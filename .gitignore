@@ -1,9 +1,5 @@
 #ApiForward
-gen-cpp/
 3rdparty/boost*
-extension/userdefined.thrift
-extension/userdef_client.cpp
-extension/userdef_server.h
 
 #Visual Studio files
 *.[Oo]bj
