@@ -11,6 +11,7 @@ extern bool _dont_hook_if_connection_failed;
 extern std::string _server_ip;
 extern int _server_port;
 
+FILE* concoleAllocated = NULL;
 
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
@@ -25,7 +26,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
         if (IsHookProcess(GetCurrentProcessId())) {
 #ifdef _DEBUG
             if (AllocConsole()){
-                freopen("CONOUT$", "w", stdout);
+                concoleAllocated = freopen("CONOUT$", "w", stdout);
             }
 #endif
             if (!thrift_connect(_server_ip.c_str(), _server_port)) {
@@ -63,10 +64,15 @@ BOOL APIENTRY DllMain( HMODULE hModule,
             thrift_close();
             printf("thrift_close()\n");
         }
+        else if (IsHostProcess(GetCurrentProcessId())){
+        }
         printf("apifwrd.dll unloaded.\n");
 #ifdef _DEBUG
         // Don't free to check messages to analyze after unloaded.
-//		FreeConsole();
+        if (concoleAllocated) {
+            fclose(concoleAllocated);
+		    FreeConsole();
+        }
 #endif
         break;
 	}

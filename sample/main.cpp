@@ -8,7 +8,9 @@
 
 bool inject_dll(HMODULE &hmodule, HHOOK &hhook, int target_threadid);
 void eject_dll(HMODULE &hmodule, HHOOK &hhook);
+BOOL CtrlHandler( DWORD fdwCtrlType ) ;
 
+bool _break_loop = false;
 
 int main(int argc, char **argv) {
 
@@ -17,14 +19,21 @@ int main(int argc, char **argv) {
         HMODULE hmodule = NULL;
         HHOOK hhook = NULL;
 
+        // Inject dlls
         if (!inject_dll(hmodule, hhook, threadid)){
             printf("Injection failed.\n");
             return 1;
         }
 
-        printf("Press enter key to stop.");
+        // Set Ctrl handler.
+        if( !SetConsoleCtrlHandler( (PHANDLER_ROUTINE) CtrlHandler, TRUE ) ) {
+            printf("Could not set control handler.\n");
+            return 1;
+        }
 
-        // Message handler is required.
+        printf("Press CTRL+C to stop.\n");
+
+        // Message handler is required for 32bit/64bit platform cross supporting.
         MSG msg;
         bool runThread = true;
         while(runThread) {
@@ -32,14 +41,10 @@ int main(int argc, char **argv) {
             PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE);
             TranslateMessage(&msg);
             DispatchMessage(&msg);
-            if (msg.message==WM_KEYDOWN && msg.wParam==VK_RETURN){
-                break;
-            }
+            if (_break_loop) break;
             Sleep(10);
         }
     
-        getchar();
-
         eject_dll(hmodule, hhook);
         return 0;
     }
@@ -105,3 +110,23 @@ void eject_dll(HMODULE &hmodule, HHOOK &hhook)
 
     return;
 }
+
+BOOL CtrlHandler( DWORD fdwCtrlType ) 
+{ 
+  switch( fdwCtrlType ) 
+  { 
+    // Handle the CTRL-C signal. 
+    case CTRL_C_EVENT: 
+    case CTRL_CLOSE_EVENT:
+    case CTRL_BREAK_EVENT:
+    case CTRL_LOGOFF_EVENT:
+    case CTRL_SHUTDOWN_EVENT:
+        _break_loop = true;
+        break;
+ 
+    default: 
+      return FALSE; 
+  } 
+
+  return TRUE;
+} 
