@@ -1,3 +1,39 @@
+#ApiForward
+gen-cpp/
+3rdparty/boost*
+extension/userdefined.thrift
+extension/userdef_client.cpp
+extension/userdef_server.h
+
+#Visual Studio files
+*.[Oo]bj
+*.user
+*.aps
+*.pch
+*.vspscc
+*.vssscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.[Cc]ache
+*.ilk
+*.log
+*.sbr
+*.sdf
+*.opensdf
+*.unsuccessfulbuild
+ipch/
+obj/
+[Ll]ib
+[Bb]in
+[Dd]ebug*/
+[Rr]elease*/
+Ankh.NoLoad
+
 # Compiled Object files
 *.slo
 *.lo
@@ -26,3 +62,7 @@
 *.exe
 *.out
 *.app
+
+#Force include
+!3rdparty/OpenSSL-Win32/**
+!3rdparty/thrift-0.9.2/lib

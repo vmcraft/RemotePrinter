@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\gen-cpp">
+      <UniqueIdentifier>{8a4d0637-8bf9-4952-b405-bdac8659d725}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\gen-cpp">
+      <UniqueIdentifier>{b3910c3f-cfa6-4d67-ace6-1418a52313ed}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\gen-cpp\ApiForward.cpp">
+      <Filter>Source Files\gen-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gen-cpp\apiforward_constants.cpp">
+      <Filter>Source Files\gen-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gen-cpp\apiforward_types.cpp">
+      <Filter>Source Files\gen-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gen-cpp\SelfService.cpp">
+      <Filter>Source Files\gen-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gen-cpp\shared_constants.cpp">
+      <Filter>Source Files\gen-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gen-cpp\shared_types.cpp">
+      <Filter>Source Files\gen-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gen-cpp\userdefined_constants.cpp">
+      <Filter>Source Files\gen-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gen-cpp\userdefined_types.cpp">
+      <Filter>Source Files\gen-cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\extension\userdef_client.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="minhooklink.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="thriftlink_client.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="apifwrd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="apifwrd.def">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\gen-cpp\ApiForward.h">
+      <Filter>Header Files\gen-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gen-cpp\apiforward_constants.h">
+      <Filter>Header Files\gen-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gen-cpp\apiforward_types.h">
+      <Filter>Header Files\gen-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gen-cpp\SelfService.h">
+      <Filter>Header Files\gen-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gen-cpp\shared_constants.h">
+      <Filter>Header Files\gen-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gen-cpp\shared_types.h">
+      <Filter>Header Files\gen-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gen-cpp\userdefined_constants.h">
+      <Filter>Header Files\gen-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gen-cpp\userdefined_types.h">
+      <Filter>Header Files\gen-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="minhooklink.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="thriftlink_client.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="apifwrd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

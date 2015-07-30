@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <THIRD_PARTY>$(SolutionDir)3rdparty</THIRD_PARTY>
+    <THRIFT>$(THIRD_PARTY)\thrift-0.9.2</THRIFT>
+    <BOOST>$(THIRD_PARTY)\boost_1_58_0</BOOST>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup />
+  <ItemGroup>
+    <BuildMacro Include="THIRD_PARTY">
+      <Value>$(THIRD_PARTY)</Value>
+    </BuildMacro>
+    <BuildMacro Include="THRIFT">
+      <Value>$(THRIFT)</Value>
+    </BuildMacro>
+    <BuildMacro Include="BOOST">
+      <Value>$(BOOST)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

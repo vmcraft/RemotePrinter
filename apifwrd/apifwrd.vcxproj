@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0C9F65B6-B1C6-497D-B489-B318AA7C7E89}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>apifwrd</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="3rdparty.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="3rdparty.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;APIFWRD_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(BOOST);$(THRIFT)\lib\cpp\src;$(SolutionDir)gen-cpp;$(SolutionDir)extension;$(SolutionDir)3rdparty\minhook-1.3.1\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ModuleDefinitionFile>apifwrd.def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>$(BOOST)\lib32-msvc-10.0;$(SolutionDir)Debug-mt;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libthrift.lib</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;APIFWRD_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(BOOST);$(THRIFT)\lib\cpp\src;$(SolutionDir)gen-cpp;$(SolutionDir)extension;$(SolutionDir)3rdparty\minhook-1.3.1\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ModuleDefinitionFile>apifwrd.def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>$(BOOST)\lib32-msvc-10.0;$(SolutionDir)Release-mt;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libthrift.lib</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\extension\userdef_client.cpp" />
+    <ClCompile Include="..\gen-cpp\ApiForward.cpp" />
+    <ClCompile Include="..\gen-cpp\apiforward_constants.cpp" />
+    <ClCompile Include="..\gen-cpp\apiforward_types.cpp" />
+    <ClCompile Include="..\gen-cpp\SelfService.cpp" />
+    <ClCompile Include="..\gen-cpp\shared_constants.cpp" />
+    <ClCompile Include="..\gen-cpp\shared_types.cpp" />
+    <ClCompile Include="..\gen-cpp\userdefined_constants.cpp" />
+    <ClCompile Include="..\gen-cpp\userdefined_types.cpp" />
+    <ClCompile Include="apifwrd.cpp" />
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="minhooklink.cpp" />
+    <ClCompile Include="thriftlink_client.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="apifwrd.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\gen-cpp\ApiForward.h" />
+    <ClInclude Include="..\gen-cpp\apiforward_constants.h" />
+    <ClInclude Include="..\gen-cpp\apiforward_types.h" />
+    <ClInclude Include="..\gen-cpp\SelfService.h" />
+    <ClInclude Include="..\gen-cpp\shared_constants.h" />
+    <ClInclude Include="..\gen-cpp\shared_types.h" />
+    <ClInclude Include="..\gen-cpp\userdefined_constants.h" />
+    <ClInclude Include="..\gen-cpp\userdefined_types.h" />
+    <ClInclude Include="apifwrd.h" />
+    <ClInclude Include="minhooklink.h" />
+    <ClInclude Include="thriftlink_client.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
