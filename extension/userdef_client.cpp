@@ -7,7 +7,6 @@
 std::string _server_ip = "127.0.0.1";
 int _server_port = 3900;
 
-
 // We will not hook the following processes forcely.
 char *_with_hook[] = {
 //                    "POS_Main.exe",
@@ -33,6 +32,11 @@ void print_hex(const char* buffer, size_t len);
 
 
 #define HOOK_ITEM_FUNC(MODULE_NAME, FUNCTION_NAME) {L#MODULE_NAME, #FUNCTION_NAME, (LPVOID)&Detour##FUNCTION_NAME, (LPVOID*)&fp##FUNCTION_NAME}
+#define INT32_TO_INT64(VAL) (((int64_t)VAL)&0x00000000FFFFFFFF)
+#define THRIFT_A_TO_STRING(VAL) (std::string((LPSTR)(VAL)))                                                                 // string to binary
+#define THRIFT_W_TO_STRING(VAL) (std::string((LPCSTR)(VAL), ((VAL)?wcslen((LPCWSTR)VAL)*sizeof(WCHAR)+sizeof(WCHAR):0)))    // wstring to binary
+#define THRIFT_B_TO_STRING(POI, LEN) (std::string((LPSTR)(POI), (((LPSTR)POI)!=NULL ? LEN : 0)))                            // buffer to binary
+
 
 // Define original function pointer
 // Spooler functions
@@ -62,6 +66,9 @@ BOOL (WINAPI *fpGetPrinterW)(HANDLE hPrinter, DWORD Level, LPBYTE pPrinter, DWOR
 HANDLE (WINAPI *fpGetSpoolFileHandle)(HANDLE hPrinter) = NULL;
 BOOL (WINAPI *fpIsValidDevmodeW)(PDEVMODEW pDevmode, size_t DevmodeSize) = NULL;
 BOOL (WINAPI *fpOpenPrinter2W)(LPCWSTR pPrinterName, LPHANDLE phPrinter, LPPRINTER_DEFAULTSW pDefault, /*PPRINTER_OPTIONS*/ PVOID pOptions) = NULL;
+BOOL (WINAPI *fpOpenPrinter2A)(LPCSTR pPrinterName, LPHANDLE phPrinter, LPPRINTER_DEFAULTSA pDefault, /*PPRINTER_OPTIONS*/ PVOID pOptions) = NULL;
+
+
 
 // Not a spooler, special codes for samsung printers
 int (WINAPI *fpOpenUsbPort)(int) = NULL;
@@ -72,6 +79,12 @@ int (WINAPI *fpPrintBitmap)(const char*) = NULL;
 int (WINAPI *fpPrint1DBarcode)(int,int,int,int,char*) = NULL;
 int (WINAPI *fpPrintPDF417)(int,int,int,int,int,int,char*) = NULL;
 int (WINAPI *fpPrintQRCode)(int,int,int,char*) = NULL;
+
+
+typedef struct _RP_PRINTER_OPTIONS {
+  UINT  cbSize;
+  DWORD dwFlags;
+} RP_PRINTER_OPTIONS, *PRP_PRINTER_OPTIONS;
 
 
 
@@ -91,11 +104,22 @@ BOOL WINAPI DetourOpenPrinterA(LPSTR pPrinterName, LPHANDLE phPrinter, LPPRINTER
     if (pPrinterName!=NULL) printerName = std::string(pPrinterName);
 
     if (pDefault) {
-        _api->OpenPrinterA(ret, printerName, true, std::string(pDefault->pDatatype),
-            std::string((char*)pDefault->pDevMode, pDefault->pDevMode?pDefault->pDevMode->dmSize:0), pDefault->DesiredAccess);
+        _api->OpenPrinterA(ret,
+            printerName,
+            true,
+            THRIFT_A_TO_STRING(pDefault->pDatatype),
+            THRIFT_B_TO_STRING(pDefault->pDevMode, pDefault->pDevMode->dmSize),
+            pDefault->DesiredAccess
+            );
     }
     else {
-        _api->OpenPrinterA(ret, printerName, false, std::string(NULL, 0), std::string(NULL, 0), 0);
+        _api->OpenPrinterA(ret,
+            printerName,
+            false,
+            std::string(NULL, 0),
+            std::string(NULL, 0),
+            0
+            );
     }
 
     BOOL result = ret.find("return") != ret.end() ? ret.at("return") : false;
@@ -123,11 +147,15 @@ BOOL WINAPI DetourOpenPrinterW(LPWSTR pPrinterName, LPHANDLE phPrinter, LPPRINTE
 
     if (pDefault) {
         _api->OpenPrinterW(ret, printerName, true,
-            std::string((char*)pDefault->pDatatype, pDefault->pDatatype ? wcslen(pDefault->pDatatype)*sizeof(WCHAR)+sizeof(WCHAR) : 0),
-            std::string((char*)pDefault->pDevMode, pDefault->pDevMode?pDefault->pDevMode->dmSize:0), pDefault->DesiredAccess);
+            THRIFT_W_TO_STRING(pDefault->pDatatype),
+            THRIFT_B_TO_STRING(pDefault->pDevMode, pDefault->pDevMode->dmSize),
+            pDefault->DesiredAccess);
     }
     else {
-        _api->OpenPrinterW(ret, printerName, false, "", "", 0);
+        _api->OpenPrinterW(ret, printerName, false,
+            std::string(NULL, 0),
+            std::string(NULL, 0),
+            0);
     }
 
     BOOL result = ret.find("return") != ret.end() ? ret.at("return") : false;
@@ -146,9 +174,7 @@ BOOL WINAPI DetourStartPagePrinter(HANDLE hPrinter) {
         return fpStartPagePrinter(hPrinter);
     }
 
-    int64_t localPrinter = 0L;
-    localPrinter = (int64_t) hPrinter;
-    return _api->StartPagePrinter(localPrinter);
+    return _api->StartPagePrinter(INT32_TO_INT64(hPrinter));
 }
 
 DWORD WINAPI DetourStartDocPrinterW(HANDLE hPrinter, DWORD  Level, LPBYTE pDocInfo) {
@@ -157,9 +183,6 @@ DWORD WINAPI DetourStartDocPrinterW(HANDLE hPrinter, DWORD  Level, LPBYTE pDocIn
         printf("DetourStartDocPrinterW() bypass.\n");
         return fpStartDocPrinterW(hPrinter, Level, pDocInfo);
     }
-
-    int64_t localPrinter = 0L;
-    localPrinter = (int64_t) hPrinter;
 
     std::string pDocName(NULL, 0);
     std::string pOutputFile(NULL, 0);
@@ -176,7 +199,7 @@ DWORD WINAPI DetourStartDocPrinterW(HANDLE hPrinter, DWORD  Level, LPBYTE pDocIn
             pDatatype = std::string((char*)localDocInfo->pDatatype, wcslen(localDocInfo->pDatatype)*sizeof(WCHAR)+sizeof(WCHAR));
     }
 
-    return _api->StartDocPrinterW(localPrinter, Level, pDocName, pOutputFile, pDatatype);
+    return _api->StartDocPrinterW(INT32_TO_INT64(hPrinter), Level, pDocName, pOutputFile, pDatatype);
 }
 
 BOOL WINAPI DetourWritePrinter(HANDLE hPrinter, LPVOID pBuf, DWORD cbBuf, LPDWORD pcWritten) {
@@ -186,12 +209,9 @@ BOOL WINAPI DetourWritePrinter(HANDLE hPrinter, LPVOID pBuf, DWORD cbBuf, LPDWOR
         return fpWritePrinter(hPrinter, pBuf, cbBuf, pcWritten);
     }
 
-    int64_t localPrinter = 0L;
-    localPrinter = (int64_t) hPrinter;
-
     std::map<string, int32_t> ret;
 
-    _api->WritePrinter(ret, localPrinter, std::string((char*)pBuf, cbBuf), cbBuf);
+    _api->WritePrinter(ret, INT32_TO_INT64(hPrinter), std::string((char*)pBuf, cbBuf), cbBuf);
 
     if (ret.find("return") != ret.end() && (bool)ret.at("return") &&
         ret.find("pcWritten") != ret.end() ){
@@ -208,11 +228,7 @@ BOOL WINAPI DetourEndPagePrinter(HANDLE hPrinter) {
         printf("DetourEndPagePrinter() bypass.\n");
         return fpEndPagePrinter(hPrinter);
     }
-
-    int64_t localPrinter = 0L;
-    localPrinter = (int64_t) hPrinter;
-
-    return _api->EndPagePrinter(localPrinter);
+    return _api->EndPagePrinter(INT32_TO_INT64(hPrinter));
 }
 
 BOOL WINAPI DetourEndDocPrinter(HANDLE hPrinter) {
@@ -221,11 +237,7 @@ BOOL WINAPI DetourEndDocPrinter(HANDLE hPrinter) {
         printf("DetourEndDocPrinter() bypass.\n");
         return fpEndDocPrinter(hPrinter);
     }
-
-    int64_t localPrinter = 0L;
-    localPrinter = (int64_t) hPrinter;
-
-    return _api->EndDocPrinter(localPrinter);
+    return _api->EndDocPrinter(INT32_TO_INT64(hPrinter));
 }
 
 BOOL WINAPI DetourClosePrinter(HANDLE hPrinter) {
@@ -235,10 +247,7 @@ BOOL WINAPI DetourClosePrinter(HANDLE hPrinter) {
         return fpClosePrinter(hPrinter);
     }
 
-    int64_t localPrinter = 0L;
-    localPrinter = (int64_t) hPrinter;
-
-    return _api->ClosePrinter(localPrinter);
+    return _api->ClosePrinter(INT32_TO_INT64(hPrinter));
 }
 
 
@@ -252,7 +261,7 @@ BOOL WINAPI DetourCloseSpoolFileHandle(
         return fpCloseSpoolFileHandle(hPrinter, hSpoolFile);
     }
 
-    return FALSE;
+    return _api->CloseSpoolFileHandle(INT32_TO_INT64(hPrinter), INT32_TO_INT64(hSpoolFile));
 }
 
 HANDLE WINAPI DetourCommitSpoolData(
@@ -265,8 +274,7 @@ HANDLE WINAPI DetourCommitSpoolData(
         printf("DetourCommitSpoolData() bypass.\n");
         return fpCommitSpoolData(hPrinter, hSpoolFile, cbCommit);
     }
-
-    return NULL;
+    return (HANDLE)_api->CommitSpoolData(INT32_TO_INT64(hPrinter), INT32_TO_INT64(hSpoolFile), cbCommit);
 }
 
 HRESULT WINAPI DetourDocumentEvent(
@@ -278,12 +286,6 @@ HRESULT WINAPI DetourDocumentEvent(
         ULONG  cbOut,
   _Out_ PVOID  pvOut
 ) {
-    printf("DetourDocumentEvent()\n");
-    if (!ensure_connection()) {
-        printf("DetourDocumentEvent() bypass.\n");
-        return fpDocumentEvent(hPrinter, hdc, iEsc, cbIn, pvIn, cbOut, pvOut);
-    }
-
     return S_FALSE;
 }
 
@@ -483,9 +485,9 @@ BOOL WINAPI DetourIsValidDevmodeW(
 }
 
 BOOL WINAPI DetourOpenPrinter2W(
-  _In_  LPCTSTR            pPrinterName,
+  _In_  LPCWSTR            pPrinterName,
   _Out_ LPHANDLE           phPrinter,
-  _In_  LPPRINTER_DEFAULTS pDefault,
+  _In_  LPPRINTER_DEFAULTSW pDefault,
   _In_  /*PPRINTER_OPTIONS*/ PVOID   pOptions
 ) {
     printf("DetourOpenPrinter2W()\n");
@@ -494,7 +496,75 @@ BOOL WINAPI DetourOpenPrinter2W(
         return fpOpenPrinter2W(pPrinterName, phPrinter, pDefault, pOptions);
     }
 
-    return FALSE;
+    std::string printerName = THRIFT_W_TO_STRING(pPrinterName);
+    std::map<string, int64_t> ret;
+
+    if (pDefault) {
+        _api->OpenPrinter2W(
+            ret, printerName, true,
+            THRIFT_W_TO_STRING(pDefault->pDatatype),
+            THRIFT_B_TO_STRING(pDefault->pDevMode, pDefault->pDevMode->dmSize),
+            pDefault->DesiredAccess,
+            THRIFT_B_TO_STRING(pOptions, ((PRP_PRINTER_OPTIONS)pOptions)->cbSize));
+    }
+    else {
+        _api->OpenPrinter2W(
+            ret, printerName, false,
+            std::string(NULL, 0),
+            std::string(NULL, 0),
+            0,
+            THRIFT_B_TO_STRING(pOptions, ((PRP_PRINTER_OPTIONS)pOptions)->cbSize));
+    }
+
+    BOOL result = ret.find("return") != ret.end() ? ret.at("return") : false;
+    if ( result && ret.find("phPrinter") != ret.end()) {
+        if (phPrinter) *phPrinter = (HANDLE)ret.at("phPrinter");
+        printf("PrinterHandle=%x\n", *phPrinter);
+    }
+
+    return false;
+}
+
+
+BOOL WINAPI DetourOpenPrinter2A(
+  _In_  LPCSTR            pPrinterName,
+  _Out_ LPHANDLE           phPrinter,
+  _In_  LPPRINTER_DEFAULTSA pDefault,
+  _In_  /*PPRINTER_OPTIONS*/ PVOID   pOptions
+) {
+    printf("DetourOpenPrinter2A()\n");
+    if (!ensure_connection()) {
+        printf("DetourOpenPrinter2A() bypass.\n");
+        return fpOpenPrinter2A(pPrinterName, phPrinter, pDefault, pOptions);
+    }
+
+    std::string printerName(pPrinterName);
+    std::map<string, int64_t> ret;
+
+    if (pDefault) {
+        _api->OpenPrinter2A(
+            ret, printerName, true,
+            THRIFT_A_TO_STRING(pDefault->pDatatype),
+            THRIFT_B_TO_STRING(pDefault->pDevMode, pDefault->pDevMode->dmSize),
+            pDefault->DesiredAccess,
+            THRIFT_B_TO_STRING(pOptions, ((PRP_PRINTER_OPTIONS)pOptions)->cbSize));
+    }
+    else {
+        _api->OpenPrinter2A(
+            ret, printerName, false,
+            std::string(NULL, 0),
+            std::string(NULL, 0),
+            0,
+            THRIFT_B_TO_STRING(pOptions, ((PRP_PRINTER_OPTIONS)pOptions)->cbSize));
+    }
+
+    BOOL result = ret.find("return") != ret.end() ? ret.at("return") : false;
+    if ( result && ret.find("phPrinter") != ret.end()) {
+        if (phPrinter) *phPrinter = (HANDLE)ret.at("phPrinter");
+        printf("PrinterHandle=%x\n", *phPrinter);
+    }
+
+    return false;
 }
 
 
@@ -639,6 +709,7 @@ HOOK_ITEM _hook_items[] = {
     HOOK_ITEM_FUNC(WINSPOOL.DRV, GetSpoolFileHandle),
     HOOK_ITEM_FUNC(WINSPOOL.DRV, IsValidDevmodeW),
     HOOK_ITEM_FUNC(WINSPOOL.DRV, OpenPrinter2W),
+    HOOK_ITEM_FUNC(WINSPOOL.DRV, OpenPrinter2A),
 
     // Not a spooler, special codes for samsung printers
     HOOK_ITEM_FUNC(BXLPDIR.DLL, OpenUsbPort),

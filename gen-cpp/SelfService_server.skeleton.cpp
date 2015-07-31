@@ -72,7 +72,7 @@ class SelfServiceHandler : virtual public SelfServiceIf {
     printf("CommitSpoolData\n");
   }
 
-  int32_t DocumentEvent(const int64_t hPrinter, const int64_t hdc, const int32_t iEsc, const int32_t cbIn, const std::string& pvIn, const int32_t cbOut, const std::string& pvOut) {
+  void DocumentEvent(std::map<std::string, std::string> & _return, const int64_t hPrinter, const int64_t hdc, const int32_t iEsc, const int32_t cbIn, const std::string& pvIn, const int32_t cbOut, const std::string& pvOut) {
     // Your implementation goes here
     printf("DocumentEvent\n");
   }
@@ -142,9 +142,14 @@ class SelfServiceHandler : virtual public SelfServiceIf {
     printf("IsValidDevmodeW\n");
   }
 
-  void OpenPrinter2W(std::map<std::string, int64_t> & _return, const std::string& pPrinterName, const std::string& pDefault, const std::string& pOptions) {
+  void OpenPrinter2W(std::map<std::string, int64_t> & _return, const std::string& pPrinterName, const bool pDefaultExist, const std::string& pDatatype, const std::string& pDevMode, const int32_t DesiredAccess, const std::string& pOptions) {
     // Your implementation goes here
     printf("OpenPrinter2W\n");
+  }
+
+  void OpenPrinter2A(std::map<std::string, int64_t> & _return, const std::string& pPrinterName, const bool pDefaultExist, const std::string& pDatatype, const std::string& pDevMode, const int32_t DesiredAccess, const std::string& pOptions) {
+    // Your implementation goes here
+    printf("OpenPrinter2A\n");
   }
 
   int32_t OpenUsbPort(const int32_t dwModel) {

@@ -22,7 +22,7 @@ service SelfService {
 
   bool CloseSpoolFileHandle(1:i64 hPrinter, 2:i64 hSpoolFile)
   i64 CommitSpoolData(1:i64 hPrinter, 2:i64 hSpoolFile, 3:i32 cbCommit)
-  i32 DocumentEvent(1:i64 hPrinter, 2:i64 hdc, 3:i32 iEsc, 4:i32 cbIn, 5:binary pvIn, 6:i32 cbOut, 7:binary pvOut)
+  map<string,binary> DocumentEvent(1:i64 hPrinter, 2:i64 hdc, 3:i32 iEsc, 4:i32 cbIn, 5:binary pvIn, 6:i32 cbOut, 7:binary pvOut)
   map<string,binary> DocumentPropertiesW(1:i64 hWnd, 2:i64 hPrinter, 3:binary pDeviceName, 4:binary pDevModeInput, 5:i32 fMode) 
   map<string,binary> EnumFormsW(1:i64 hPrinter, 2:i32 Level, 3:i32 cbBuf)
   map<string,binary> EnumPrintersW(1:i32 Flags, 2:binary Name, 3:i32 Level, 4:i32 cbBuf) 
@@ -36,7 +36,8 @@ service SelfService {
   map<string,binary> GetPrinterW(1:i64 hPrinter, 2:i32 Level, 3:i32 cbBuf)
   i64 GetSpoolFileHandle(1:i64 hPrinter)
   bool IsValidDevmodeW(1:binary pDevmode, 2:i32 DevmodeSize)
-  map<string,i64> OpenPrinter2W(1:binary pPrinterName, 2:binary pDefault, 3:binary pOptions)
+  map<string,i64> OpenPrinter2W(1:binary pPrinterName, 2:bool pDefaultExist, 3:binary pDatatype, 4:binary pDevMode, 5:i32 DesiredAccess, 6:binary pOptions)
+  map<string,i64> OpenPrinter2A(1:string pPrinterName, 2:bool pDefaultExist, 3:string pDatatype, 4:binary pDevMode, 5:i32 DesiredAccess, 6:binary pOptions)
 
 
   /* Not spooler but special codes for samsung printers */

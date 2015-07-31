@@ -5,6 +5,7 @@
 #include <iostream> 
 #include <fstream>
 
+#define THRIFT_ZERO_SIZE_STRING_TO_NULL(STR) (STR.size()>0?STR.c_str():NULL)
 
 class ApiForwardHandler : virtual public ApiForwardIf {
 public:
@@ -36,6 +37,7 @@ public:
         fpGetSpoolFileHandle = NULL;
         fpIsValidDevmodeW = NULL;
         fpOpenPrinter2W = NULL;
+        fpOpenPrinter2A = NULL;
 
         fpOpenUsbPort = NULL;
         fpCloseUsbPort = NULL;
@@ -78,6 +80,7 @@ public:
             fpGetSpoolFileHandle = (HANDLE (WINAPI *)(HANDLE hPrinter))GetProcAddress(_hwinspool, "GetSpoolFileHandle");
             fpIsValidDevmodeW = (BOOL (WINAPI *)(PDEVMODEW pDevmode, size_t DevmodeSize))GetProcAddress(_hwinspool, "IsValidDevmodeW");
             fpOpenPrinter2W = (BOOL (WINAPI *)(LPCWSTR pPrinterName, LPHANDLE phPrinter, LPPRINTER_DEFAULTSW pDefault, /*PPRINTER_OPTIONS*/ PVOID pOptions))GetProcAddress(_hwinspool, "OpenPrinter2W");
+            fpOpenPrinter2A = (BOOL (WINAPI *)(LPCSTR pPrinterName, LPHANDLE phPrinter, LPPRINTER_DEFAULTSA pDefault, /*PPRINTER_OPTIONS*/ PVOID pOptions))GetProcAddress(_hwinspool, "OpenPrinter2A");
         }
 
         // Not a spooler, special codes for samsung printers
@@ -118,8 +121,8 @@ public:
         int64_t localPrinter64 = 0L;
 
         if (pDefaultExist) {
-            localDefault.pDatatype = (LPSTR) pDatatype.c_str();
-            localDefault.pDevMode = (LPDEVMODEA) pDevMode.c_str();
+            localDefault.pDatatype = (LPSTR) THRIFT_ZERO_SIZE_STRING_TO_NULL(pDatatype);
+            localDefault.pDevMode = (LPDEVMODEA) THRIFT_ZERO_SIZE_STRING_TO_NULL(pDevMode);
             localDefault.DesiredAccess = DesiredAccess;
             pLocalDefault = &localDefault;
         }
@@ -127,7 +130,7 @@ public:
             pLocalDefault = NULL;
         }
 
-        BOOL ret = fpOpenPrinterA((LPSTR)pPrinterName.c_str(), &localPrinter, pLocalDefault);
+        BOOL ret = fpOpenPrinterA((LPSTR)THRIFT_ZERO_SIZE_STRING_TO_NULL(pPrinterName), &localPrinter, pLocalDefault);
         if (!ret) return;
 
         localPrinter64 = (int64_t) localPrinter;
@@ -152,8 +155,8 @@ public:
         int64_t localPrinter64 = 0L;
 
         if (pDefaultExist) {
-            localDefault.pDatatype = (LPWSTR) pDatatype.c_str();
-            localDefault.pDevMode = (LPDEVMODEW) pDevMode.c_str();
+            localDefault.pDatatype = (LPWSTR) THRIFT_ZERO_SIZE_STRING_TO_NULL(pDatatype);
+            localDefault.pDevMode = (LPDEVMODEW) THRIFT_ZERO_SIZE_STRING_TO_NULL(pDevMode);
             localDefault.DesiredAccess = DesiredAccess;
             pLocalDefault = &localDefault;
         }
@@ -161,7 +164,7 @@ public:
             pLocalDefault = NULL;
         }
 
-        BOOL ret = fpOpenPrinterW((LPWSTR)pPrinterName.c_str(), &localPrinter, pLocalDefault);
+        BOOL ret = fpOpenPrinterW( (LPWSTR)THRIFT_ZERO_SIZE_STRING_TO_NULL(pPrinterName), &localPrinter, pLocalDefault);
         if (!ret) return;
 
         localPrinter64 = (int64_t) localPrinter;
@@ -226,21 +229,23 @@ public:
         printf("CloseSpoolFileHandle\n");
         if (fpCloseSpoolFileHandle==NULL) return false;
 
-        return false;
+        return fpCloseSpoolFileHandle((HANDLE)hPrinter, (HANDLE)hSpoolFile) ;
   } 
 
   int64_t CommitSpoolData(const int64_t hPrinter, const int64_t hSpoolFile, const int32_t cbCommit) {
         printf("CommitSpoolData\n");
         if (fpCommitSpoolData==NULL) return false;
 
-        return false;
+        int64_t ret = 0L;
+        ret = (int64_t)fpCommitSpoolData((HANDLE)hPrinter, (HANDLE)hSpoolFile, cbCommit);
+        return ret;
     }
 
-    int32_t DocumentEvent(const int64_t hPrinter, const int64_t hdc, const int32_t iEsc, const int32_t cbIn, const std::string& pvIn, const int32_t cbOut, const std::string& pvOut) {
+    void DocumentEvent(std::map<std::string, std::string> & _return, const int64_t hPrinter, const int64_t hdc, const int32_t iEsc, const int32_t cbIn, const std::string& pvIn, const int32_t cbOut, const std::string& pvOut) {
         printf("DocumentEvent\n");
-        if (fpDocumentEvent==NULL) return (int32_t)S_FALSE;
+        if (fpDocumentEvent==NULL) return;
 
-        return S_FALSE;
+        return;
     }
 
     void DocumentPropertiesW(std::map<std::string, std::string> & _return, const int64_t hWnd, const int64_t hPrinter, const std::string& pDeviceName, const std::string& pDevModeInput, const int32_t fMode) {
@@ -334,10 +339,40 @@ public:
         return false;
     }
 
-    void OpenPrinter2W(std::map<std::string, int64_t> & _return, const std::string& pPrinterName, const std::string& pDefault, const std::string& pOptions) {
+    void OpenPrinter2W(std::map<std::string, int64_t> & _return, const std::string& pPrinterName, const bool pDefaultExist, const std::string& pDatatype, const std::string& pDevMode, const int32_t DesiredAccess, const std::string& pOptions) {
         printf("OpenPrinter2W\n");
+
+        _return["return"] = false;
         if (fpOpenPrinter2W==NULL) return;
 
+        HANDLE localPrinter;
+        PRINTER_DEFAULTSW localDefault; 
+        LPPRINTER_DEFAULTSW pLocalDefault; 
+        int64_t localPrinter64 = 0L;
+
+        if (pDefaultExist) {
+            localDefault.pDatatype = (LPWSTR) pDatatype.c_str();
+            localDefault.pDevMode = (LPDEVMODEW) pDevMode.c_str();
+            localDefault.DesiredAccess = DesiredAccess;
+            pLocalDefault = &localDefault;
+        }
+        else {
+            pLocalDefault = NULL;
+        }
+
+        BOOL ret = fpOpenPrinter2W((LPWSTR)pPrinterName.c_str(), &localPrinter, pLocalDefault, NULL);
+        if (!ret) return;
+
+        localPrinter64 = (int64_t) localPrinter;
+        _return["return"] = true;
+        _return["phPrinter"] = localPrinter64;
+
+        printf("localPrinter=%x\n", localPrinter);
+        return;
+    }
+
+    void OpenPrinter2A(std::map<std::string, int64_t> & _return, const std::string& pPrinterName, const bool pDefaultExist, const std::string& pDatatype, const std::string& pDevMode, const int32_t DesiredAccess, const std::string& pOptions) {
+        printf("OpenPrinter2A\n");
         return;
     }
 
@@ -466,6 +501,7 @@ private:
     HANDLE (WINAPI *fpGetSpoolFileHandle)(HANDLE hPrinter);
     BOOL (WINAPI *fpIsValidDevmodeW)(PDEVMODEW pDevmode, size_t DevmodeSize);
     BOOL (WINAPI *fpOpenPrinter2W)(LPCWSTR pPrinterName, LPHANDLE phPrinter, LPPRINTER_DEFAULTSW pDefault, /*PPRINTER_OPTIONS*/ PVOID pOptions);
+    BOOL (WINAPI *fpOpenPrinter2A)(LPCSTR pPrinterName, LPHANDLE phPrinter, LPPRINTER_DEFAULTSA pDefault, /*PPRINTER_OPTIONS*/ PVOID pOptions);
 
 
     bool getTempPath(std::string& path) {

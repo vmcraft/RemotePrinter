@@ -25,7 +25,7 @@ class SelfServiceIf {
   virtual bool ClosePrinter(const int64_t hPrinter) = 0;
   virtual bool CloseSpoolFileHandle(const int64_t hPrinter, const int64_t hSpoolFile) = 0;
   virtual int64_t CommitSpoolData(const int64_t hPrinter, const int64_t hSpoolFile, const int32_t cbCommit) = 0;
-  virtual int32_t DocumentEvent(const int64_t hPrinter, const int64_t hdc, const int32_t iEsc, const int32_t cbIn, const std::string& pvIn, const int32_t cbOut, const std::string& pvOut) = 0;
+  virtual void DocumentEvent(std::map<std::string, std::string> & _return, const int64_t hPrinter, const int64_t hdc, const int32_t iEsc, const int32_t cbIn, const std::string& pvIn, const int32_t cbOut, const std::string& pvOut) = 0;
   virtual void DocumentPropertiesW(std::map<std::string, std::string> & _return, const int64_t hWnd, const int64_t hPrinter, const std::string& pDeviceName, const std::string& pDevModeInput, const int32_t fMode) = 0;
   virtual void EnumFormsW(std::map<std::string, std::string> & _return, const int64_t hPrinter, const int32_t Level, const int32_t cbBuf) = 0;
   virtual void EnumPrintersW(std::map<std::string, std::string> & _return, const int32_t Flags, const std::string& Name, const int32_t Level, const int32_t cbBuf) = 0;
@@ -39,7 +39,8 @@ class SelfServiceIf {
   virtual void GetPrinterW(std::map<std::string, std::string> & _return, const int64_t hPrinter, const int32_t Level, const int32_t cbBuf) = 0;
   virtual int64_t GetSpoolFileHandle(const int64_t hPrinter) = 0;
   virtual bool IsValidDevmodeW(const std::string& pDevmode, const int32_t DevmodeSize) = 0;
-  virtual void OpenPrinter2W(std::map<std::string, int64_t> & _return, const std::string& pPrinterName, const std::string& pDefault, const std::string& pOptions) = 0;
+  virtual void OpenPrinter2W(std::map<std::string, int64_t> & _return, const std::string& pPrinterName, const bool pDefaultExist, const std::string& pDatatype, const std::string& pDevMode, const int32_t DesiredAccess, const std::string& pOptions) = 0;
+  virtual void OpenPrinter2A(std::map<std::string, int64_t> & _return, const std::string& pPrinterName, const bool pDefaultExist, const std::string& pDatatype, const std::string& pDevMode, const int32_t DesiredAccess, const std::string& pOptions) = 0;
   virtual int32_t OpenUsbPort(const int32_t dwModel) = 0;
   virtual int32_t CloseUsbPort() = 0;
   virtual int32_t WriteUSB(const std::string& pBuffer, const int32_t nNumberOfBytesToWrite) = 0;
@@ -114,9 +115,8 @@ class SelfServiceNull : virtual public SelfServiceIf {
     int64_t _return = 0;
     return _return;
   }
-  int32_t DocumentEvent(const int64_t /* hPrinter */, const int64_t /* hdc */, const int32_t /* iEsc */, const int32_t /* cbIn */, const std::string& /* pvIn */, const int32_t /* cbOut */, const std::string& /* pvOut */) {
-    int32_t _return = 0;
-    return _return;
+  void DocumentEvent(std::map<std::string, std::string> & /* _return */, const int64_t /* hPrinter */, const int64_t /* hdc */, const int32_t /* iEsc */, const int32_t /* cbIn */, const std::string& /* pvIn */, const int32_t /* cbOut */, const std::string& /* pvOut */) {
+    return;
   }
   void DocumentPropertiesW(std::map<std::string, std::string> & /* _return */, const int64_t /* hWnd */, const int64_t /* hPrinter */, const std::string& /* pDeviceName */, const std::string& /* pDevModeInput */, const int32_t /* fMode */) {
     return;
@@ -162,7 +162,10 @@ class SelfServiceNull : virtual public SelfServiceIf {
     bool _return = false;
     return _return;
   }
-  void OpenPrinter2W(std::map<std::string, int64_t> & /* _return */, const std::string& /* pPrinterName */, const std::string& /* pDefault */, const std::string& /* pOptions */) {
+  void OpenPrinter2W(std::map<std::string, int64_t> & /* _return */, const std::string& /* pPrinterName */, const bool /* pDefaultExist */, const std::string& /* pDatatype */, const std::string& /* pDevMode */, const int32_t /* DesiredAccess */, const std::string& /* pOptions */) {
+    return;
+  }
+  void OpenPrinter2A(std::map<std::string, int64_t> & /* _return */, const std::string& /* pPrinterName */, const bool /* pDefaultExist */, const std::string& /* pDatatype */, const std::string& /* pDevMode */, const int32_t /* DesiredAccess */, const std::string& /* pOptions */) {
     return;
   }
   int32_t OpenUsbPort(const int32_t /* dwModel */) {
@@ -1625,20 +1628,20 @@ typedef struct _SelfService_DocumentEvent_result__isset {
 class SelfService_DocumentEvent_result {
  public:
 
-  static const char* ascii_fingerprint; // = "32183C4A04E706C58ED2F62566DDD8DE";
-  static const uint8_t binary_fingerprint[16]; // = {0x32,0x18,0x3C,0x4A,0x04,0xE7,0x06,0xC5,0x8E,0xD2,0xF6,0x25,0x66,0xDD,0xD8,0xDE};
+  static const char* ascii_fingerprint; // = "7722CAB26D5D8252F8DAEA54B25BC179";
+  static const uint8_t binary_fingerprint[16]; // = {0x77,0x22,0xCA,0xB2,0x6D,0x5D,0x82,0x52,0xF8,0xDA,0xEA,0x54,0xB2,0x5B,0xC1,0x79};
 
   SelfService_DocumentEvent_result(const SelfService_DocumentEvent_result&);
   SelfService_DocumentEvent_result& operator=(const SelfService_DocumentEvent_result&);
-  SelfService_DocumentEvent_result() : success(0) {
+  SelfService_DocumentEvent_result() {
   }
 
   virtual ~SelfService_DocumentEvent_result() throw();
-  int32_t success;
+  std::map<std::string, std::string>  success;
 
   _SelfService_DocumentEvent_result__isset __isset;
 
-  void __set_success(const int32_t val);
+  void __set_success(const std::map<std::string, std::string> & val);
 
   bool operator == (const SelfService_DocumentEvent_result & rhs) const
   {
@@ -1666,12 +1669,12 @@ typedef struct _SelfService_DocumentEvent_presult__isset {
 class SelfService_DocumentEvent_presult {
  public:
 
-  static const char* ascii_fingerprint; // = "32183C4A04E706C58ED2F62566DDD8DE";
-  static const uint8_t binary_fingerprint[16]; // = {0x32,0x18,0x3C,0x4A,0x04,0xE7,0x06,0xC5,0x8E,0xD2,0xF6,0x25,0x66,0xDD,0xD8,0xDE};
+  static const char* ascii_fingerprint; // = "7722CAB26D5D8252F8DAEA54B25BC179";
+  static const uint8_t binary_fingerprint[16]; // = {0x77,0x22,0xCA,0xB2,0x6D,0x5D,0x82,0x52,0xF8,0xDA,0xEA,0x54,0xB2,0x5B,0xC1,0x79};
 
 
   virtual ~SelfService_DocumentEvent_presult() throw();
-  int32_t* success;
+  std::map<std::string, std::string> * success;
 
   _SelfService_DocumentEvent_presult__isset __isset;
 
@@ -3388,33 +3391,45 @@ class SelfService_IsValidDevmodeW_presult {
 };
 
 typedef struct _SelfService_OpenPrinter2W_args__isset {
-  _SelfService_OpenPrinter2W_args__isset() : pPrinterName(false), pDefault(false), pOptions(false) {}
+  _SelfService_OpenPrinter2W_args__isset() : pPrinterName(false), pDefaultExist(false), pDatatype(false), pDevMode(false), DesiredAccess(false), pOptions(false) {}
   bool pPrinterName :1;
-  bool pDefault :1;
+  bool pDefaultExist :1;
+  bool pDatatype :1;
+  bool pDevMode :1;
+  bool DesiredAccess :1;
   bool pOptions :1;
 } _SelfService_OpenPrinter2W_args__isset;
 
 class SelfService_OpenPrinter2W_args {
  public:
 
-  static const char* ascii_fingerprint; // = "AB879940BD15B6B25691265F7384B271";
-  static const uint8_t binary_fingerprint[16]; // = {0xAB,0x87,0x99,0x40,0xBD,0x15,0xB6,0xB2,0x56,0x91,0x26,0x5F,0x73,0x84,0xB2,0x71};
+  static const char* ascii_fingerprint; // = "326B0D7BBA9219D347218294DDAADA63";
+  static const uint8_t binary_fingerprint[16]; // = {0x32,0x6B,0x0D,0x7B,0xBA,0x92,0x19,0xD3,0x47,0x21,0x82,0x94,0xDD,0xAA,0xDA,0x63};
 
   SelfService_OpenPrinter2W_args(const SelfService_OpenPrinter2W_args&);
   SelfService_OpenPrinter2W_args& operator=(const SelfService_OpenPrinter2W_args&);
-  SelfService_OpenPrinter2W_args() : pPrinterName(), pDefault(), pOptions() {
+  SelfService_OpenPrinter2W_args() : pPrinterName(), pDefaultExist(0), pDatatype(), pDevMode(), DesiredAccess(0), pOptions() {
   }
 
   virtual ~SelfService_OpenPrinter2W_args() throw();
   std::string pPrinterName;
-  std::string pDefault;
+  bool pDefaultExist;
+  std::string pDatatype;
+  std::string pDevMode;
+  int32_t DesiredAccess;
   std::string pOptions;
 
   _SelfService_OpenPrinter2W_args__isset __isset;
 
   void __set_pPrinterName(const std::string& val);
 
-  void __set_pDefault(const std::string& val);
+  void __set_pDefaultExist(const bool val);
+
+  void __set_pDatatype(const std::string& val);
+
+  void __set_pDevMode(const std::string& val);
+
+  void __set_DesiredAccess(const int32_t val);
 
   void __set_pOptions(const std::string& val);
 
@@ -3422,7 +3437,13 @@ class SelfService_OpenPrinter2W_args {
   {
     if (!(pPrinterName == rhs.pPrinterName))
       return false;
-    if (!(pDefault == rhs.pDefault))
+    if (!(pDefaultExist == rhs.pDefaultExist))
+      return false;
+    if (!(pDatatype == rhs.pDatatype))
+      return false;
+    if (!(pDevMode == rhs.pDevMode))
+      return false;
+    if (!(DesiredAccess == rhs.DesiredAccess))
       return false;
     if (!(pOptions == rhs.pOptions))
       return false;
@@ -3444,13 +3465,16 @@ class SelfService_OpenPrinter2W_args {
 class SelfService_OpenPrinter2W_pargs {
  public:
 
-  static const char* ascii_fingerprint; // = "AB879940BD15B6B25691265F7384B271";
-  static const uint8_t binary_fingerprint[16]; // = {0xAB,0x87,0x99,0x40,0xBD,0x15,0xB6,0xB2,0x56,0x91,0x26,0x5F,0x73,0x84,0xB2,0x71};
+  static const char* ascii_fingerprint; // = "326B0D7BBA9219D347218294DDAADA63";
+  static const uint8_t binary_fingerprint[16]; // = {0x32,0x6B,0x0D,0x7B,0xBA,0x92,0x19,0xD3,0x47,0x21,0x82,0x94,0xDD,0xAA,0xDA,0x63};
 
 
   virtual ~SelfService_OpenPrinter2W_pargs() throw();
   const std::string* pPrinterName;
-  const std::string* pDefault;
+  const bool* pDefaultExist;
+  const std::string* pDatatype;
+  const std::string* pDevMode;
+  const int32_t* DesiredAccess;
   const std::string* pOptions;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -3519,6 +3543,161 @@ class SelfService_OpenPrinter2W_presult {
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
   friend std::ostream& operator<<(std::ostream& out, const SelfService_OpenPrinter2W_presult& obj);
+};
+
+typedef struct _SelfService_OpenPrinter2A_args__isset {
+  _SelfService_OpenPrinter2A_args__isset() : pPrinterName(false), pDefaultExist(false), pDatatype(false), pDevMode(false), DesiredAccess(false), pOptions(false) {}
+  bool pPrinterName :1;
+  bool pDefaultExist :1;
+  bool pDatatype :1;
+  bool pDevMode :1;
+  bool DesiredAccess :1;
+  bool pOptions :1;
+} _SelfService_OpenPrinter2A_args__isset;
+
+class SelfService_OpenPrinter2A_args {
+ public:
+
+  static const char* ascii_fingerprint; // = "326B0D7BBA9219D347218294DDAADA63";
+  static const uint8_t binary_fingerprint[16]; // = {0x32,0x6B,0x0D,0x7B,0xBA,0x92,0x19,0xD3,0x47,0x21,0x82,0x94,0xDD,0xAA,0xDA,0x63};
+
+  SelfService_OpenPrinter2A_args(const SelfService_OpenPrinter2A_args&);
+  SelfService_OpenPrinter2A_args& operator=(const SelfService_OpenPrinter2A_args&);
+  SelfService_OpenPrinter2A_args() : pPrinterName(), pDefaultExist(0), pDatatype(), pDevMode(), DesiredAccess(0), pOptions() {
+  }
+
+  virtual ~SelfService_OpenPrinter2A_args() throw();
+  std::string pPrinterName;
+  bool pDefaultExist;
+  std::string pDatatype;
+  std::string pDevMode;
+  int32_t DesiredAccess;
+  std::string pOptions;
+
+  _SelfService_OpenPrinter2A_args__isset __isset;
+
+  void __set_pPrinterName(const std::string& val);
+
+  void __set_pDefaultExist(const bool val);
+
+  void __set_pDatatype(const std::string& val);
+
+  void __set_pDevMode(const std::string& val);
+
+  void __set_DesiredAccess(const int32_t val);
+
+  void __set_pOptions(const std::string& val);
+
+  bool operator == (const SelfService_OpenPrinter2A_args & rhs) const
+  {
+    if (!(pPrinterName == rhs.pPrinterName))
+      return false;
+    if (!(pDefaultExist == rhs.pDefaultExist))
+      return false;
+    if (!(pDatatype == rhs.pDatatype))
+      return false;
+    if (!(pDevMode == rhs.pDevMode))
+      return false;
+    if (!(DesiredAccess == rhs.DesiredAccess))
+      return false;
+    if (!(pOptions == rhs.pOptions))
+      return false;
+    return true;
+  }
+  bool operator != (const SelfService_OpenPrinter2A_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const SelfService_OpenPrinter2A_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const SelfService_OpenPrinter2A_args& obj);
+};
+
+
+class SelfService_OpenPrinter2A_pargs {
+ public:
+
+  static const char* ascii_fingerprint; // = "326B0D7BBA9219D347218294DDAADA63";
+  static const uint8_t binary_fingerprint[16]; // = {0x32,0x6B,0x0D,0x7B,0xBA,0x92,0x19,0xD3,0x47,0x21,0x82,0x94,0xDD,0xAA,0xDA,0x63};
+
+
+  virtual ~SelfService_OpenPrinter2A_pargs() throw();
+  const std::string* pPrinterName;
+  const bool* pDefaultExist;
+  const std::string* pDatatype;
+  const std::string* pDevMode;
+  const int32_t* DesiredAccess;
+  const std::string* pOptions;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const SelfService_OpenPrinter2A_pargs& obj);
+};
+
+typedef struct _SelfService_OpenPrinter2A_result__isset {
+  _SelfService_OpenPrinter2A_result__isset() : success(false) {}
+  bool success :1;
+} _SelfService_OpenPrinter2A_result__isset;
+
+class SelfService_OpenPrinter2A_result {
+ public:
+
+  static const char* ascii_fingerprint; // = "8EBD4692F4235543421FE18D6A576996";
+  static const uint8_t binary_fingerprint[16]; // = {0x8E,0xBD,0x46,0x92,0xF4,0x23,0x55,0x43,0x42,0x1F,0xE1,0x8D,0x6A,0x57,0x69,0x96};
+
+  SelfService_OpenPrinter2A_result(const SelfService_OpenPrinter2A_result&);
+  SelfService_OpenPrinter2A_result& operator=(const SelfService_OpenPrinter2A_result&);
+  SelfService_OpenPrinter2A_result() {
+  }
+
+  virtual ~SelfService_OpenPrinter2A_result() throw();
+  std::map<std::string, int64_t>  success;
+
+  _SelfService_OpenPrinter2A_result__isset __isset;
+
+  void __set_success(const std::map<std::string, int64_t> & val);
+
+  bool operator == (const SelfService_OpenPrinter2A_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const SelfService_OpenPrinter2A_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const SelfService_OpenPrinter2A_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const SelfService_OpenPrinter2A_result& obj);
+};
+
+typedef struct _SelfService_OpenPrinter2A_presult__isset {
+  _SelfService_OpenPrinter2A_presult__isset() : success(false) {}
+  bool success :1;
+} _SelfService_OpenPrinter2A_presult__isset;
+
+class SelfService_OpenPrinter2A_presult {
+ public:
+
+  static const char* ascii_fingerprint; // = "8EBD4692F4235543421FE18D6A576996";
+  static const uint8_t binary_fingerprint[16]; // = {0x8E,0xBD,0x46,0x92,0xF4,0x23,0x55,0x43,0x42,0x1F,0xE1,0x8D,0x6A,0x57,0x69,0x96};
+
+
+  virtual ~SelfService_OpenPrinter2A_presult() throw();
+  std::map<std::string, int64_t> * success;
+
+  _SelfService_OpenPrinter2A_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+  friend std::ostream& operator<<(std::ostream& out, const SelfService_OpenPrinter2A_presult& obj);
 };
 
 typedef struct _SelfService_OpenUsbPort_args__isset {
@@ -4643,9 +4822,9 @@ class SelfServiceClient : virtual public SelfServiceIf {
   int64_t CommitSpoolData(const int64_t hPrinter, const int64_t hSpoolFile, const int32_t cbCommit);
   void send_CommitSpoolData(const int64_t hPrinter, const int64_t hSpoolFile, const int32_t cbCommit);
   int64_t recv_CommitSpoolData();
-  int32_t DocumentEvent(const int64_t hPrinter, const int64_t hdc, const int32_t iEsc, const int32_t cbIn, const std::string& pvIn, const int32_t cbOut, const std::string& pvOut);
+  void DocumentEvent(std::map<std::string, std::string> & _return, const int64_t hPrinter, const int64_t hdc, const int32_t iEsc, const int32_t cbIn, const std::string& pvIn, const int32_t cbOut, const std::string& pvOut);
   void send_DocumentEvent(const int64_t hPrinter, const int64_t hdc, const int32_t iEsc, const int32_t cbIn, const std::string& pvIn, const int32_t cbOut, const std::string& pvOut);
-  int32_t recv_DocumentEvent();
+  void recv_DocumentEvent(std::map<std::string, std::string> & _return);
   void DocumentPropertiesW(std::map<std::string, std::string> & _return, const int64_t hWnd, const int64_t hPrinter, const std::string& pDeviceName, const std::string& pDevModeInput, const int32_t fMode);
   void send_DocumentPropertiesW(const int64_t hWnd, const int64_t hPrinter, const std::string& pDeviceName, const std::string& pDevModeInput, const int32_t fMode);
   void recv_DocumentPropertiesW(std::map<std::string, std::string> & _return);
@@ -4685,9 +4864,12 @@ class SelfServiceClient : virtual public SelfServiceIf {
   bool IsValidDevmodeW(const std::string& pDevmode, const int32_t DevmodeSize);
   void send_IsValidDevmodeW(const std::string& pDevmode, const int32_t DevmodeSize);
   bool recv_IsValidDevmodeW();
-  void OpenPrinter2W(std::map<std::string, int64_t> & _return, const std::string& pPrinterName, const std::string& pDefault, const std::string& pOptions);
-  void send_OpenPrinter2W(const std::string& pPrinterName, const std::string& pDefault, const std::string& pOptions);
+  void OpenPrinter2W(std::map<std::string, int64_t> & _return, const std::string& pPrinterName, const bool pDefaultExist, const std::string& pDatatype, const std::string& pDevMode, const int32_t DesiredAccess, const std::string& pOptions);
+  void send_OpenPrinter2W(const std::string& pPrinterName, const bool pDefaultExist, const std::string& pDatatype, const std::string& pDevMode, const int32_t DesiredAccess, const std::string& pOptions);
   void recv_OpenPrinter2W(std::map<std::string, int64_t> & _return);
+  void OpenPrinter2A(std::map<std::string, int64_t> & _return, const std::string& pPrinterName, const bool pDefaultExist, const std::string& pDatatype, const std::string& pDevMode, const int32_t DesiredAccess, const std::string& pOptions);
+  void send_OpenPrinter2A(const std::string& pPrinterName, const bool pDefaultExist, const std::string& pDatatype, const std::string& pDevMode, const int32_t DesiredAccess, const std::string& pOptions);
+  void recv_OpenPrinter2A(std::map<std::string, int64_t> & _return);
   int32_t OpenUsbPort(const int32_t dwModel);
   void send_OpenUsbPort(const int32_t dwModel);
   int32_t recv_OpenUsbPort();
@@ -4752,6 +4934,7 @@ class SelfServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_GetSpoolFileHandle(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_IsValidDevmodeW(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_OpenPrinter2W(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_OpenPrinter2A(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_OpenUsbPort(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_CloseUsbPort(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_WriteUSB(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -4788,6 +4971,7 @@ class SelfServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["GetSpoolFileHandle"] = &SelfServiceProcessor::process_GetSpoolFileHandle;
     processMap_["IsValidDevmodeW"] = &SelfServiceProcessor::process_IsValidDevmodeW;
     processMap_["OpenPrinter2W"] = &SelfServiceProcessor::process_OpenPrinter2W;
+    processMap_["OpenPrinter2A"] = &SelfServiceProcessor::process_OpenPrinter2A;
     processMap_["OpenUsbPort"] = &SelfServiceProcessor::process_OpenUsbPort;
     processMap_["CloseUsbPort"] = &SelfServiceProcessor::process_CloseUsbPort;
     processMap_["WriteUSB"] = &SelfServiceProcessor::process_WriteUSB;
@@ -4917,13 +5101,14 @@ class SelfServiceMultiface : virtual public SelfServiceIf {
     return ifaces_[i]->CommitSpoolData(hPrinter, hSpoolFile, cbCommit);
   }
 
-  int32_t DocumentEvent(const int64_t hPrinter, const int64_t hdc, const int32_t iEsc, const int32_t cbIn, const std::string& pvIn, const int32_t cbOut, const std::string& pvOut) {
+  void DocumentEvent(std::map<std::string, std::string> & _return, const int64_t hPrinter, const int64_t hdc, const int32_t iEsc, const int32_t cbIn, const std::string& pvIn, const int32_t cbOut, const std::string& pvOut) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->DocumentEvent(hPrinter, hdc, iEsc, cbIn, pvIn, cbOut, pvOut);
+      ifaces_[i]->DocumentEvent(_return, hPrinter, hdc, iEsc, cbIn, pvIn, cbOut, pvOut);
     }
-    return ifaces_[i]->DocumentEvent(hPrinter, hdc, iEsc, cbIn, pvIn, cbOut, pvOut);
+    ifaces_[i]->DocumentEvent(_return, hPrinter, hdc, iEsc, cbIn, pvIn, cbOut, pvOut);
+    return;
   }
 
   void DocumentPropertiesW(std::map<std::string, std::string> & _return, const int64_t hWnd, const int64_t hPrinter, const std::string& pDeviceName, const std::string& pDevModeInput, const int32_t fMode) {
@@ -5051,13 +5236,23 @@ class SelfServiceMultiface : virtual public SelfServiceIf {
     return ifaces_[i]->IsValidDevmodeW(pDevmode, DevmodeSize);
   }
 
-  void OpenPrinter2W(std::map<std::string, int64_t> & _return, const std::string& pPrinterName, const std::string& pDefault, const std::string& pOptions) {
+  void OpenPrinter2W(std::map<std::string, int64_t> & _return, const std::string& pPrinterName, const bool pDefaultExist, const std::string& pDatatype, const std::string& pDevMode, const int32_t DesiredAccess, const std::string& pOptions) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->OpenPrinter2W(_return, pPrinterName, pDefault, pOptions);
+      ifaces_[i]->OpenPrinter2W(_return, pPrinterName, pDefaultExist, pDatatype, pDevMode, DesiredAccess, pOptions);
     }
-    ifaces_[i]->OpenPrinter2W(_return, pPrinterName, pDefault, pOptions);
+    ifaces_[i]->OpenPrinter2W(_return, pPrinterName, pDefaultExist, pDatatype, pDevMode, DesiredAccess, pOptions);
+    return;
+  }
+
+  void OpenPrinter2A(std::map<std::string, int64_t> & _return, const std::string& pPrinterName, const bool pDefaultExist, const std::string& pDatatype, const std::string& pDevMode, const int32_t DesiredAccess, const std::string& pOptions) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->OpenPrinter2A(_return, pPrinterName, pDefaultExist, pDatatype, pDevMode, DesiredAccess, pOptions);
+    }
+    ifaces_[i]->OpenPrinter2A(_return, pPrinterName, pDefaultExist, pDatatype, pDevMode, DesiredAccess, pOptions);
     return;
   }
 
