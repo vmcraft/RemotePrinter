@@ -36,6 +36,7 @@ void print_hex(const char* buffer, size_t len);
 #define THRIFT_A_TO_STRING(VAL) (std::string((LPSTR)(VAL)))                                                                 // string to binary
 #define THRIFT_W_TO_STRING(VAL) (std::string((LPCSTR)(VAL), ((VAL)?wcslen((LPCWSTR)VAL)*sizeof(WCHAR)+sizeof(WCHAR):0)))    // wstring to binary
 #define THRIFT_B_TO_STRING(POI, LEN) (std::string((LPSTR)(POI), (((LPSTR)POI)!=NULL ? LEN : 0)))                            // buffer to binary
+#define THRIFT_SAFE_GET(MAP, NAME, DEFAULT) ( MAP.find(NAME)!=MAP.end() ? MAP.at(NAME) : DEFAULT )
 
 
 // Define original function pointer
@@ -405,7 +406,14 @@ BOOL WINAPI DetourGetDefaultPrinterW(
         return fpGetDefaultPrinterW(pszBuffer, pcchBuffer);
     }
 
-    return FALSE;
+    if (pcchBuffer==NULL) return FALSE;
+    std::map<string, int32_t> ret;
+
+    _api->GetDefaultPrinterW(ret, THRIFT_B_TO_STRING(pszBuffer, *pcchBuffer));
+    *pcchBuffer = THRIFT_SAFE_GET(ret, "pcchBuffer", 0);
+    if (*pcchBuffer==0) return FALSE;
+
+    return THRIFT_SAFE_GET(ret, "result", FALSE);
 }
 
 DWORD WINAPI DetourGetPrinterDataW(
