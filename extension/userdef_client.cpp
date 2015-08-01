@@ -123,14 +123,16 @@ BOOL WINAPI DetourOpenPrinterA(LPSTR pPrinterName, LPHANDLE phPrinter, LPPRINTER
             );
     }
 
-    BOOL result = ret.find("return") != ret.end() ? ret.at("return") : false;
-    if ( result && ret.find("phPrinter") != ret.end()) {
-        if (phPrinter) *phPrinter = (HANDLE)ret.at("phPrinter");
-        printf("PrinterHandle=%x\n", *phPrinter);
-        return true;
+    BOOL result = THRIFT_SAFE_GET(ret, "return", FALSE);
+    if ( result) {
+        if (phPrinter){
+            *phPrinter = (HANDLE)THRIFT_SAFE_GET(ret, "phPrinter", NULL);
+            printf("PrinterHandle=%x\n", *phPrinter);
+        }
+        return result;
     }
 
-    return false;
+    return result;
 }
 
 BOOL WINAPI DetourOpenPrinterW(LPWSTR pPrinterName, LPHANDLE phPrinter, LPPRINTER_DEFAULTSW pDefault){
@@ -159,13 +161,16 @@ BOOL WINAPI DetourOpenPrinterW(LPWSTR pPrinterName, LPHANDLE phPrinter, LPPRINTE
             0);
     }
 
-    BOOL result = ret.find("return") != ret.end() ? ret.at("return") : false;
-    if ( result && ret.find("phPrinter") != ret.end()) {
-        if (phPrinter) *phPrinter = (HANDLE)ret.at("phPrinter");
-        printf("PrinterHandle=%x\n", *phPrinter);
+    BOOL result = THRIFT_SAFE_GET(ret, "return", FALSE);
+    if ( result) {
+        if (phPrinter) {
+            *phPrinter = (HANDLE)THRIFT_SAFE_GET(ret, "phPrinter", NULL);
+            printf("PrinterHandle=%x\n", *phPrinter);
+        }
+        return result;
     }
 
-    return false;
+    return result;
 }
 
 BOOL WINAPI DetourStartPagePrinter(HANDLE hPrinter) {
@@ -214,13 +219,8 @@ BOOL WINAPI DetourWritePrinter(HANDLE hPrinter, LPVOID pBuf, DWORD cbBuf, LPDWOR
 
     _api->WritePrinter(ret, INT32_TO_INT64(hPrinter), std::string((char*)pBuf, cbBuf), cbBuf);
 
-    if (ret.find("return") != ret.end() && (bool)ret.at("return") &&
-        ret.find("pcWritten") != ret.end() ){
-            *pcWritten = ret.at("pcWritten");
-            return true;
-    }
-
-    return false;
+    if (pcWritten) *pcWritten = THRIFT_SAFE_GET(ret, "pcWritten", 0);
+    return (BOOL)THRIFT_SAFE_GET(ret, "return", FALSE);
 }
 
 BOOL WINAPI DetourEndPagePrinter(HANDLE hPrinter) {
@@ -413,7 +413,7 @@ BOOL WINAPI DetourGetDefaultPrinterW(
     *pcchBuffer = THRIFT_SAFE_GET(ret, "pcchBuffer", 0);
     if (*pcchBuffer==0) return FALSE;
 
-    return THRIFT_SAFE_GET(ret, "result", FALSE);
+    return (BOOL)THRIFT_SAFE_GET(ret, "result", FALSE);
 }
 
 DWORD WINAPI DetourGetPrinterDataW(
@@ -524,13 +524,16 @@ BOOL WINAPI DetourOpenPrinter2W(
             THRIFT_B_TO_STRING(pOptions, ((PRP_PRINTER_OPTIONS)pOptions)->cbSize));
     }
 
-    BOOL result = ret.find("return") != ret.end() ? ret.at("return") : false;
-    if ( result && ret.find("phPrinter") != ret.end()) {
-        if (phPrinter) *phPrinter = (HANDLE)ret.at("phPrinter");
-        printf("PrinterHandle=%x\n", *phPrinter);
+    BOOL result = THRIFT_SAFE_GET(ret, "return", false);
+    if ( result) {
+        if (phPrinter) {
+            *phPrinter = (HANDLE) THRIFT_SAFE_GET(ret, "phPrinter", NULL);
+            printf("PrinterHandle=%x\n", *phPrinter);
+        }
+        return result;
     }
 
-    return false;
+    return result;
 }
 
 
@@ -566,13 +569,16 @@ BOOL WINAPI DetourOpenPrinter2A(
             THRIFT_B_TO_STRING(pOptions, ((PRP_PRINTER_OPTIONS)pOptions)->cbSize));
     }
 
-    BOOL result = ret.find("return") != ret.end() ? ret.at("return") : false;
-    if ( result && ret.find("phPrinter") != ret.end()) {
-        if (phPrinter) *phPrinter = (HANDLE)ret.at("phPrinter");
-        printf("PrinterHandle=%x\n", *phPrinter);
+    BOOL result = THRIFT_SAFE_GET(ret, "return", false);
+    if ( result) {
+        if (phPrinter) {
+            *phPrinter = (HANDLE) THRIFT_SAFE_GET(ret, "phPrinter", NULL);
+            printf("PrinterHandle=%x\n", *phPrinter);
+        }
+        return result;
     }
 
-    return false;
+    return result;
 }
 
 
