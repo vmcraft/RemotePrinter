@@ -21,6 +21,8 @@ namespace userdefined {
 
 class ArgGetDefaultPrinterW;
 
+class ArgEnumPrintersW;
+
 typedef struct _ArgGetDefaultPrinterW__isset {
   _ArgGetDefaultPrinterW__isset() : ret(false), pszBuffer(false), pcchBuffer(false) {}
   bool ret :1;
@@ -75,6 +77,97 @@ class ArgGetDefaultPrinterW {
 };
 
 void swap(ArgGetDefaultPrinterW &a, ArgGetDefaultPrinterW &b);
+
+typedef struct _ArgEnumPrintersW__isset {
+  _ArgEnumPrintersW__isset() : ret(false), Flags(false), Name(false), Level(false), pPrinterEnum(false), cbBuf(false), pcbNeeded(false), pcReturned(false), int32PrinterEnum(false) {}
+  bool ret :1;
+  bool Flags :1;
+  bool Name :1;
+  bool Level :1;
+  bool pPrinterEnum :1;
+  bool cbBuf :1;
+  bool pcbNeeded :1;
+  bool pcReturned :1;
+  bool int32PrinterEnum :1;
+} _ArgEnumPrintersW__isset;
+
+class ArgEnumPrintersW {
+ public:
+
+  static const char* ascii_fingerprint; // = "DE518725CC5D9695526E35BF6A80A175";
+  static const uint8_t binary_fingerprint[16]; // = {0xDE,0x51,0x87,0x25,0xCC,0x5D,0x96,0x95,0x52,0x6E,0x35,0xBF,0x6A,0x80,0xA1,0x75};
+
+  ArgEnumPrintersW(const ArgEnumPrintersW&);
+  ArgEnumPrintersW& operator=(const ArgEnumPrintersW&);
+  ArgEnumPrintersW() : ret(0), Flags(0), Name(), Level(0), pPrinterEnum(), cbBuf(0), pcbNeeded(0), pcReturned(0) {
+  }
+
+  virtual ~ArgEnumPrintersW() throw();
+  bool ret;
+  int32_t Flags;
+  std::string Name;
+  int32_t Level;
+  std::string pPrinterEnum;
+  int32_t cbBuf;
+  int32_t pcbNeeded;
+  int32_t pcReturned;
+  std::map<std::string, int32_t>  int32PrinterEnum;
+
+  _ArgEnumPrintersW__isset __isset;
+
+  void __set_ret(const bool val);
+
+  void __set_Flags(const int32_t val);
+
+  void __set_Name(const std::string& val);
+
+  void __set_Level(const int32_t val);
+
+  void __set_pPrinterEnum(const std::string& val);
+
+  void __set_cbBuf(const int32_t val);
+
+  void __set_pcbNeeded(const int32_t val);
+
+  void __set_pcReturned(const int32_t val);
+
+  void __set_int32PrinterEnum(const std::map<std::string, int32_t> & val);
+
+  bool operator == (const ArgEnumPrintersW & rhs) const
+  {
+    if (!(ret == rhs.ret))
+      return false;
+    if (!(Flags == rhs.Flags))
+      return false;
+    if (!(Name == rhs.Name))
+      return false;
+    if (!(Level == rhs.Level))
+      return false;
+    if (!(pPrinterEnum == rhs.pPrinterEnum))
+      return false;
+    if (!(cbBuf == rhs.cbBuf))
+      return false;
+    if (!(pcbNeeded == rhs.pcbNeeded))
+      return false;
+    if (!(pcReturned == rhs.pcReturned))
+      return false;
+    if (!(int32PrinterEnum == rhs.int32PrinterEnum))
+      return false;
+    return true;
+  }
+  bool operator != (const ArgEnumPrintersW &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ArgEnumPrintersW & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const ArgEnumPrintersW& obj);
+};
+
+void swap(ArgEnumPrintersW &a, ArgEnumPrintersW &b);
 
 } // namespace
 

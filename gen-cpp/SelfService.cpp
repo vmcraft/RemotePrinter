@@ -181,17 +181,17 @@ uint32_t SelfService_OpenPrinterA_result::read(::apache::thrift::protocol::TProt
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size2;
-            ::apache::thrift::protocol::TType _ktype3;
-            ::apache::thrift::protocol::TType _vtype4;
-            xfer += iprot->readMapBegin(_ktype3, _vtype4, _size2);
-            uint32_t _i6;
-            for (_i6 = 0; _i6 < _size2; ++_i6)
+            uint32_t _size12;
+            ::apache::thrift::protocol::TType _ktype13;
+            ::apache::thrift::protocol::TType _vtype14;
+            xfer += iprot->readMapBegin(_ktype13, _vtype14, _size12);
+            uint32_t _i16;
+            for (_i16 = 0; _i16 < _size12; ++_i16)
             {
-              std::string _key7;
-              xfer += iprot->readString(_key7);
-              int64_t& _val8 = this->success[_key7];
-              xfer += iprot->readI64(_val8);
+              std::string _key17;
+              xfer += iprot->readString(_key17);
+              int64_t& _val18 = this->success[_key17];
+              xfer += iprot->readI64(_val18);
             }
             xfer += iprot->readMapEnd();
           }
@@ -222,11 +222,11 @@ uint32_t SelfService_OpenPrinterA_result::write(::apache::thrift::protocol::TPro
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_I64, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, int64_t> ::const_iterator _iter9;
-      for (_iter9 = this->success.begin(); _iter9 != this->success.end(); ++_iter9)
+      std::map<std::string, int64_t> ::const_iterator _iter19;
+      for (_iter19 = this->success.begin(); _iter19 != this->success.end(); ++_iter19)
       {
-        xfer += oprot->writeString(_iter9->first);
-        xfer += oprot->writeI64(_iter9->second);
+        xfer += oprot->writeString(_iter19->first);
+        xfer += oprot->writeI64(_iter19->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -266,17 +266,17 @@ uint32_t SelfService_OpenPrinterA_presult::read(::apache::thrift::protocol::TPro
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size10;
-            ::apache::thrift::protocol::TType _ktype11;
-            ::apache::thrift::protocol::TType _vtype12;
-            xfer += iprot->readMapBegin(_ktype11, _vtype12, _size10);
-            uint32_t _i14;
-            for (_i14 = 0; _i14 < _size10; ++_i14)
+            uint32_t _size20;
+            ::apache::thrift::protocol::TType _ktype21;
+            ::apache::thrift::protocol::TType _vtype22;
+            xfer += iprot->readMapBegin(_ktype21, _vtype22, _size20);
+            uint32_t _i24;
+            for (_i24 = 0; _i24 < _size20; ++_i24)
             {
-              std::string _key15;
-              xfer += iprot->readString(_key15);
-              int64_t& _val16 = (*(this->success))[_key15];
-              xfer += iprot->readI64(_val16);
+              std::string _key25;
+              xfer += iprot->readString(_key25);
+              int64_t& _val26 = (*(this->success))[_key25];
+              xfer += iprot->readI64(_val26);
             }
             xfer += iprot->readMapEnd();
           }
@@ -470,17 +470,17 @@ uint32_t SelfService_OpenPrinterW_result::read(::apache::thrift::protocol::TProt
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size17;
-            ::apache::thrift::protocol::TType _ktype18;
-            ::apache::thrift::protocol::TType _vtype19;
-            xfer += iprot->readMapBegin(_ktype18, _vtype19, _size17);
-            uint32_t _i21;
-            for (_i21 = 0; _i21 < _size17; ++_i21)
+            uint32_t _size27;
+            ::apache::thrift::protocol::TType _ktype28;
+            ::apache::thrift::protocol::TType _vtype29;
+            xfer += iprot->readMapBegin(_ktype28, _vtype29, _size27);
+            uint32_t _i31;
+            for (_i31 = 0; _i31 < _size27; ++_i31)
             {
-              std::string _key22;
-              xfer += iprot->readString(_key22);
-              int64_t& _val23 = this->success[_key22];
-              xfer += iprot->readI64(_val23);
+              std::string _key32;
+              xfer += iprot->readString(_key32);
+              int64_t& _val33 = this->success[_key32];
+              xfer += iprot->readI64(_val33);
             }
             xfer += iprot->readMapEnd();
           }
@@ -511,11 +511,11 @@ uint32_t SelfService_OpenPrinterW_result::write(::apache::thrift::protocol::TPro
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_I64, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, int64_t> ::const_iterator _iter24;
-      for (_iter24 = this->success.begin(); _iter24 != this->success.end(); ++_iter24)
+      std::map<std::string, int64_t> ::const_iterator _iter34;
+      for (_iter34 = this->success.begin(); _iter34 != this->success.end(); ++_iter34)
       {
-        xfer += oprot->writeString(_iter24->first);
-        xfer += oprot->writeI64(_iter24->second);
+        xfer += oprot->writeString(_iter34->first);
+        xfer += oprot->writeI64(_iter34->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -555,17 +555,17 @@ uint32_t SelfService_OpenPrinterW_presult::read(::apache::thrift::protocol::TPro
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size25;
-            ::apache::thrift::protocol::TType _ktype26;
-            ::apache::thrift::protocol::TType _vtype27;
-            xfer += iprot->readMapBegin(_ktype26, _vtype27, _size25);
-            uint32_t _i29;
-            for (_i29 = 0; _i29 < _size25; ++_i29)
+            uint32_t _size35;
+            ::apache::thrift::protocol::TType _ktype36;
+            ::apache::thrift::protocol::TType _vtype37;
+            xfer += iprot->readMapBegin(_ktype36, _vtype37, _size35);
+            uint32_t _i39;
+            for (_i39 = 0; _i39 < _size35; ++_i39)
             {
-              std::string _key30;
-              xfer += iprot->readString(_key30);
-              int64_t& _val31 = (*(this->success))[_key30];
-              xfer += iprot->readI64(_val31);
+              std::string _key40;
+              xfer += iprot->readString(_key40);
+              int64_t& _val41 = (*(this->success))[_key40];
+              xfer += iprot->readI64(_val41);
             }
             xfer += iprot->readMapEnd();
           }
@@ -1163,17 +1163,17 @@ uint32_t SelfService_WritePrinter_result::read(::apache::thrift::protocol::TProt
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size32;
-            ::apache::thrift::protocol::TType _ktype33;
-            ::apache::thrift::protocol::TType _vtype34;
-            xfer += iprot->readMapBegin(_ktype33, _vtype34, _size32);
-            uint32_t _i36;
-            for (_i36 = 0; _i36 < _size32; ++_i36)
+            uint32_t _size42;
+            ::apache::thrift::protocol::TType _ktype43;
+            ::apache::thrift::protocol::TType _vtype44;
+            xfer += iprot->readMapBegin(_ktype43, _vtype44, _size42);
+            uint32_t _i46;
+            for (_i46 = 0; _i46 < _size42; ++_i46)
             {
-              std::string _key37;
-              xfer += iprot->readString(_key37);
-              int32_t& _val38 = this->success[_key37];
-              xfer += iprot->readI32(_val38);
+              std::string _key47;
+              xfer += iprot->readString(_key47);
+              int32_t& _val48 = this->success[_key47];
+              xfer += iprot->readI32(_val48);
             }
             xfer += iprot->readMapEnd();
           }
@@ -1204,11 +1204,11 @@ uint32_t SelfService_WritePrinter_result::write(::apache::thrift::protocol::TPro
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, int32_t> ::const_iterator _iter39;
-      for (_iter39 = this->success.begin(); _iter39 != this->success.end(); ++_iter39)
+      std::map<std::string, int32_t> ::const_iterator _iter49;
+      for (_iter49 = this->success.begin(); _iter49 != this->success.end(); ++_iter49)
       {
-        xfer += oprot->writeString(_iter39->first);
-        xfer += oprot->writeI32(_iter39->second);
+        xfer += oprot->writeString(_iter49->first);
+        xfer += oprot->writeI32(_iter49->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -1248,17 +1248,17 @@ uint32_t SelfService_WritePrinter_presult::read(::apache::thrift::protocol::TPro
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size40;
-            ::apache::thrift::protocol::TType _ktype41;
-            ::apache::thrift::protocol::TType _vtype42;
-            xfer += iprot->readMapBegin(_ktype41, _vtype42, _size40);
-            uint32_t _i44;
-            for (_i44 = 0; _i44 < _size40; ++_i44)
+            uint32_t _size50;
+            ::apache::thrift::protocol::TType _ktype51;
+            ::apache::thrift::protocol::TType _vtype52;
+            xfer += iprot->readMapBegin(_ktype51, _vtype52, _size50);
+            uint32_t _i54;
+            for (_i54 = 0; _i54 < _size50; ++_i54)
             {
-              std::string _key45;
-              xfer += iprot->readString(_key45);
-              int32_t& _val46 = (*(this->success))[_key45];
-              xfer += iprot->readI32(_val46);
+              std::string _key55;
+              xfer += iprot->readString(_key55);
+              int32_t& _val56 = (*(this->success))[_key55];
+              xfer += iprot->readI32(_val56);
             }
             xfer += iprot->readMapEnd();
           }
@@ -2462,17 +2462,17 @@ uint32_t SelfService_DocumentEvent_result::read(::apache::thrift::protocol::TPro
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size47;
-            ::apache::thrift::protocol::TType _ktype48;
-            ::apache::thrift::protocol::TType _vtype49;
-            xfer += iprot->readMapBegin(_ktype48, _vtype49, _size47);
-            uint32_t _i51;
-            for (_i51 = 0; _i51 < _size47; ++_i51)
+            uint32_t _size57;
+            ::apache::thrift::protocol::TType _ktype58;
+            ::apache::thrift::protocol::TType _vtype59;
+            xfer += iprot->readMapBegin(_ktype58, _vtype59, _size57);
+            uint32_t _i61;
+            for (_i61 = 0; _i61 < _size57; ++_i61)
             {
-              std::string _key52;
-              xfer += iprot->readString(_key52);
-              std::string& _val53 = this->success[_key52];
-              xfer += iprot->readBinary(_val53);
+              std::string _key62;
+              xfer += iprot->readString(_key62);
+              std::string& _val63 = this->success[_key62];
+              xfer += iprot->readBinary(_val63);
             }
             xfer += iprot->readMapEnd();
           }
@@ -2503,11 +2503,11 @@ uint32_t SelfService_DocumentEvent_result::write(::apache::thrift::protocol::TPr
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, std::string> ::const_iterator _iter54;
-      for (_iter54 = this->success.begin(); _iter54 != this->success.end(); ++_iter54)
+      std::map<std::string, std::string> ::const_iterator _iter64;
+      for (_iter64 = this->success.begin(); _iter64 != this->success.end(); ++_iter64)
       {
-        xfer += oprot->writeString(_iter54->first);
-        xfer += oprot->writeBinary(_iter54->second);
+        xfer += oprot->writeString(_iter64->first);
+        xfer += oprot->writeBinary(_iter64->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -2547,17 +2547,17 @@ uint32_t SelfService_DocumentEvent_presult::read(::apache::thrift::protocol::TPr
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size55;
-            ::apache::thrift::protocol::TType _ktype56;
-            ::apache::thrift::protocol::TType _vtype57;
-            xfer += iprot->readMapBegin(_ktype56, _vtype57, _size55);
-            uint32_t _i59;
-            for (_i59 = 0; _i59 < _size55; ++_i59)
+            uint32_t _size65;
+            ::apache::thrift::protocol::TType _ktype66;
+            ::apache::thrift::protocol::TType _vtype67;
+            xfer += iprot->readMapBegin(_ktype66, _vtype67, _size65);
+            uint32_t _i69;
+            for (_i69 = 0; _i69 < _size65; ++_i69)
             {
-              std::string _key60;
-              xfer += iprot->readString(_key60);
-              std::string& _val61 = (*(this->success))[_key60];
-              xfer += iprot->readBinary(_val61);
+              std::string _key70;
+              xfer += iprot->readString(_key70);
+              std::string& _val71 = (*(this->success))[_key70];
+              xfer += iprot->readBinary(_val71);
             }
             xfer += iprot->readMapEnd();
           }
@@ -2751,17 +2751,17 @@ uint32_t SelfService_DocumentPropertiesW_result::read(::apache::thrift::protocol
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size62;
-            ::apache::thrift::protocol::TType _ktype63;
-            ::apache::thrift::protocol::TType _vtype64;
-            xfer += iprot->readMapBegin(_ktype63, _vtype64, _size62);
-            uint32_t _i66;
-            for (_i66 = 0; _i66 < _size62; ++_i66)
+            uint32_t _size72;
+            ::apache::thrift::protocol::TType _ktype73;
+            ::apache::thrift::protocol::TType _vtype74;
+            xfer += iprot->readMapBegin(_ktype73, _vtype74, _size72);
+            uint32_t _i76;
+            for (_i76 = 0; _i76 < _size72; ++_i76)
             {
-              std::string _key67;
-              xfer += iprot->readString(_key67);
-              std::string& _val68 = this->success[_key67];
-              xfer += iprot->readBinary(_val68);
+              std::string _key77;
+              xfer += iprot->readString(_key77);
+              std::string& _val78 = this->success[_key77];
+              xfer += iprot->readBinary(_val78);
             }
             xfer += iprot->readMapEnd();
           }
@@ -2792,11 +2792,11 @@ uint32_t SelfService_DocumentPropertiesW_result::write(::apache::thrift::protoco
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, std::string> ::const_iterator _iter69;
-      for (_iter69 = this->success.begin(); _iter69 != this->success.end(); ++_iter69)
+      std::map<std::string, std::string> ::const_iterator _iter79;
+      for (_iter79 = this->success.begin(); _iter79 != this->success.end(); ++_iter79)
       {
-        xfer += oprot->writeString(_iter69->first);
-        xfer += oprot->writeBinary(_iter69->second);
+        xfer += oprot->writeString(_iter79->first);
+        xfer += oprot->writeBinary(_iter79->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -2836,17 +2836,17 @@ uint32_t SelfService_DocumentPropertiesW_presult::read(::apache::thrift::protoco
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size70;
-            ::apache::thrift::protocol::TType _ktype71;
-            ::apache::thrift::protocol::TType _vtype72;
-            xfer += iprot->readMapBegin(_ktype71, _vtype72, _size70);
-            uint32_t _i74;
-            for (_i74 = 0; _i74 < _size70; ++_i74)
+            uint32_t _size80;
+            ::apache::thrift::protocol::TType _ktype81;
+            ::apache::thrift::protocol::TType _vtype82;
+            xfer += iprot->readMapBegin(_ktype81, _vtype82, _size80);
+            uint32_t _i84;
+            for (_i84 = 0; _i84 < _size80; ++_i84)
             {
-              std::string _key75;
-              xfer += iprot->readString(_key75);
-              std::string& _val76 = (*(this->success))[_key75];
-              xfer += iprot->readBinary(_val76);
+              std::string _key85;
+              xfer += iprot->readString(_key85);
+              std::string& _val86 = (*(this->success))[_key85];
+              xfer += iprot->readBinary(_val86);
             }
             xfer += iprot->readMapEnd();
           }
@@ -3008,17 +3008,17 @@ uint32_t SelfService_EnumFormsW_result::read(::apache::thrift::protocol::TProtoc
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size77;
-            ::apache::thrift::protocol::TType _ktype78;
-            ::apache::thrift::protocol::TType _vtype79;
-            xfer += iprot->readMapBegin(_ktype78, _vtype79, _size77);
-            uint32_t _i81;
-            for (_i81 = 0; _i81 < _size77; ++_i81)
+            uint32_t _size87;
+            ::apache::thrift::protocol::TType _ktype88;
+            ::apache::thrift::protocol::TType _vtype89;
+            xfer += iprot->readMapBegin(_ktype88, _vtype89, _size87);
+            uint32_t _i91;
+            for (_i91 = 0; _i91 < _size87; ++_i91)
             {
-              std::string _key82;
-              xfer += iprot->readString(_key82);
-              std::string& _val83 = this->success[_key82];
-              xfer += iprot->readBinary(_val83);
+              std::string _key92;
+              xfer += iprot->readString(_key92);
+              std::string& _val93 = this->success[_key92];
+              xfer += iprot->readBinary(_val93);
             }
             xfer += iprot->readMapEnd();
           }
@@ -3049,11 +3049,11 @@ uint32_t SelfService_EnumFormsW_result::write(::apache::thrift::protocol::TProto
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, std::string> ::const_iterator _iter84;
-      for (_iter84 = this->success.begin(); _iter84 != this->success.end(); ++_iter84)
+      std::map<std::string, std::string> ::const_iterator _iter94;
+      for (_iter94 = this->success.begin(); _iter94 != this->success.end(); ++_iter94)
       {
-        xfer += oprot->writeString(_iter84->first);
-        xfer += oprot->writeBinary(_iter84->second);
+        xfer += oprot->writeString(_iter94->first);
+        xfer += oprot->writeBinary(_iter94->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -3093,17 +3093,17 @@ uint32_t SelfService_EnumFormsW_presult::read(::apache::thrift::protocol::TProto
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size85;
-            ::apache::thrift::protocol::TType _ktype86;
-            ::apache::thrift::protocol::TType _vtype87;
-            xfer += iprot->readMapBegin(_ktype86, _vtype87, _size85);
-            uint32_t _i89;
-            for (_i89 = 0; _i89 < _size85; ++_i89)
+            uint32_t _size95;
+            ::apache::thrift::protocol::TType _ktype96;
+            ::apache::thrift::protocol::TType _vtype97;
+            xfer += iprot->readMapBegin(_ktype96, _vtype97, _size95);
+            uint32_t _i99;
+            for (_i99 = 0; _i99 < _size95; ++_i99)
             {
-              std::string _key90;
-              xfer += iprot->readString(_key90);
-              std::string& _val91 = (*(this->success))[_key90];
-              xfer += iprot->readBinary(_val91);
+              std::string _key100;
+              xfer += iprot->readString(_key100);
+              std::string& _val101 = (*(this->success))[_key100];
+              xfer += iprot->readBinary(_val101);
             }
             xfer += iprot->readMapEnd();
           }
@@ -3150,33 +3150,9 @@ uint32_t SelfService_EnumPrintersW_args::read(::apache::thrift::protocol::TProto
     switch (fid)
     {
       case 1:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->Flags);
-          this->__isset.Flags = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->Name);
-          this->__isset.Name = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->Level);
-          this->__isset.Level = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 4:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->cbBuf);
-          this->__isset.cbBuf = true;
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->arg.read(iprot);
+          this->__isset.arg = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -3198,20 +3174,8 @@ uint32_t SelfService_EnumPrintersW_args::write(::apache::thrift::protocol::TProt
   oprot->incrementRecursionDepth();
   xfer += oprot->writeStructBegin("SelfService_EnumPrintersW_args");
 
-  xfer += oprot->writeFieldBegin("Flags", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32(this->Flags);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("Name", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeBinary(this->Name);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("Level", ::apache::thrift::protocol::T_I32, 3);
-  xfer += oprot->writeI32(this->Level);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("cbBuf", ::apache::thrift::protocol::T_I32, 4);
-  xfer += oprot->writeI32(this->cbBuf);
+  xfer += oprot->writeFieldBegin("arg", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += this->arg.write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -3230,20 +3194,8 @@ uint32_t SelfService_EnumPrintersW_pargs::write(::apache::thrift::protocol::TPro
   oprot->incrementRecursionDepth();
   xfer += oprot->writeStructBegin("SelfService_EnumPrintersW_pargs");
 
-  xfer += oprot->writeFieldBegin("Flags", ::apache::thrift::protocol::T_I32, 1);
-  xfer += oprot->writeI32((*(this->Flags)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("Name", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeBinary((*(this->Name)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("Level", ::apache::thrift::protocol::T_I32, 3);
-  xfer += oprot->writeI32((*(this->Level)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("cbBuf", ::apache::thrift::protocol::T_I32, 4);
-  xfer += oprot->writeI32((*(this->cbBuf)));
+  xfer += oprot->writeFieldBegin("arg", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += (*(this->arg)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -3278,23 +3230,8 @@ uint32_t SelfService_EnumPrintersW_result::read(::apache::thrift::protocol::TPro
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_MAP) {
-          {
-            this->success.clear();
-            uint32_t _size92;
-            ::apache::thrift::protocol::TType _ktype93;
-            ::apache::thrift::protocol::TType _vtype94;
-            xfer += iprot->readMapBegin(_ktype93, _vtype94, _size92);
-            uint32_t _i96;
-            for (_i96 = 0; _i96 < _size92; ++_i96)
-            {
-              std::string _key97;
-              xfer += iprot->readString(_key97);
-              std::string& _val98 = this->success[_key97];
-              xfer += iprot->readBinary(_val98);
-            }
-            xfer += iprot->readMapEnd();
-          }
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->success.read(iprot);
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -3319,17 +3256,8 @@ uint32_t SelfService_EnumPrintersW_result::write(::apache::thrift::protocol::TPr
   xfer += oprot->writeStructBegin("SelfService_EnumPrintersW_result");
 
   if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
-    {
-      xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, std::string> ::const_iterator _iter99;
-      for (_iter99 = this->success.begin(); _iter99 != this->success.end(); ++_iter99)
-      {
-        xfer += oprot->writeString(_iter99->first);
-        xfer += oprot->writeBinary(_iter99->second);
-      }
-      xfer += oprot->writeMapEnd();
-    }
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
+    xfer += this->success.write(oprot);
     xfer += oprot->writeFieldEnd();
   }
   xfer += oprot->writeFieldStop();
@@ -3363,23 +3291,8 @@ uint32_t SelfService_EnumPrintersW_presult::read(::apache::thrift::protocol::TPr
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_MAP) {
-          {
-            (*(this->success)).clear();
-            uint32_t _size100;
-            ::apache::thrift::protocol::TType _ktype101;
-            ::apache::thrift::protocol::TType _vtype102;
-            xfer += iprot->readMapBegin(_ktype101, _vtype102, _size100);
-            uint32_t _i104;
-            for (_i104 = 0; _i104 < _size100; ++_i104)
-            {
-              std::string _key105;
-              xfer += iprot->readString(_key105);
-              std::string& _val106 = (*(this->success))[_key105];
-              xfer += iprot->readBinary(_val106);
-            }
-            xfer += iprot->readMapEnd();
-          }
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += (*(this->success)).read(iprot);
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -3942,17 +3855,17 @@ uint32_t SelfService_FindNextPrinterChangeNotification_result::read(::apache::th
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size107;
-            ::apache::thrift::protocol::TType _ktype108;
-            ::apache::thrift::protocol::TType _vtype109;
-            xfer += iprot->readMapBegin(_ktype108, _vtype109, _size107);
-            uint32_t _i111;
-            for (_i111 = 0; _i111 < _size107; ++_i111)
+            uint32_t _size102;
+            ::apache::thrift::protocol::TType _ktype103;
+            ::apache::thrift::protocol::TType _vtype104;
+            xfer += iprot->readMapBegin(_ktype103, _vtype104, _size102);
+            uint32_t _i106;
+            for (_i106 = 0; _i106 < _size102; ++_i106)
             {
-              std::string _key112;
-              xfer += iprot->readString(_key112);
-              std::string& _val113 = this->success[_key112];
-              xfer += iprot->readBinary(_val113);
+              std::string _key107;
+              xfer += iprot->readString(_key107);
+              std::string& _val108 = this->success[_key107];
+              xfer += iprot->readBinary(_val108);
             }
             xfer += iprot->readMapEnd();
           }
@@ -3983,11 +3896,11 @@ uint32_t SelfService_FindNextPrinterChangeNotification_result::write(::apache::t
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, std::string> ::const_iterator _iter114;
-      for (_iter114 = this->success.begin(); _iter114 != this->success.end(); ++_iter114)
+      std::map<std::string, std::string> ::const_iterator _iter109;
+      for (_iter109 = this->success.begin(); _iter109 != this->success.end(); ++_iter109)
       {
-        xfer += oprot->writeString(_iter114->first);
-        xfer += oprot->writeBinary(_iter114->second);
+        xfer += oprot->writeString(_iter109->first);
+        xfer += oprot->writeBinary(_iter109->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -4027,17 +3940,17 @@ uint32_t SelfService_FindNextPrinterChangeNotification_presult::read(::apache::t
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size115;
-            ::apache::thrift::protocol::TType _ktype116;
-            ::apache::thrift::protocol::TType _vtype117;
-            xfer += iprot->readMapBegin(_ktype116, _vtype117, _size115);
-            uint32_t _i119;
-            for (_i119 = 0; _i119 < _size115; ++_i119)
+            uint32_t _size110;
+            ::apache::thrift::protocol::TType _ktype111;
+            ::apache::thrift::protocol::TType _vtype112;
+            xfer += iprot->readMapBegin(_ktype111, _vtype112, _size110);
+            uint32_t _i114;
+            for (_i114 = 0; _i114 < _size110; ++_i114)
             {
-              std::string _key120;
-              xfer += iprot->readString(_key120);
-              std::string& _val121 = (*(this->success))[_key120];
-              xfer += iprot->readBinary(_val121);
+              std::string _key115;
+              xfer += iprot->readString(_key115);
+              std::string& _val116 = (*(this->success))[_key115];
+              xfer += iprot->readBinary(_val116);
             }
             xfer += iprot->readMapEnd();
           }
@@ -4571,17 +4484,17 @@ uint32_t SelfService_GetPrinterDataW_result::read(::apache::thrift::protocol::TP
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size122;
-            ::apache::thrift::protocol::TType _ktype123;
-            ::apache::thrift::protocol::TType _vtype124;
-            xfer += iprot->readMapBegin(_ktype123, _vtype124, _size122);
-            uint32_t _i126;
-            for (_i126 = 0; _i126 < _size122; ++_i126)
+            uint32_t _size117;
+            ::apache::thrift::protocol::TType _ktype118;
+            ::apache::thrift::protocol::TType _vtype119;
+            xfer += iprot->readMapBegin(_ktype118, _vtype119, _size117);
+            uint32_t _i121;
+            for (_i121 = 0; _i121 < _size117; ++_i121)
             {
-              std::string _key127;
-              xfer += iprot->readString(_key127);
-              std::string& _val128 = this->success[_key127];
-              xfer += iprot->readBinary(_val128);
+              std::string _key122;
+              xfer += iprot->readString(_key122);
+              std::string& _val123 = this->success[_key122];
+              xfer += iprot->readBinary(_val123);
             }
             xfer += iprot->readMapEnd();
           }
@@ -4612,11 +4525,11 @@ uint32_t SelfService_GetPrinterDataW_result::write(::apache::thrift::protocol::T
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, std::string> ::const_iterator _iter129;
-      for (_iter129 = this->success.begin(); _iter129 != this->success.end(); ++_iter129)
+      std::map<std::string, std::string> ::const_iterator _iter124;
+      for (_iter124 = this->success.begin(); _iter124 != this->success.end(); ++_iter124)
       {
-        xfer += oprot->writeString(_iter129->first);
-        xfer += oprot->writeBinary(_iter129->second);
+        xfer += oprot->writeString(_iter124->first);
+        xfer += oprot->writeBinary(_iter124->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -4656,17 +4569,17 @@ uint32_t SelfService_GetPrinterDataW_presult::read(::apache::thrift::protocol::T
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size130;
-            ::apache::thrift::protocol::TType _ktype131;
-            ::apache::thrift::protocol::TType _vtype132;
-            xfer += iprot->readMapBegin(_ktype131, _vtype132, _size130);
-            uint32_t _i134;
-            for (_i134 = 0; _i134 < _size130; ++_i134)
+            uint32_t _size125;
+            ::apache::thrift::protocol::TType _ktype126;
+            ::apache::thrift::protocol::TType _vtype127;
+            xfer += iprot->readMapBegin(_ktype126, _vtype127, _size125);
+            uint32_t _i129;
+            for (_i129 = 0; _i129 < _size125; ++_i129)
             {
-              std::string _key135;
-              xfer += iprot->readString(_key135);
-              std::string& _val136 = (*(this->success))[_key135];
-              xfer += iprot->readBinary(_val136);
+              std::string _key130;
+              xfer += iprot->readString(_key130);
+              std::string& _val131 = (*(this->success))[_key130];
+              xfer += iprot->readBinary(_val131);
             }
             xfer += iprot->readMapEnd();
           }
@@ -4844,17 +4757,17 @@ uint32_t SelfService_GetPrinterDataExW_result::read(::apache::thrift::protocol::
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size137;
-            ::apache::thrift::protocol::TType _ktype138;
-            ::apache::thrift::protocol::TType _vtype139;
-            xfer += iprot->readMapBegin(_ktype138, _vtype139, _size137);
-            uint32_t _i141;
-            for (_i141 = 0; _i141 < _size137; ++_i141)
+            uint32_t _size132;
+            ::apache::thrift::protocol::TType _ktype133;
+            ::apache::thrift::protocol::TType _vtype134;
+            xfer += iprot->readMapBegin(_ktype133, _vtype134, _size132);
+            uint32_t _i136;
+            for (_i136 = 0; _i136 < _size132; ++_i136)
             {
-              std::string _key142;
-              xfer += iprot->readString(_key142);
-              std::string& _val143 = this->success[_key142];
-              xfer += iprot->readBinary(_val143);
+              std::string _key137;
+              xfer += iprot->readString(_key137);
+              std::string& _val138 = this->success[_key137];
+              xfer += iprot->readBinary(_val138);
             }
             xfer += iprot->readMapEnd();
           }
@@ -4885,11 +4798,11 @@ uint32_t SelfService_GetPrinterDataExW_result::write(::apache::thrift::protocol:
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, std::string> ::const_iterator _iter144;
-      for (_iter144 = this->success.begin(); _iter144 != this->success.end(); ++_iter144)
+      std::map<std::string, std::string> ::const_iterator _iter139;
+      for (_iter139 = this->success.begin(); _iter139 != this->success.end(); ++_iter139)
       {
-        xfer += oprot->writeString(_iter144->first);
-        xfer += oprot->writeBinary(_iter144->second);
+        xfer += oprot->writeString(_iter139->first);
+        xfer += oprot->writeBinary(_iter139->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -4929,17 +4842,17 @@ uint32_t SelfService_GetPrinterDataExW_presult::read(::apache::thrift::protocol:
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size145;
-            ::apache::thrift::protocol::TType _ktype146;
-            ::apache::thrift::protocol::TType _vtype147;
-            xfer += iprot->readMapBegin(_ktype146, _vtype147, _size145);
-            uint32_t _i149;
-            for (_i149 = 0; _i149 < _size145; ++_i149)
+            uint32_t _size140;
+            ::apache::thrift::protocol::TType _ktype141;
+            ::apache::thrift::protocol::TType _vtype142;
+            xfer += iprot->readMapBegin(_ktype141, _vtype142, _size140);
+            uint32_t _i144;
+            for (_i144 = 0; _i144 < _size140; ++_i144)
             {
-              std::string _key150;
-              xfer += iprot->readString(_key150);
-              std::string& _val151 = (*(this->success))[_key150];
-              xfer += iprot->readBinary(_val151);
+              std::string _key145;
+              xfer += iprot->readString(_key145);
+              std::string& _val146 = (*(this->success))[_key145];
+              xfer += iprot->readBinary(_val146);
             }
             xfer += iprot->readMapEnd();
           }
@@ -5101,17 +5014,17 @@ uint32_t SelfService_GetPrinterW_result::read(::apache::thrift::protocol::TProto
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size152;
-            ::apache::thrift::protocol::TType _ktype153;
-            ::apache::thrift::protocol::TType _vtype154;
-            xfer += iprot->readMapBegin(_ktype153, _vtype154, _size152);
-            uint32_t _i156;
-            for (_i156 = 0; _i156 < _size152; ++_i156)
+            uint32_t _size147;
+            ::apache::thrift::protocol::TType _ktype148;
+            ::apache::thrift::protocol::TType _vtype149;
+            xfer += iprot->readMapBegin(_ktype148, _vtype149, _size147);
+            uint32_t _i151;
+            for (_i151 = 0; _i151 < _size147; ++_i151)
             {
-              std::string _key157;
-              xfer += iprot->readString(_key157);
-              std::string& _val158 = this->success[_key157];
-              xfer += iprot->readBinary(_val158);
+              std::string _key152;
+              xfer += iprot->readString(_key152);
+              std::string& _val153 = this->success[_key152];
+              xfer += iprot->readBinary(_val153);
             }
             xfer += iprot->readMapEnd();
           }
@@ -5142,11 +5055,11 @@ uint32_t SelfService_GetPrinterW_result::write(::apache::thrift::protocol::TProt
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, std::string> ::const_iterator _iter159;
-      for (_iter159 = this->success.begin(); _iter159 != this->success.end(); ++_iter159)
+      std::map<std::string, std::string> ::const_iterator _iter154;
+      for (_iter154 = this->success.begin(); _iter154 != this->success.end(); ++_iter154)
       {
-        xfer += oprot->writeString(_iter159->first);
-        xfer += oprot->writeBinary(_iter159->second);
+        xfer += oprot->writeString(_iter154->first);
+        xfer += oprot->writeBinary(_iter154->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -5186,17 +5099,17 @@ uint32_t SelfService_GetPrinterW_presult::read(::apache::thrift::protocol::TProt
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size160;
-            ::apache::thrift::protocol::TType _ktype161;
-            ::apache::thrift::protocol::TType _vtype162;
-            xfer += iprot->readMapBegin(_ktype161, _vtype162, _size160);
-            uint32_t _i164;
-            for (_i164 = 0; _i164 < _size160; ++_i164)
+            uint32_t _size155;
+            ::apache::thrift::protocol::TType _ktype156;
+            ::apache::thrift::protocol::TType _vtype157;
+            xfer += iprot->readMapBegin(_ktype156, _vtype157, _size155);
+            uint32_t _i159;
+            for (_i159 = 0; _i159 < _size155; ++_i159)
             {
-              std::string _key165;
-              xfer += iprot->readString(_key165);
-              std::string& _val166 = (*(this->success))[_key165];
-              xfer += iprot->readBinary(_val166);
+              std::string _key160;
+              xfer += iprot->readString(_key160);
+              std::string& _val161 = (*(this->success))[_key160];
+              xfer += iprot->readBinary(_val161);
             }
             xfer += iprot->readMapEnd();
           }
@@ -5794,17 +5707,17 @@ uint32_t SelfService_OpenPrinter2W_result::read(::apache::thrift::protocol::TPro
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size167;
-            ::apache::thrift::protocol::TType _ktype168;
-            ::apache::thrift::protocol::TType _vtype169;
-            xfer += iprot->readMapBegin(_ktype168, _vtype169, _size167);
-            uint32_t _i171;
-            for (_i171 = 0; _i171 < _size167; ++_i171)
+            uint32_t _size162;
+            ::apache::thrift::protocol::TType _ktype163;
+            ::apache::thrift::protocol::TType _vtype164;
+            xfer += iprot->readMapBegin(_ktype163, _vtype164, _size162);
+            uint32_t _i166;
+            for (_i166 = 0; _i166 < _size162; ++_i166)
             {
-              std::string _key172;
-              xfer += iprot->readString(_key172);
-              int64_t& _val173 = this->success[_key172];
-              xfer += iprot->readI64(_val173);
+              std::string _key167;
+              xfer += iprot->readString(_key167);
+              int64_t& _val168 = this->success[_key167];
+              xfer += iprot->readI64(_val168);
             }
             xfer += iprot->readMapEnd();
           }
@@ -5835,11 +5748,11 @@ uint32_t SelfService_OpenPrinter2W_result::write(::apache::thrift::protocol::TPr
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_I64, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, int64_t> ::const_iterator _iter174;
-      for (_iter174 = this->success.begin(); _iter174 != this->success.end(); ++_iter174)
+      std::map<std::string, int64_t> ::const_iterator _iter169;
+      for (_iter169 = this->success.begin(); _iter169 != this->success.end(); ++_iter169)
       {
-        xfer += oprot->writeString(_iter174->first);
-        xfer += oprot->writeI64(_iter174->second);
+        xfer += oprot->writeString(_iter169->first);
+        xfer += oprot->writeI64(_iter169->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -5879,17 +5792,17 @@ uint32_t SelfService_OpenPrinter2W_presult::read(::apache::thrift::protocol::TPr
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size175;
-            ::apache::thrift::protocol::TType _ktype176;
-            ::apache::thrift::protocol::TType _vtype177;
-            xfer += iprot->readMapBegin(_ktype176, _vtype177, _size175);
-            uint32_t _i179;
-            for (_i179 = 0; _i179 < _size175; ++_i179)
+            uint32_t _size170;
+            ::apache::thrift::protocol::TType _ktype171;
+            ::apache::thrift::protocol::TType _vtype172;
+            xfer += iprot->readMapBegin(_ktype171, _vtype172, _size170);
+            uint32_t _i174;
+            for (_i174 = 0; _i174 < _size170; ++_i174)
             {
-              std::string _key180;
-              xfer += iprot->readString(_key180);
-              int64_t& _val181 = (*(this->success))[_key180];
-              xfer += iprot->readI64(_val181);
+              std::string _key175;
+              xfer += iprot->readString(_key175);
+              int64_t& _val176 = (*(this->success))[_key175];
+              xfer += iprot->readI64(_val176);
             }
             xfer += iprot->readMapEnd();
           }
@@ -6099,17 +6012,17 @@ uint32_t SelfService_OpenPrinter2A_result::read(::apache::thrift::protocol::TPro
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->success.clear();
-            uint32_t _size182;
-            ::apache::thrift::protocol::TType _ktype183;
-            ::apache::thrift::protocol::TType _vtype184;
-            xfer += iprot->readMapBegin(_ktype183, _vtype184, _size182);
-            uint32_t _i186;
-            for (_i186 = 0; _i186 < _size182; ++_i186)
+            uint32_t _size177;
+            ::apache::thrift::protocol::TType _ktype178;
+            ::apache::thrift::protocol::TType _vtype179;
+            xfer += iprot->readMapBegin(_ktype178, _vtype179, _size177);
+            uint32_t _i181;
+            for (_i181 = 0; _i181 < _size177; ++_i181)
             {
-              std::string _key187;
-              xfer += iprot->readString(_key187);
-              int64_t& _val188 = this->success[_key187];
-              xfer += iprot->readI64(_val188);
+              std::string _key182;
+              xfer += iprot->readString(_key182);
+              int64_t& _val183 = this->success[_key182];
+              xfer += iprot->readI64(_val183);
             }
             xfer += iprot->readMapEnd();
           }
@@ -6140,11 +6053,11 @@ uint32_t SelfService_OpenPrinter2A_result::write(::apache::thrift::protocol::TPr
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_MAP, 0);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_I64, static_cast<uint32_t>(this->success.size()));
-      std::map<std::string, int64_t> ::const_iterator _iter189;
-      for (_iter189 = this->success.begin(); _iter189 != this->success.end(); ++_iter189)
+      std::map<std::string, int64_t> ::const_iterator _iter184;
+      for (_iter184 = this->success.begin(); _iter184 != this->success.end(); ++_iter184)
       {
-        xfer += oprot->writeString(_iter189->first);
-        xfer += oprot->writeI64(_iter189->second);
+        xfer += oprot->writeString(_iter184->first);
+        xfer += oprot->writeI64(_iter184->second);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -6184,17 +6097,17 @@ uint32_t SelfService_OpenPrinter2A_presult::read(::apache::thrift::protocol::TPr
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             (*(this->success)).clear();
-            uint32_t _size190;
-            ::apache::thrift::protocol::TType _ktype191;
-            ::apache::thrift::protocol::TType _vtype192;
-            xfer += iprot->readMapBegin(_ktype191, _vtype192, _size190);
-            uint32_t _i194;
-            for (_i194 = 0; _i194 < _size190; ++_i194)
+            uint32_t _size185;
+            ::apache::thrift::protocol::TType _ktype186;
+            ::apache::thrift::protocol::TType _vtype187;
+            xfer += iprot->readMapBegin(_ktype186, _vtype187, _size185);
+            uint32_t _i189;
+            for (_i189 = 0; _i189 < _size185; ++_i189)
             {
-              std::string _key195;
-              xfer += iprot->readString(_key195);
-              int64_t& _val196 = (*(this->success))[_key195];
-              xfer += iprot->readI64(_val196);
+              std::string _key190;
+              xfer += iprot->readString(_key190);
+              int64_t& _val191 = (*(this->success))[_key190];
+              xfer += iprot->readI64(_val191);
             }
             xfer += iprot->readMapEnd();
           }
@@ -8737,22 +8650,19 @@ void SelfServiceClient::recv_EnumFormsW(std::map<std::string, std::string> & _re
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "EnumFormsW failed: unknown result");
 }
 
-void SelfServiceClient::EnumPrintersW(std::map<std::string, std::string> & _return, const int32_t Flags, const std::string& Name, const int32_t Level, const int32_t cbBuf)
+void SelfServiceClient::EnumPrintersW(ArgEnumPrintersW& _return, const ArgEnumPrintersW& arg)
 {
-  send_EnumPrintersW(Flags, Name, Level, cbBuf);
+  send_EnumPrintersW(arg);
   recv_EnumPrintersW(_return);
 }
 
-void SelfServiceClient::send_EnumPrintersW(const int32_t Flags, const std::string& Name, const int32_t Level, const int32_t cbBuf)
+void SelfServiceClient::send_EnumPrintersW(const ArgEnumPrintersW& arg)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("EnumPrintersW", ::apache::thrift::protocol::T_CALL, cseqid);
 
   SelfService_EnumPrintersW_pargs args;
-  args.Flags = &Flags;
-  args.Name = &Name;
-  args.Level = &Level;
-  args.cbBuf = &cbBuf;
+  args.arg = &arg;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -8760,7 +8670,7 @@ void SelfServiceClient::send_EnumPrintersW(const int32_t Flags, const std::strin
   oprot_->getTransport()->flush();
 }
 
-void SelfServiceClient::recv_EnumPrintersW(std::map<std::string, std::string> & _return)
+void SelfServiceClient::recv_EnumPrintersW(ArgEnumPrintersW& _return)
 {
 
   int32_t rseqid = 0;
@@ -10740,7 +10650,7 @@ void SelfServiceProcessor::process_EnumPrintersW(int32_t seqid, ::apache::thrift
 
   SelfService_EnumPrintersW_result result;
   try {
-    iface_->EnumPrintersW(result.success, args.Flags, args.Name, args.Level, args.cbBuf);
+    iface_->EnumPrintersW(result.success, args.arg);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {

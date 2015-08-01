@@ -6,11 +6,23 @@
 namespace cpp userdefined
 
 struct ArgGetDefaultPrinterW {
-    1: bool ret,
-    2: binary pszBuffer,
-    3: i32 pcchBuffer,
+  1: bool ret,
+  2: binary pszBuffer,
+  3: i32 pcchBuffer,
 }
 
+struct ArgEnumPrintersW {
+  1: bool ret,
+  2: i32 Flags,
+  3: binary  Name,
+  4: i32 Level,
+  5: binary pPrinterEnum,
+  6: i32 cbBuf,
+  7: i32 pcbNeeded,
+  8: i32 pcReturned
+
+  10: map<string,i32> int32PrinterEnum
+}
 
 /**
  * Define here your functions to hook
@@ -31,7 +43,7 @@ service SelfService {
   map<string,binary> DocumentEvent(1:i64 hPrinter, 2:i64 hdc, 3:i32 iEsc, 4:i32 cbIn, 5:binary pvIn, 6:i32 cbOut, 7:binary pvOut)
   map<string,binary> DocumentPropertiesW(1:i64 hWnd, 2:i64 hPrinter, 3:binary pDeviceName, 4:binary pDevModeInput, 5:i32 fMode) 
   map<string,binary> EnumFormsW(1:i64 hPrinter, 2:i32 Level, 3:i32 cbBuf)
-  map<string,binary> EnumPrintersW(1:i32 Flags, 2:binary Name, 3:i32 Level, 4:i32 cbBuf) 
+  ArgEnumPrintersW EnumPrintersW(1:ArgEnumPrintersW arg) 
   bool FindClosePrinterChangeNotification(1:i64 hChange)
   i64 FindFirstPrinterChangeNotification(1:i64 hPrinter, 2:i32 fdwFilter, 3:i32 fdwOptions, 4:binary pPrinterNotifyOptions)
   map<string,binary> FindNextPrinterChangeNotification(1:i64 hChange, 2:binary pPrinterNotifyOptions)

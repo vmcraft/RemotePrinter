@@ -87,7 +87,7 @@ class SelfServiceHandler : virtual public SelfServiceIf {
     printf("EnumFormsW\n");
   }
 
-  void EnumPrintersW(std::map<std::string, std::string> & _return, const int32_t Flags, const std::string& Name, const int32_t Level, const int32_t cbBuf) {
+  void EnumPrintersW(ArgEnumPrintersW& _return, const ArgEnumPrintersW& arg) {
     // Your implementation goes here
     printf("EnumPrintersW\n");
   }

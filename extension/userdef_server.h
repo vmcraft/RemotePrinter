@@ -10,6 +10,13 @@
 using namespace userdefined;
 
 #define THRIFT_ZERO_SIZE_STRING_TO_NULL(STR) (STR.size()>0?STR.c_str():NULL)
+#define THRIFT_A_TO_STRING(VAL) (std::string((LPSTR)(VAL)))                                                                 // string to binary
+#define THRIFT_W_TO_STRING(VAL) (std::string((LPCSTR)(VAL), ((VAL)?wcslen((LPCWSTR)VAL)*sizeof(WCHAR)+sizeof(WCHAR):0)))    // wstring to binary
+#define THRIFT_B_TO_STRING(POI, LEN) (std::string((LPSTR)(POI), (((LPSTR)POI)!=NULL ? LEN : 0)))                            // buffer to binary
+#define THRIFT_SAFE_GET(MAP, NAME, DEFAULT) ( MAP.find(NAME)!=MAP.end() ? MAP.at(NAME) : DEFAULT )
+#define THIRFT_NULL_STRING(VAL) (VAL.size()>0 ? VAL.c_str() : NULL)
+#define RP_GET_OFFSET(BUFFER, POINT) (BUFFER==NULL||POINT==NULL ? -1 : (DWORD)((PUCHAR)(POINT)-(PUCHAR)BUFFER))
+
 
 class ApiForwardHandler : virtual public ApiForwardIf {
 public:
@@ -266,9 +273,74 @@ public:
         return;
     }
 
-    void EnumPrintersW(std::map<std::string, std::string> & _return, const int32_t Flags, const std::string& Name, const int32_t Level, const int32_t cbBuf) {
+    void EnumPrintersW(ArgEnumPrintersW& _return, const ArgEnumPrintersW& arg) {
         printf("EnumPrintersW\n");
+
+        _return.ret = false;
         if (fpEnumPrintersW==NULL) return;
+
+        DWORD localpcbNeeded;
+        DWORD localpcReturned;
+        std::shared_ptr<std::vector<char>> localBuffer(new std::vector<char>());
+        localBuffer->reserve(arg.cbBuf);
+
+        BOOL ret = fpEnumPrintersW(arg.Flags,
+                        (LPWSTR)THIRFT_NULL_STRING(arg.Name),
+                        arg.Level,
+                        (arg.cbBuf>0?reinterpret_cast<LPBYTE>(localBuffer->data()):NULL),
+                        arg.cbBuf,
+                        &localpcbNeeded,
+                        &localpcReturned
+                        );
+        _return.pPrinterEnum = THRIFT_B_TO_STRING((arg.cbBuf>0?reinterpret_cast<LPBYTE>(localBuffer->data()):NULL), arg.cbBuf);
+        _return.pcbNeeded = localpcbNeeded;
+        _return.pcReturned = localpcReturned;
+        _return.ret = ret;
+
+        if (ret && localpcReturned>0) {
+            switch(arg.Level){
+            case 1:
+                {
+                LPPRINTER_INFO_1 info = (LPPRINTER_INFO_1) localBuffer->data();
+                _return.int32PrinterEnum["pDescription"] = RP_GET_OFFSET(info, info->pDescription);
+                _return.int32PrinterEnum["pName"] = RP_GET_OFFSET(info, info->pName);
+                _return.int32PrinterEnum["pComment"] = RP_GET_OFFSET(info, info->pComment);
+                break;
+                }
+            case 2:
+                {
+                LPPRINTER_INFO_2 info = (LPPRINTER_INFO_2) localBuffer->data();
+                _return.int32PrinterEnum["pServerName"] = RP_GET_OFFSET(info, info->pServerName);
+                _return.int32PrinterEnum["pPrinterName"] = RP_GET_OFFSET(info, info->pPrinterName);
+                _return.int32PrinterEnum["pShareName"] = RP_GET_OFFSET(info, info->pShareName);
+                _return.int32PrinterEnum["pPortName"] = RP_GET_OFFSET(info, info->pPortName);
+                _return.int32PrinterEnum["pDriverName"] = RP_GET_OFFSET(info, info->pDriverName);
+                _return.int32PrinterEnum["pComment"] = RP_GET_OFFSET(info, info->pComment);
+                _return.int32PrinterEnum["pLocation"] = RP_GET_OFFSET(info, info->pLocation);
+                _return.int32PrinterEnum["pDevMode"] = RP_GET_OFFSET(info, info->pDevMode, info->pDevMode->dmSize);
+                _return.int32PrinterEnum["pSepFile"] = RP_GET_OFFSET(info, info->pSepFile);
+                _return.int32PrinterEnum["pPrintProcessor"] = RP_GET_OFFSET(info, info->pPrintProcessor);
+                _return.int32PrinterEnum["pParameters"] = RP_GET_OFFSET(info, info->pParameters);
+                break;
+                }
+            case 4:
+                {
+                LPPRINTER_INFO_4 info = (LPPRINTER_INFO_4) localBuffer->data();
+                _return.int32PrinterEnum["pPrinterName"] = RP_GET_OFFSET(info, info->pPrinterName);
+                _return.int32PrinterEnum["pServerName"] = RP_GET_OFFSET(info, info->pServerName);
+                break;
+                }
+            case 5:
+                {
+                LPPRINTER_INFO_5 info = (LPPRINTER_INFO_5) localBuffer->data();
+                _return.int32PrinterEnum["pPrinterName"] = RP_GET_OFFSET(info, info->pPrinterName);
+                _return.int32PrinterEnum["pPortName"] = RP_GET_OFFSET(info, info->pPortName);
+                break;
+                }
+            default:
+                _return.ret = false;
+            }
+        }
 
         return;
     }

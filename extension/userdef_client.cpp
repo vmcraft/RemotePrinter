@@ -38,6 +38,7 @@ using namespace userdefined;
 #define THRIFT_W_TO_STRING(VAL) (std::string((LPCSTR)(VAL), ((VAL)?wcslen((LPCWSTR)VAL)*sizeof(WCHAR)+sizeof(WCHAR):0)))    // wstring to binary
 #define THRIFT_B_TO_STRING(POI, LEN) (std::string((LPSTR)(POI), (((LPSTR)POI)!=NULL ? LEN : 0)))                            // buffer to binary
 #define THRIFT_SAFE_GET(MAP, NAME, DEFAULT) ( MAP.find(NAME)!=MAP.end() ? MAP.at(NAME) : DEFAULT )
+#define RP_SET_OFFSET(BUFFER,OFFSET) ((DWORD)OFFSET==(DWORD)-1 ? NULL : (PVOID)((PUCHAR)BUFFER+(DWORD)OFFSET))
 
 
 // Define original function pointer
@@ -340,19 +341,69 @@ BOOL WINAPI DetourEnumPrintersW(
         return fpEnumPrintersW(Flags, Name, Level, pPrinterEnum, cbBuf, pcbNeeded, pcReturned);
     }
 
-    std::map<std::string, std::string> ret;
-    _api->EnumPrintersW(ret, Flags, THRIFT_W_TO_STRING(Name), Level, cbBuf);
+    if (fpEnumPrintersW==NULL) return FALSE;
 
-    if (pcbNeeded) *pcbNeeded = std::stoi(THRIFT_SAFE_GET(ret, "pcbNeeded", "0"));
-    if (pcReturned) *pcReturned = std::stoi(THRIFT_SAFE_GET(ret, "pcReturned", "0"));
+    ArgEnumPrintersW arg;
+    ArgEnumPrintersW result;
 
-    BOOL result = (BOOL)std::stoi(THRIFT_SAFE_GET(ret, "return", "0"));
-    if (result && pPrinterEnum) {
-        std::string &localPrinterEnum = THRIFT_SAFE_GET(ret, "pPrinterEnum", "");
-        memcpy(pPrinterEnum, localPrinterEnum.c_str(), localPrinterEnum.size());
+    arg.Flags = Flags;
+    arg.Name = THRIFT_W_TO_STRING(Name);
+    arg.Level = Level;
+    arg.cbBuf = cbBuf;
+   
+    _api->EnumPrintersW(result, arg);
+
+    if (pcbNeeded) *pcbNeeded = result.pcbNeeded;
+    if (pcReturned) *pcReturned = result.pcReturned;
+
+    if (result.ret && pPrinterEnum) {
+        memcpy(pPrinterEnum, result.pPrinterEnum.c_str(), cbBuf);
+
+        switch(arg.Level){
+        case 1:
+            {
+            LPPRINTER_INFO_1 info = (LPPRINTER_INFO_1) pPrinterEnum;
+            info->pDescription = (LPWSTR)RP_SET_OFFSET(info, result.int32PrinterEnum["pDescription"]);
+            info->pName = (LPWSTR)RP_SET_OFFSET(info, result.int32PrinterEnum["pName"]);
+            info->pComment = (LPWSTR)RP_SET_OFFSET(info, result.int32PrinterEnum["pComment"]);
+            break;
+            }
+        case 2:
+            {
+            LPPRINTER_INFO_2 info = (LPPRINTER_INFO_2) pPrinterEnum;
+            info->pServerName = (LPWSTR)RP_SET_OFFSET(info, result.int32PrinterEnum["pServerName"]);
+            info->pPrinterName = (LPWSTR)RP_SET_OFFSET(info, result.int32PrinterEnum["pPrinterName"]);
+            info->pShareName = (LPWSTR)RP_SET_OFFSET(info, result.int32PrinterEnum["pShareName"]);
+            info->pPortName = (LPWSTR)RP_SET_OFFSET(info, result.int32PrinterEnum["pPortName"]);
+            info->pDriverName = (LPWSTR)RP_SET_OFFSET(info, result.int32PrinterEnum["pDriverName"]);
+            info->pComment = (LPWSTR)RP_SET_OFFSET(info, result.int32PrinterEnum["pComment"]);
+            info->pLocation = (LPWSTR)RP_SET_OFFSET(info, result.int32PrinterEnum["pLocation"]);
+            info->pDevMode = (LPDEVMODE)RP_SET_OFFSET(info, result.int32PrinterEnum["pDevMode"]);
+            info->pSepFile = (LPWSTR)RP_SET_OFFSET(info, result.int32PrinterEnum["pSepFile"]);
+            info->pPrintProcessor = (LPWSTR)RP_SET_OFFSET(info, result.int32PrinterEnum["pPrintProcessor"]);
+            info->pParameters = (LPWSTR)RP_SET_OFFSET(info, result.int32PrinterEnum["pParameters"]);
+            break;
+            }
+        case 4:
+            {
+            LPPRINTER_INFO_4 info = (LPPRINTER_INFO_4) pPrinterEnum;
+            info->pPrinterName = (LPWSTR)RP_SET_OFFSET(info, result.int32PrinterEnum["pPrinterName"]);
+            info->pServerName = (LPWSTR)RP_SET_OFFSET(info, result.int32PrinterEnum["pServerName"]);
+            break;
+            }
+        case 5:
+            {
+            LPPRINTER_INFO_5 info = (LPPRINTER_INFO_5) pPrinterEnum;
+            info->pPrinterName = (LPWSTR)RP_SET_OFFSET(info, result.int32PrinterEnum["pPrinterName"]);
+            info->pPortName = (LPWSTR)RP_SET_OFFSET(info, result.int32PrinterEnum["pPortName"]);
+            break;
+            }
+        default:
+            result.ret = false;
+        }
     }
 
-    return result;
+    return (BOOL)result.ret;
 }
 
 BOOL WINAPI DetourFindClosePrinterChangeNotification(

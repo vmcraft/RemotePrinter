@@ -28,7 +28,7 @@ class SelfServiceIf {
   virtual void DocumentEvent(std::map<std::string, std::string> & _return, const int64_t hPrinter, const int64_t hdc, const int32_t iEsc, const int32_t cbIn, const std::string& pvIn, const int32_t cbOut, const std::string& pvOut) = 0;
   virtual void DocumentPropertiesW(std::map<std::string, std::string> & _return, const int64_t hWnd, const int64_t hPrinter, const std::string& pDeviceName, const std::string& pDevModeInput, const int32_t fMode) = 0;
   virtual void EnumFormsW(std::map<std::string, std::string> & _return, const int64_t hPrinter, const int32_t Level, const int32_t cbBuf) = 0;
-  virtual void EnumPrintersW(std::map<std::string, std::string> & _return, const int32_t Flags, const std::string& Name, const int32_t Level, const int32_t cbBuf) = 0;
+  virtual void EnumPrintersW(ArgEnumPrintersW& _return, const ArgEnumPrintersW& arg) = 0;
   virtual bool FindClosePrinterChangeNotification(const int64_t hChange) = 0;
   virtual int64_t FindFirstPrinterChangeNotification(const int64_t hPrinter, const int32_t fdwFilter, const int32_t fdwOptions, const std::string& pPrinterNotifyOptions) = 0;
   virtual void FindNextPrinterChangeNotification(std::map<std::string, std::string> & _return, const int64_t hChange, const std::string& pPrinterNotifyOptions) = 0;
@@ -124,7 +124,7 @@ class SelfServiceNull : virtual public SelfServiceIf {
   void EnumFormsW(std::map<std::string, std::string> & /* _return */, const int64_t /* hPrinter */, const int32_t /* Level */, const int32_t /* cbBuf */) {
     return;
   }
-  void EnumPrintersW(std::map<std::string, std::string> & /* _return */, const int32_t /* Flags */, const std::string& /* Name */, const int32_t /* Level */, const int32_t /* cbBuf */) {
+  void EnumPrintersW(ArgEnumPrintersW& /* _return */, const ArgEnumPrintersW& /* arg */) {
     return;
   }
   bool FindClosePrinterChangeNotification(const int64_t /* hChange */) {
@@ -1966,49 +1966,31 @@ class SelfService_EnumFormsW_presult {
 };
 
 typedef struct _SelfService_EnumPrintersW_args__isset {
-  _SelfService_EnumPrintersW_args__isset() : Flags(false), Name(false), Level(false), cbBuf(false) {}
-  bool Flags :1;
-  bool Name :1;
-  bool Level :1;
-  bool cbBuf :1;
+  _SelfService_EnumPrintersW_args__isset() : arg(false) {}
+  bool arg :1;
 } _SelfService_EnumPrintersW_args__isset;
 
 class SelfService_EnumPrintersW_args {
  public:
 
-  static const char* ascii_fingerprint; // = "AD5E8581BBE4C3CDE5FC5930DA3DD601";
-  static const uint8_t binary_fingerprint[16]; // = {0xAD,0x5E,0x85,0x81,0xBB,0xE4,0xC3,0xCD,0xE5,0xFC,0x59,0x30,0xDA,0x3D,0xD6,0x01};
+  static const char* ascii_fingerprint; // = "2A64060E105AC55A0F2168232DBC43CA";
+  static const uint8_t binary_fingerprint[16]; // = {0x2A,0x64,0x06,0x0E,0x10,0x5A,0xC5,0x5A,0x0F,0x21,0x68,0x23,0x2D,0xBC,0x43,0xCA};
 
   SelfService_EnumPrintersW_args(const SelfService_EnumPrintersW_args&);
   SelfService_EnumPrintersW_args& operator=(const SelfService_EnumPrintersW_args&);
-  SelfService_EnumPrintersW_args() : Flags(0), Name(), Level(0), cbBuf(0) {
+  SelfService_EnumPrintersW_args() {
   }
 
   virtual ~SelfService_EnumPrintersW_args() throw();
-  int32_t Flags;
-  std::string Name;
-  int32_t Level;
-  int32_t cbBuf;
+  ArgEnumPrintersW arg;
 
   _SelfService_EnumPrintersW_args__isset __isset;
 
-  void __set_Flags(const int32_t val);
-
-  void __set_Name(const std::string& val);
-
-  void __set_Level(const int32_t val);
-
-  void __set_cbBuf(const int32_t val);
+  void __set_arg(const ArgEnumPrintersW& val);
 
   bool operator == (const SelfService_EnumPrintersW_args & rhs) const
   {
-    if (!(Flags == rhs.Flags))
-      return false;
-    if (!(Name == rhs.Name))
-      return false;
-    if (!(Level == rhs.Level))
-      return false;
-    if (!(cbBuf == rhs.cbBuf))
+    if (!(arg == rhs.arg))
       return false;
     return true;
   }
@@ -2028,15 +2010,12 @@ class SelfService_EnumPrintersW_args {
 class SelfService_EnumPrintersW_pargs {
  public:
 
-  static const char* ascii_fingerprint; // = "AD5E8581BBE4C3CDE5FC5930DA3DD601";
-  static const uint8_t binary_fingerprint[16]; // = {0xAD,0x5E,0x85,0x81,0xBB,0xE4,0xC3,0xCD,0xE5,0xFC,0x59,0x30,0xDA,0x3D,0xD6,0x01};
+  static const char* ascii_fingerprint; // = "2A64060E105AC55A0F2168232DBC43CA";
+  static const uint8_t binary_fingerprint[16]; // = {0x2A,0x64,0x06,0x0E,0x10,0x5A,0xC5,0x5A,0x0F,0x21,0x68,0x23,0x2D,0xBC,0x43,0xCA};
 
 
   virtual ~SelfService_EnumPrintersW_pargs() throw();
-  const int32_t* Flags;
-  const std::string* Name;
-  const int32_t* Level;
-  const int32_t* cbBuf;
+  const ArgEnumPrintersW* arg;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -2051,8 +2030,8 @@ typedef struct _SelfService_EnumPrintersW_result__isset {
 class SelfService_EnumPrintersW_result {
  public:
 
-  static const char* ascii_fingerprint; // = "7722CAB26D5D8252F8DAEA54B25BC179";
-  static const uint8_t binary_fingerprint[16]; // = {0x77,0x22,0xCA,0xB2,0x6D,0x5D,0x82,0x52,0xF8,0xDA,0xEA,0x54,0xB2,0x5B,0xC1,0x79};
+  static const char* ascii_fingerprint; // = "B0DF1AAC5B404CE2F7EAE1C160DBB550";
+  static const uint8_t binary_fingerprint[16]; // = {0xB0,0xDF,0x1A,0xAC,0x5B,0x40,0x4C,0xE2,0xF7,0xEA,0xE1,0xC1,0x60,0xDB,0xB5,0x50};
 
   SelfService_EnumPrintersW_result(const SelfService_EnumPrintersW_result&);
   SelfService_EnumPrintersW_result& operator=(const SelfService_EnumPrintersW_result&);
@@ -2060,11 +2039,11 @@ class SelfService_EnumPrintersW_result {
   }
 
   virtual ~SelfService_EnumPrintersW_result() throw();
-  std::map<std::string, std::string>  success;
+  ArgEnumPrintersW success;
 
   _SelfService_EnumPrintersW_result__isset __isset;
 
-  void __set_success(const std::map<std::string, std::string> & val);
+  void __set_success(const ArgEnumPrintersW& val);
 
   bool operator == (const SelfService_EnumPrintersW_result & rhs) const
   {
@@ -2092,12 +2071,12 @@ typedef struct _SelfService_EnumPrintersW_presult__isset {
 class SelfService_EnumPrintersW_presult {
  public:
 
-  static const char* ascii_fingerprint; // = "7722CAB26D5D8252F8DAEA54B25BC179";
-  static const uint8_t binary_fingerprint[16]; // = {0x77,0x22,0xCA,0xB2,0x6D,0x5D,0x82,0x52,0xF8,0xDA,0xEA,0x54,0xB2,0x5B,0xC1,0x79};
+  static const char* ascii_fingerprint; // = "B0DF1AAC5B404CE2F7EAE1C160DBB550";
+  static const uint8_t binary_fingerprint[16]; // = {0xB0,0xDF,0x1A,0xAC,0x5B,0x40,0x4C,0xE2,0xF7,0xEA,0xE1,0xC1,0x60,0xDB,0xB5,0x50};
 
 
   virtual ~SelfService_EnumPrintersW_presult() throw();
-  std::map<std::string, std::string> * success;
+  ArgEnumPrintersW* success;
 
   _SelfService_EnumPrintersW_presult__isset __isset;
 
@@ -4831,9 +4810,9 @@ class SelfServiceClient : virtual public SelfServiceIf {
   void EnumFormsW(std::map<std::string, std::string> & _return, const int64_t hPrinter, const int32_t Level, const int32_t cbBuf);
   void send_EnumFormsW(const int64_t hPrinter, const int32_t Level, const int32_t cbBuf);
   void recv_EnumFormsW(std::map<std::string, std::string> & _return);
-  void EnumPrintersW(std::map<std::string, std::string> & _return, const int32_t Flags, const std::string& Name, const int32_t Level, const int32_t cbBuf);
-  void send_EnumPrintersW(const int32_t Flags, const std::string& Name, const int32_t Level, const int32_t cbBuf);
-  void recv_EnumPrintersW(std::map<std::string, std::string> & _return);
+  void EnumPrintersW(ArgEnumPrintersW& _return, const ArgEnumPrintersW& arg);
+  void send_EnumPrintersW(const ArgEnumPrintersW& arg);
+  void recv_EnumPrintersW(ArgEnumPrintersW& _return);
   bool FindClosePrinterChangeNotification(const int64_t hChange);
   void send_FindClosePrinterChangeNotification(const int64_t hChange);
   bool recv_FindClosePrinterChangeNotification();
@@ -5131,13 +5110,13 @@ class SelfServiceMultiface : virtual public SelfServiceIf {
     return;
   }
 
-  void EnumPrintersW(std::map<std::string, std::string> & _return, const int32_t Flags, const std::string& Name, const int32_t Level, const int32_t cbBuf) {
+  void EnumPrintersW(ArgEnumPrintersW& _return, const ArgEnumPrintersW& arg) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->EnumPrintersW(_return, Flags, Name, Level, cbBuf);
+      ifaces_[i]->EnumPrintersW(_return, arg);
     }
-    ifaces_[i]->EnumPrintersW(_return, Flags, Name, Level, cbBuf);
+    ifaces_[i]->EnumPrintersW(_return, arg);
     return;
   }
 
