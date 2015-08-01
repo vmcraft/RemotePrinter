@@ -33,7 +33,7 @@ class SelfServiceIf {
   virtual int64_t FindFirstPrinterChangeNotification(const int64_t hPrinter, const int32_t fdwFilter, const int32_t fdwOptions, const std::string& pPrinterNotifyOptions) = 0;
   virtual void FindNextPrinterChangeNotification(std::map<std::string, std::string> & _return, const int64_t hChange, const std::string& pPrinterNotifyOptions) = 0;
   virtual bool FreePrinterNotifyInfo(const std::string& pPrinterNotifyInfo) = 0;
-  virtual void GetDefaultPrinterW(std::map<std::string, int32_t> & _return, const std::string& pszBuffer) = 0;
+  virtual void GetDefaultPrinterW(ArgGetDefaultPrinterW& _return, const ArgGetDefaultPrinterW& arg) = 0;
   virtual void GetPrinterDataW(std::map<std::string, std::string> & _return, const int64_t hPrinter, const std::string& pValueName, const int32_t nSize) = 0;
   virtual void GetPrinterDataExW(std::map<std::string, std::string> & _return, const int64_t hPrinter, const std::string& pKeyName, const std::string& pValueName, const int32_t nSize) = 0;
   virtual void GetPrinterW(std::map<std::string, std::string> & _return, const int64_t hPrinter, const int32_t Level, const int32_t cbBuf) = 0;
@@ -142,7 +142,7 @@ class SelfServiceNull : virtual public SelfServiceIf {
     bool _return = false;
     return _return;
   }
-  void GetDefaultPrinterW(std::map<std::string, int32_t> & /* _return */, const std::string& /* pszBuffer */) {
+  void GetDefaultPrinterW(ArgGetDefaultPrinterW& /* _return */, const ArgGetDefaultPrinterW& /* arg */) {
     return;
   }
   void GetPrinterDataW(std::map<std::string, std::string> & /* _return */, const int64_t /* hPrinter */, const std::string& /* pValueName */, const int32_t /* nSize */) {
@@ -2615,31 +2615,31 @@ class SelfService_FreePrinterNotifyInfo_presult {
 };
 
 typedef struct _SelfService_GetDefaultPrinterW_args__isset {
-  _SelfService_GetDefaultPrinterW_args__isset() : pszBuffer(false) {}
-  bool pszBuffer :1;
+  _SelfService_GetDefaultPrinterW_args__isset() : arg(false) {}
+  bool arg :1;
 } _SelfService_GetDefaultPrinterW_args__isset;
 
 class SelfService_GetDefaultPrinterW_args {
  public:
 
-  static const char* ascii_fingerprint; // = "EFB929595D312AC8F305D5A794CFEDA1";
-  static const uint8_t binary_fingerprint[16]; // = {0xEF,0xB9,0x29,0x59,0x5D,0x31,0x2A,0xC8,0xF3,0x05,0xD5,0xA7,0x94,0xCF,0xED,0xA1};
+  static const char* ascii_fingerprint; // = "6B2AF6463ECB7BAE4D236B8E0274278C";
+  static const uint8_t binary_fingerprint[16]; // = {0x6B,0x2A,0xF6,0x46,0x3E,0xCB,0x7B,0xAE,0x4D,0x23,0x6B,0x8E,0x02,0x74,0x27,0x8C};
 
   SelfService_GetDefaultPrinterW_args(const SelfService_GetDefaultPrinterW_args&);
   SelfService_GetDefaultPrinterW_args& operator=(const SelfService_GetDefaultPrinterW_args&);
-  SelfService_GetDefaultPrinterW_args() : pszBuffer() {
+  SelfService_GetDefaultPrinterW_args() {
   }
 
   virtual ~SelfService_GetDefaultPrinterW_args() throw();
-  std::string pszBuffer;
+  ArgGetDefaultPrinterW arg;
 
   _SelfService_GetDefaultPrinterW_args__isset __isset;
 
-  void __set_pszBuffer(const std::string& val);
+  void __set_arg(const ArgGetDefaultPrinterW& val);
 
   bool operator == (const SelfService_GetDefaultPrinterW_args & rhs) const
   {
-    if (!(pszBuffer == rhs.pszBuffer))
+    if (!(arg == rhs.arg))
       return false;
     return true;
   }
@@ -2659,12 +2659,12 @@ class SelfService_GetDefaultPrinterW_args {
 class SelfService_GetDefaultPrinterW_pargs {
  public:
 
-  static const char* ascii_fingerprint; // = "EFB929595D312AC8F305D5A794CFEDA1";
-  static const uint8_t binary_fingerprint[16]; // = {0xEF,0xB9,0x29,0x59,0x5D,0x31,0x2A,0xC8,0xF3,0x05,0xD5,0xA7,0x94,0xCF,0xED,0xA1};
+  static const char* ascii_fingerprint; // = "6B2AF6463ECB7BAE4D236B8E0274278C";
+  static const uint8_t binary_fingerprint[16]; // = {0x6B,0x2A,0xF6,0x46,0x3E,0xCB,0x7B,0xAE,0x4D,0x23,0x6B,0x8E,0x02,0x74,0x27,0x8C};
 
 
   virtual ~SelfService_GetDefaultPrinterW_pargs() throw();
-  const std::string* pszBuffer;
+  const ArgGetDefaultPrinterW* arg;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -2679,8 +2679,8 @@ typedef struct _SelfService_GetDefaultPrinterW_result__isset {
 class SelfService_GetDefaultPrinterW_result {
  public:
 
-  static const char* ascii_fingerprint; // = "7C515227315A17E9031F09B9C74E4259";
-  static const uint8_t binary_fingerprint[16]; // = {0x7C,0x51,0x52,0x27,0x31,0x5A,0x17,0xE9,0x03,0x1F,0x09,0xB9,0xC7,0x4E,0x42,0x59};
+  static const char* ascii_fingerprint; // = "33444990E9F7449CD4B2BB586C9D9D50";
+  static const uint8_t binary_fingerprint[16]; // = {0x33,0x44,0x49,0x90,0xE9,0xF7,0x44,0x9C,0xD4,0xB2,0xBB,0x58,0x6C,0x9D,0x9D,0x50};
 
   SelfService_GetDefaultPrinterW_result(const SelfService_GetDefaultPrinterW_result&);
   SelfService_GetDefaultPrinterW_result& operator=(const SelfService_GetDefaultPrinterW_result&);
@@ -2688,11 +2688,11 @@ class SelfService_GetDefaultPrinterW_result {
   }
 
   virtual ~SelfService_GetDefaultPrinterW_result() throw();
-  std::map<std::string, int32_t>  success;
+  ArgGetDefaultPrinterW success;
 
   _SelfService_GetDefaultPrinterW_result__isset __isset;
 
-  void __set_success(const std::map<std::string, int32_t> & val);
+  void __set_success(const ArgGetDefaultPrinterW& val);
 
   bool operator == (const SelfService_GetDefaultPrinterW_result & rhs) const
   {
@@ -2720,12 +2720,12 @@ typedef struct _SelfService_GetDefaultPrinterW_presult__isset {
 class SelfService_GetDefaultPrinterW_presult {
  public:
 
-  static const char* ascii_fingerprint; // = "7C515227315A17E9031F09B9C74E4259";
-  static const uint8_t binary_fingerprint[16]; // = {0x7C,0x51,0x52,0x27,0x31,0x5A,0x17,0xE9,0x03,0x1F,0x09,0xB9,0xC7,0x4E,0x42,0x59};
+  static const char* ascii_fingerprint; // = "33444990E9F7449CD4B2BB586C9D9D50";
+  static const uint8_t binary_fingerprint[16]; // = {0x33,0x44,0x49,0x90,0xE9,0xF7,0x44,0x9C,0xD4,0xB2,0xBB,0x58,0x6C,0x9D,0x9D,0x50};
 
 
   virtual ~SelfService_GetDefaultPrinterW_presult() throw();
-  std::map<std::string, int32_t> * success;
+  ArgGetDefaultPrinterW* success;
 
   _SelfService_GetDefaultPrinterW_presult__isset __isset;
 
@@ -4846,9 +4846,9 @@ class SelfServiceClient : virtual public SelfServiceIf {
   bool FreePrinterNotifyInfo(const std::string& pPrinterNotifyInfo);
   void send_FreePrinterNotifyInfo(const std::string& pPrinterNotifyInfo);
   bool recv_FreePrinterNotifyInfo();
-  void GetDefaultPrinterW(std::map<std::string, int32_t> & _return, const std::string& pszBuffer);
-  void send_GetDefaultPrinterW(const std::string& pszBuffer);
-  void recv_GetDefaultPrinterW(std::map<std::string, int32_t> & _return);
+  void GetDefaultPrinterW(ArgGetDefaultPrinterW& _return, const ArgGetDefaultPrinterW& arg);
+  void send_GetDefaultPrinterW(const ArgGetDefaultPrinterW& arg);
+  void recv_GetDefaultPrinterW(ArgGetDefaultPrinterW& _return);
   void GetPrinterDataW(std::map<std::string, std::string> & _return, const int64_t hPrinter, const std::string& pValueName, const int32_t nSize);
   void send_GetPrinterDataW(const int64_t hPrinter, const std::string& pValueName, const int32_t nSize);
   void recv_GetPrinterDataW(std::map<std::string, std::string> & _return);
@@ -5178,13 +5178,13 @@ class SelfServiceMultiface : virtual public SelfServiceIf {
     return ifaces_[i]->FreePrinterNotifyInfo(pPrinterNotifyInfo);
   }
 
-  void GetDefaultPrinterW(std::map<std::string, int32_t> & _return, const std::string& pszBuffer) {
+  void GetDefaultPrinterW(ArgGetDefaultPrinterW& _return, const ArgGetDefaultPrinterW& arg) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->GetDefaultPrinterW(_return, pszBuffer);
+      ifaces_[i]->GetDefaultPrinterW(_return, arg);
     }
-    ifaces_[i]->GetDefaultPrinterW(_return, pszBuffer);
+    ifaces_[i]->GetDefaultPrinterW(_return, arg);
     return;
   }
 

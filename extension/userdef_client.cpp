@@ -30,6 +30,7 @@ bool _dont_hook_if_connection_failed = false;
 bool read_from_file(std::string& file_path, std::string& binary_data) ;
 void print_hex(const char* buffer, size_t len);
 
+using namespace userdefined;
 
 #define HOOK_ITEM_FUNC(MODULE_NAME, FUNCTION_NAME) {L#MODULE_NAME, #FUNCTION_NAME, (LPVOID)&Detour##FUNCTION_NAME, (LPVOID*)&fp##FUNCTION_NAME}
 #define INT32_TO_INT64(VAL) (((int64_t)VAL)&0x00000000FFFFFFFF)
@@ -326,7 +327,7 @@ BOOL WINAPI DetourEnumFormsW(
 
 BOOL WINAPI DetourEnumPrintersW(
   _In_  DWORD   Flags,
-  _In_  LPTSTR  Name,
+  _In_  LPWSTR  Name,
   _In_  DWORD   Level,
   _Out_ LPBYTE  pPrinterEnum,
   _In_  DWORD   cbBuf,
@@ -339,7 +340,19 @@ BOOL WINAPI DetourEnumPrintersW(
         return fpEnumPrintersW(Flags, Name, Level, pPrinterEnum, cbBuf, pcbNeeded, pcReturned);
     }
 
-    return FALSE;
+    std::map<std::string, std::string> ret;
+    _api->EnumPrintersW(ret, Flags, THRIFT_W_TO_STRING(Name), Level, cbBuf);
+
+    if (pcbNeeded) *pcbNeeded = std::stoi(THRIFT_SAFE_GET(ret, "pcbNeeded", "0"));
+    if (pcReturned) *pcReturned = std::stoi(THRIFT_SAFE_GET(ret, "pcReturned", "0"));
+
+    BOOL result = (BOOL)std::stoi(THRIFT_SAFE_GET(ret, "return", "0"));
+    if (result && pPrinterEnum) {
+        std::string &localPrinterEnum = THRIFT_SAFE_GET(ret, "pPrinterEnum", "");
+        memcpy(pPrinterEnum, localPrinterEnum.c_str(), localPrinterEnum.size());
+    }
+
+    return result;
 }
 
 BOOL WINAPI DetourFindClosePrinterChangeNotification(
@@ -407,13 +420,20 @@ BOOL WINAPI DetourGetDefaultPrinterW(
     }
 
     if (pcchBuffer==NULL) return FALSE;
-    std::map<string, int32_t> ret;
 
-    _api->GetDefaultPrinterW(ret, THRIFT_B_TO_STRING(pszBuffer, *pcchBuffer));
-    *pcchBuffer = THRIFT_SAFE_GET(ret, "pcchBuffer", 0);
-    if (*pcchBuffer==0) return FALSE;
+    ArgGetDefaultPrinterW args;
+    ArgGetDefaultPrinterW result;
 
-    return (BOOL)THRIFT_SAFE_GET(ret, "result", FALSE);
+    args.pcchBuffer = (pcchBuffer?*pcchBuffer:0);
+
+    _api->GetDefaultPrinterW(result,args);
+
+    if (pcchBuffer) *pcchBuffer = result.pcchBuffer;
+    if (result.ret) {
+       memcpy(pszBuffer, result.pszBuffer.c_str(), result.pcchBuffer);
+    }
+
+    return (BOOL)result.ret;
 }
 
 DWORD WINAPI DetourGetPrinterDataW(

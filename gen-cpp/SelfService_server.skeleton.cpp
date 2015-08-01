@@ -112,7 +112,7 @@ class SelfServiceHandler : virtual public SelfServiceIf {
     printf("FreePrinterNotifyInfo\n");
   }
 
-  void GetDefaultPrinterW(std::map<std::string, int32_t> & _return, const std::string& pszBuffer) {
+  void GetDefaultPrinterW(ArgGetDefaultPrinterW& _return, const ArgGetDefaultPrinterW& arg) {
     // Your implementation goes here
     printf("GetDefaultPrinterW\n");
   }

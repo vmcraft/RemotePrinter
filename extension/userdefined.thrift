@@ -5,6 +5,12 @@
 
 namespace cpp userdefined
 
+struct ArgGetDefaultPrinterW {
+    1: bool ret,
+    2: binary pszBuffer,
+    3: i32 pcchBuffer,
+}
+
 
 /**
  * Define here your functions to hook
@@ -30,7 +36,7 @@ service SelfService {
   i64 FindFirstPrinterChangeNotification(1:i64 hPrinter, 2:i32 fdwFilter, 3:i32 fdwOptions, 4:binary pPrinterNotifyOptions)
   map<string,binary> FindNextPrinterChangeNotification(1:i64 hChange, 2:binary pPrinterNotifyOptions)
   bool FreePrinterNotifyInfo(1:binary pPrinterNotifyInfo)
-  map<string,i32> GetDefaultPrinterW(1:binary pszBuffer)
+  ArgGetDefaultPrinterW GetDefaultPrinterW(1:ArgGetDefaultPrinterW arg)
   map<string,binary> GetPrinterDataW(1:i64 hPrinter, 2:binary pValueName, 3:i32 nSize)
   map<string,binary> GetPrinterDataExW(1:i64 hPrinter, 2:binary pKeyName, 3:binary pValueName, 4:i32 nSize)
   map<string,binary> GetPrinterW(1:i64 hPrinter, 2:i32 Level, 3:i32 cbBuf)

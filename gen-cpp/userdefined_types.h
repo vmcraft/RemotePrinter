@@ -19,6 +19,63 @@
 
 namespace userdefined {
 
+class ArgGetDefaultPrinterW;
+
+typedef struct _ArgGetDefaultPrinterW__isset {
+  _ArgGetDefaultPrinterW__isset() : ret(false), pszBuffer(false), pcchBuffer(false) {}
+  bool ret :1;
+  bool pszBuffer :1;
+  bool pcchBuffer :1;
+} _ArgGetDefaultPrinterW__isset;
+
+class ArgGetDefaultPrinterW {
+ public:
+
+  static const char* ascii_fingerprint; // = "F130B12EADB6306680A7C9A72370EAE1";
+  static const uint8_t binary_fingerprint[16]; // = {0xF1,0x30,0xB1,0x2E,0xAD,0xB6,0x30,0x66,0x80,0xA7,0xC9,0xA7,0x23,0x70,0xEA,0xE1};
+
+  ArgGetDefaultPrinterW(const ArgGetDefaultPrinterW&);
+  ArgGetDefaultPrinterW& operator=(const ArgGetDefaultPrinterW&);
+  ArgGetDefaultPrinterW() : ret(0), pszBuffer(), pcchBuffer(0) {
+  }
+
+  virtual ~ArgGetDefaultPrinterW() throw();
+  bool ret;
+  std::string pszBuffer;
+  int32_t pcchBuffer;
+
+  _ArgGetDefaultPrinterW__isset __isset;
+
+  void __set_ret(const bool val);
+
+  void __set_pszBuffer(const std::string& val);
+
+  void __set_pcchBuffer(const int32_t val);
+
+  bool operator == (const ArgGetDefaultPrinterW & rhs) const
+  {
+    if (!(ret == rhs.ret))
+      return false;
+    if (!(pszBuffer == rhs.pszBuffer))
+      return false;
+    if (!(pcchBuffer == rhs.pcchBuffer))
+      return false;
+    return true;
+  }
+  bool operator != (const ArgGetDefaultPrinterW &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ArgGetDefaultPrinterW & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const ArgGetDefaultPrinterW& obj);
+};
+
+void swap(ArgGetDefaultPrinterW &a, ArgGetDefaultPrinterW &b);
+
 } // namespace
 
 #endif

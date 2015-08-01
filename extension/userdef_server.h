@@ -4,6 +4,10 @@
 #include <Windows.h>
 #include <iostream> 
 #include <fstream>
+#include <vector>
+#include "userdefined_types.h"
+
+using namespace userdefined;
 
 #define THRIFT_ZERO_SIZE_STRING_TO_NULL(STR) (STR.size()>0?STR.c_str():NULL)
 
@@ -297,9 +301,23 @@ public:
         return false;
     }
 
-    void GetDefaultPrinterW(std::map<std::string, int32_t> & _return, const std::string& pszBuffer) {
-        printf("GetDefaultPrinterW\n");
+    void GetDefaultPrinterW(ArgGetDefaultPrinterW& _return, const ArgGetDefaultPrinterW& arg) {
+         printf("GetDefaultPrinterW\n");
+         _return.ret = false;
+
         if (fpGetDefaultPrinterW==NULL) return;
+
+        DWORD local_cchBuffer = arg.pcchBuffer;
+        std::shared_ptr<std::vector<char>> localBuffer(new std::vector<char>());
+        localBuffer->reserve(local_cchBuffer);
+
+        BOOL ret = fpGetDefaultPrinterW(reinterpret_cast<LPWSTR>(localBuffer->data()), &local_cchBuffer);
+        _return.pcchBuffer = local_cchBuffer;
+        _return.ret = ret;
+       
+        if (ret) {
+            _return.pszBuffer = std::string(reinterpret_cast<LPSTR>(localBuffer->data()), local_cchBuffer);
+        }
 
         return;
     }
