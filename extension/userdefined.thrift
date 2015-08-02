@@ -21,7 +21,29 @@ struct ArgEnumPrintersW {
   7: i32 pcbNeeded,
   8: i32 pcReturned
 
-  10: map<string,i32> int32PrinterEnum
+  9: map<string,i32> int32PrinterEnum
+}
+
+struct ArgDocumentPropertiesW {
+  1: i32 ret,
+  2: i64 hHwnd,
+  3: i64 hPrinter,
+  4: binary pDeviceName,
+  5: binary pDevModeOutput,
+  6: binary pDevModeInput,
+  7: i32 fMode,
+  8: i32 lasterror
+}
+
+struct ArgGetPrinterW {
+  1: bool ret,
+  2: i64 hPrinter,
+  3: i32 Level,
+  4: binary pPrinter,
+  5: i32 cbBuf,
+  6: i32 pcbNeeded,
+  7: map<string,i32> int32Args,
+  8: i32 lasterror
 }
 
 /**
@@ -41,7 +63,7 @@ service SelfService {
   bool CloseSpoolFileHandle(1:i64 hPrinter, 2:i64 hSpoolFile)
   i64 CommitSpoolData(1:i64 hPrinter, 2:i64 hSpoolFile, 3:i32 cbCommit)
   map<string,binary> DocumentEvent(1:i64 hPrinter, 2:i64 hdc, 3:i32 iEsc, 4:i32 cbIn, 5:binary pvIn, 6:i32 cbOut, 7:binary pvOut)
-  map<string,binary> DocumentPropertiesW(1:i64 hWnd, 2:i64 hPrinter, 3:binary pDeviceName, 4:binary pDevModeInput, 5:i32 fMode) 
+  ArgDocumentPropertiesW DocumentPropertiesW(1:ArgDocumentPropertiesW arg) 
   map<string,binary> EnumFormsW(1:i64 hPrinter, 2:i32 Level, 3:i32 cbBuf)
   ArgEnumPrintersW EnumPrintersW(1:ArgEnumPrintersW arg) 
   bool FindClosePrinterChangeNotification(1:i64 hChange)
@@ -51,7 +73,7 @@ service SelfService {
   ArgGetDefaultPrinterW GetDefaultPrinterW(1:ArgGetDefaultPrinterW arg)
   map<string,binary> GetPrinterDataW(1:i64 hPrinter, 2:binary pValueName, 3:i32 nSize)
   map<string,binary> GetPrinterDataExW(1:i64 hPrinter, 2:binary pKeyName, 3:binary pValueName, 4:i32 nSize)
-  map<string,binary> GetPrinterW(1:i64 hPrinter, 2:i32 Level, 3:i32 cbBuf)
+  ArgGetPrinterW GetPrinterW(1:ArgGetPrinterW arg)
   i64 GetSpoolFileHandle(1:i64 hPrinter)
   bool IsValidDevmodeW(1:binary pDevmode, 2:i32 DevmodeSize)
   map<string,i64> OpenPrinter2W(1:binary pPrinterName, 2:bool pDefaultExist, 3:binary pDatatype, 4:binary pDevMode, 5:i32 DesiredAccess, 6:binary pOptions)

@@ -77,7 +77,7 @@ class SelfServiceHandler : virtual public SelfServiceIf {
     printf("DocumentEvent\n");
   }
 
-  void DocumentPropertiesW(std::map<std::string, std::string> & _return, const int64_t hWnd, const int64_t hPrinter, const std::string& pDeviceName, const std::string& pDevModeInput, const int32_t fMode) {
+  void DocumentPropertiesW(ArgDocumentPropertiesW& _return, const ArgDocumentPropertiesW& arg) {
     // Your implementation goes here
     printf("DocumentPropertiesW\n");
   }
@@ -127,7 +127,7 @@ class SelfServiceHandler : virtual public SelfServiceIf {
     printf("GetPrinterDataExW\n");
   }
 
-  void GetPrinterW(std::map<std::string, std::string> & _return, const int64_t hPrinter, const int32_t Level, const int32_t cbBuf) {
+  void GetPrinterW(ArgGetPrinterW& _return, const ArgGetPrinterW& arg) {
     // Your implementation goes here
     printf("GetPrinterW\n");
   }

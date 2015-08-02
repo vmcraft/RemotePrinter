@@ -184,8 +184,8 @@ void ArgEnumPrintersW::__set_int32PrinterEnum(const std::map<std::string, int32_
   this->int32PrinterEnum = val;
 }
 
-const char* ArgEnumPrintersW::ascii_fingerprint = "DE518725CC5D9695526E35BF6A80A175";
-const uint8_t ArgEnumPrintersW::binary_fingerprint[16] = {0xDE,0x51,0x87,0x25,0xCC,0x5D,0x96,0x95,0x52,0x6E,0x35,0xBF,0x6A,0x80,0xA1,0x75};
+const char* ArgEnumPrintersW::ascii_fingerprint = "FDA3E4A29FC8F2A906E0E7F414419872";
+const uint8_t ArgEnumPrintersW::binary_fingerprint[16] = {0xFD,0xA3,0xE4,0xA2,0x9F,0xC8,0xF2,0xA9,0x06,0xE0,0xE7,0xF4,0x14,0x41,0x98,0x72};
 
 uint32_t ArgEnumPrintersW::read(::apache::thrift::protocol::TProtocol* iprot) {
 
@@ -271,7 +271,7 @@ uint32_t ArgEnumPrintersW::read(::apache::thrift::protocol::TProtocol* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 10:
+      case 9:
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->int32PrinterEnum.clear();
@@ -343,7 +343,7 @@ uint32_t ArgEnumPrintersW::write(::apache::thrift::protocol::TProtocol* oprot) c
   xfer += oprot->writeI32(this->pcReturned);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("int32PrinterEnum", ::apache::thrift::protocol::T_MAP, 10);
+  xfer += oprot->writeFieldBegin("int32PrinterEnum", ::apache::thrift::protocol::T_MAP, 9);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->int32PrinterEnum.size()));
     std::map<std::string, int32_t> ::const_iterator _iter9;
@@ -413,6 +413,490 @@ std::ostream& operator<<(std::ostream& out, const ArgEnumPrintersW& obj) {
   out << ", " << "pcbNeeded=" << to_string(obj.pcbNeeded);
   out << ", " << "pcReturned=" << to_string(obj.pcReturned);
   out << ", " << "int32PrinterEnum=" << to_string(obj.int32PrinterEnum);
+  out << ")";
+  return out;
+}
+
+
+ArgDocumentPropertiesW::~ArgDocumentPropertiesW() throw() {
+}
+
+
+void ArgDocumentPropertiesW::__set_ret(const int32_t val) {
+  this->ret = val;
+}
+
+void ArgDocumentPropertiesW::__set_hHwnd(const int64_t val) {
+  this->hHwnd = val;
+}
+
+void ArgDocumentPropertiesW::__set_hPrinter(const int64_t val) {
+  this->hPrinter = val;
+}
+
+void ArgDocumentPropertiesW::__set_pDeviceName(const std::string& val) {
+  this->pDeviceName = val;
+}
+
+void ArgDocumentPropertiesW::__set_pDevModeOutput(const std::string& val) {
+  this->pDevModeOutput = val;
+}
+
+void ArgDocumentPropertiesW::__set_pDevModeInput(const std::string& val) {
+  this->pDevModeInput = val;
+}
+
+void ArgDocumentPropertiesW::__set_fMode(const int32_t val) {
+  this->fMode = val;
+}
+
+void ArgDocumentPropertiesW::__set_lasterror(const int32_t val) {
+  this->lasterror = val;
+}
+
+const char* ArgDocumentPropertiesW::ascii_fingerprint = "6873E30F42348638F354653ED57E492E";
+const uint8_t ArgDocumentPropertiesW::binary_fingerprint[16] = {0x68,0x73,0xE3,0x0F,0x42,0x34,0x86,0x38,0xF3,0x54,0x65,0x3E,0xD5,0x7E,0x49,0x2E};
+
+uint32_t ArgDocumentPropertiesW::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->ret);
+          this->__isset.ret = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->hHwnd);
+          this->__isset.hHwnd = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->hPrinter);
+          this->__isset.hPrinter = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readBinary(this->pDeviceName);
+          this->__isset.pDeviceName = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 5:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readBinary(this->pDevModeOutput);
+          this->__isset.pDevModeOutput = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 6:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readBinary(this->pDevModeInput);
+          this->__isset.pDevModeInput = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 7:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->fMode);
+          this->__isset.fMode = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 8:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->lasterror);
+          this->__isset.lasterror = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t ArgDocumentPropertiesW::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  oprot->incrementRecursionDepth();
+  xfer += oprot->writeStructBegin("ArgDocumentPropertiesW");
+
+  xfer += oprot->writeFieldBegin("ret", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->ret);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("hHwnd", ::apache::thrift::protocol::T_I64, 2);
+  xfer += oprot->writeI64(this->hHwnd);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("hPrinter", ::apache::thrift::protocol::T_I64, 3);
+  xfer += oprot->writeI64(this->hPrinter);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("pDeviceName", ::apache::thrift::protocol::T_STRING, 4);
+  xfer += oprot->writeBinary(this->pDeviceName);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("pDevModeOutput", ::apache::thrift::protocol::T_STRING, 5);
+  xfer += oprot->writeBinary(this->pDevModeOutput);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("pDevModeInput", ::apache::thrift::protocol::T_STRING, 6);
+  xfer += oprot->writeBinary(this->pDevModeInput);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("fMode", ::apache::thrift::protocol::T_I32, 7);
+  xfer += oprot->writeI32(this->fMode);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("lasterror", ::apache::thrift::protocol::T_I32, 8);
+  xfer += oprot->writeI32(this->lasterror);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  oprot->decrementRecursionDepth();
+  return xfer;
+}
+
+void swap(ArgDocumentPropertiesW &a, ArgDocumentPropertiesW &b) {
+  using ::std::swap;
+  swap(a.ret, b.ret);
+  swap(a.hHwnd, b.hHwnd);
+  swap(a.hPrinter, b.hPrinter);
+  swap(a.pDeviceName, b.pDeviceName);
+  swap(a.pDevModeOutput, b.pDevModeOutput);
+  swap(a.pDevModeInput, b.pDevModeInput);
+  swap(a.fMode, b.fMode);
+  swap(a.lasterror, b.lasterror);
+  swap(a.__isset, b.__isset);
+}
+
+ArgDocumentPropertiesW::ArgDocumentPropertiesW(const ArgDocumentPropertiesW& other12) {
+  ret = other12.ret;
+  hHwnd = other12.hHwnd;
+  hPrinter = other12.hPrinter;
+  pDeviceName = other12.pDeviceName;
+  pDevModeOutput = other12.pDevModeOutput;
+  pDevModeInput = other12.pDevModeInput;
+  fMode = other12.fMode;
+  lasterror = other12.lasterror;
+  __isset = other12.__isset;
+}
+ArgDocumentPropertiesW& ArgDocumentPropertiesW::operator=(const ArgDocumentPropertiesW& other13) {
+  ret = other13.ret;
+  hHwnd = other13.hHwnd;
+  hPrinter = other13.hPrinter;
+  pDeviceName = other13.pDeviceName;
+  pDevModeOutput = other13.pDevModeOutput;
+  pDevModeInput = other13.pDevModeInput;
+  fMode = other13.fMode;
+  lasterror = other13.lasterror;
+  __isset = other13.__isset;
+  return *this;
+}
+std::ostream& operator<<(std::ostream& out, const ArgDocumentPropertiesW& obj) {
+  using apache::thrift::to_string;
+  out << "ArgDocumentPropertiesW(";
+  out << "ret=" << to_string(obj.ret);
+  out << ", " << "hHwnd=" << to_string(obj.hHwnd);
+  out << ", " << "hPrinter=" << to_string(obj.hPrinter);
+  out << ", " << "pDeviceName=" << to_string(obj.pDeviceName);
+  out << ", " << "pDevModeOutput=" << to_string(obj.pDevModeOutput);
+  out << ", " << "pDevModeInput=" << to_string(obj.pDevModeInput);
+  out << ", " << "fMode=" << to_string(obj.fMode);
+  out << ", " << "lasterror=" << to_string(obj.lasterror);
+  out << ")";
+  return out;
+}
+
+
+ArgGetPrinterW::~ArgGetPrinterW() throw() {
+}
+
+
+void ArgGetPrinterW::__set_ret(const bool val) {
+  this->ret = val;
+}
+
+void ArgGetPrinterW::__set_hPrinter(const int64_t val) {
+  this->hPrinter = val;
+}
+
+void ArgGetPrinterW::__set_Level(const int32_t val) {
+  this->Level = val;
+}
+
+void ArgGetPrinterW::__set_pPrinter(const std::string& val) {
+  this->pPrinter = val;
+}
+
+void ArgGetPrinterW::__set_cbBuf(const int32_t val) {
+  this->cbBuf = val;
+}
+
+void ArgGetPrinterW::__set_pcbNeeded(const int32_t val) {
+  this->pcbNeeded = val;
+}
+
+void ArgGetPrinterW::__set_int32Args(const std::map<std::string, int32_t> & val) {
+  this->int32Args = val;
+}
+
+void ArgGetPrinterW::__set_lasterror(const int32_t val) {
+  this->lasterror = val;
+}
+
+const char* ArgGetPrinterW::ascii_fingerprint = "887AC5FA8D7F4FC166B66A9233C106E9";
+const uint8_t ArgGetPrinterW::binary_fingerprint[16] = {0x88,0x7A,0xC5,0xFA,0x8D,0x7F,0x4F,0xC1,0x66,0xB6,0x6A,0x92,0x33,0xC1,0x06,0xE9};
+
+uint32_t ArgGetPrinterW::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->ret);
+          this->__isset.ret = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->hPrinter);
+          this->__isset.hPrinter = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->Level);
+          this->__isset.Level = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readBinary(this->pPrinter);
+          this->__isset.pPrinter = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 5:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->cbBuf);
+          this->__isset.cbBuf = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 6:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->pcbNeeded);
+          this->__isset.pcbNeeded = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 7:
+        if (ftype == ::apache::thrift::protocol::T_MAP) {
+          {
+            this->int32Args.clear();
+            uint32_t _size14;
+            ::apache::thrift::protocol::TType _ktype15;
+            ::apache::thrift::protocol::TType _vtype16;
+            xfer += iprot->readMapBegin(_ktype15, _vtype16, _size14);
+            uint32_t _i18;
+            for (_i18 = 0; _i18 < _size14; ++_i18)
+            {
+              std::string _key19;
+              xfer += iprot->readString(_key19);
+              int32_t& _val20 = this->int32Args[_key19];
+              xfer += iprot->readI32(_val20);
+            }
+            xfer += iprot->readMapEnd();
+          }
+          this->__isset.int32Args = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 8:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->lasterror);
+          this->__isset.lasterror = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t ArgGetPrinterW::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  oprot->incrementRecursionDepth();
+  xfer += oprot->writeStructBegin("ArgGetPrinterW");
+
+  xfer += oprot->writeFieldBegin("ret", ::apache::thrift::protocol::T_BOOL, 1);
+  xfer += oprot->writeBool(this->ret);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("hPrinter", ::apache::thrift::protocol::T_I64, 2);
+  xfer += oprot->writeI64(this->hPrinter);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("Level", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeI32(this->Level);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("pPrinter", ::apache::thrift::protocol::T_STRING, 4);
+  xfer += oprot->writeBinary(this->pPrinter);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("cbBuf", ::apache::thrift::protocol::T_I32, 5);
+  xfer += oprot->writeI32(this->cbBuf);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("pcbNeeded", ::apache::thrift::protocol::T_I32, 6);
+  xfer += oprot->writeI32(this->pcbNeeded);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("int32Args", ::apache::thrift::protocol::T_MAP, 7);
+  {
+    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_I32, static_cast<uint32_t>(this->int32Args.size()));
+    std::map<std::string, int32_t> ::const_iterator _iter21;
+    for (_iter21 = this->int32Args.begin(); _iter21 != this->int32Args.end(); ++_iter21)
+    {
+      xfer += oprot->writeString(_iter21->first);
+      xfer += oprot->writeI32(_iter21->second);
+    }
+    xfer += oprot->writeMapEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("lasterror", ::apache::thrift::protocol::T_I32, 8);
+  xfer += oprot->writeI32(this->lasterror);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  oprot->decrementRecursionDepth();
+  return xfer;
+}
+
+void swap(ArgGetPrinterW &a, ArgGetPrinterW &b) {
+  using ::std::swap;
+  swap(a.ret, b.ret);
+  swap(a.hPrinter, b.hPrinter);
+  swap(a.Level, b.Level);
+  swap(a.pPrinter, b.pPrinter);
+  swap(a.cbBuf, b.cbBuf);
+  swap(a.pcbNeeded, b.pcbNeeded);
+  swap(a.int32Args, b.int32Args);
+  swap(a.lasterror, b.lasterror);
+  swap(a.__isset, b.__isset);
+}
+
+ArgGetPrinterW::ArgGetPrinterW(const ArgGetPrinterW& other22) {
+  ret = other22.ret;
+  hPrinter = other22.hPrinter;
+  Level = other22.Level;
+  pPrinter = other22.pPrinter;
+  cbBuf = other22.cbBuf;
+  pcbNeeded = other22.pcbNeeded;
+  int32Args = other22.int32Args;
+  lasterror = other22.lasterror;
+  __isset = other22.__isset;
+}
+ArgGetPrinterW& ArgGetPrinterW::operator=(const ArgGetPrinterW& other23) {
+  ret = other23.ret;
+  hPrinter = other23.hPrinter;
+  Level = other23.Level;
+  pPrinter = other23.pPrinter;
+  cbBuf = other23.cbBuf;
+  pcbNeeded = other23.pcbNeeded;
+  int32Args = other23.int32Args;
+  lasterror = other23.lasterror;
+  __isset = other23.__isset;
+  return *this;
+}
+std::ostream& operator<<(std::ostream& out, const ArgGetPrinterW& obj) {
+  using apache::thrift::to_string;
+  out << "ArgGetPrinterW(";
+  out << "ret=" << to_string(obj.ret);
+  out << ", " << "hPrinter=" << to_string(obj.hPrinter);
+  out << ", " << "Level=" << to_string(obj.Level);
+  out << ", " << "pPrinter=" << to_string(obj.pPrinter);
+  out << ", " << "cbBuf=" << to_string(obj.cbBuf);
+  out << ", " << "pcbNeeded=" << to_string(obj.pcbNeeded);
+  out << ", " << "int32Args=" << to_string(obj.int32Args);
+  out << ", " << "lasterror=" << to_string(obj.lasterror);
   out << ")";
   return out;
 }

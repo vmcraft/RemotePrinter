@@ -259,10 +259,27 @@ public:
         return;
     }
 
-    void DocumentPropertiesW(std::map<std::string, std::string> & _return, const int64_t hWnd, const int64_t hPrinter, const std::string& pDeviceName, const std::string& pDevModeInput, const int32_t fMode) {
+    void DocumentPropertiesW(ArgDocumentPropertiesW& _return, const ArgDocumentPropertiesW& arg) {
         printf("DocumentPropertiesW\n");
+        _return.ret = (LONG)-1;
+        _return.lasterror = GetLastError();
         if (fpDocumentPropertiesW==NULL) return;
 
+        std::shared_ptr<std::vector<char>> localpDevModeOutput(new std::vector<char>());
+        localpDevModeOutput->reserve(arg.pDevModeOutput.size());
+
+        LONG ret = fpDocumentPropertiesW(GetDesktopWindow(),
+                        (HANDLE)arg.hPrinter,
+                        (LPWSTR)THIRFT_NULL_STRING(arg.pDeviceName),
+                        (PDEVMODEW)(arg.pDevModeOutput.size()>0?reinterpret_cast<LPBYTE>(localpDevModeOutput->data()):NULL),
+                        (PDEVMODEW)THIRFT_NULL_STRING(arg.pDevModeInput),
+                        arg.fMode
+                        );
+
+        _return.ret = ret;
+        _return.lasterror = GetLastError();
+
+        _return.pDevModeOutput = THRIFT_B_TO_STRING((arg.pDevModeOutput.size()>0?reinterpret_cast<LPBYTE>(localpDevModeOutput->data()):NULL), arg.pDevModeOutput.size());
         return ;
     }
 
@@ -279,8 +296,8 @@ public:
         _return.ret = false;
         if (fpEnumPrintersW==NULL) return;
 
-        DWORD localpcbNeeded;
-        DWORD localpcReturned;
+        DWORD localpcbNeeded = 0;
+        DWORD localpcReturned = 0;
         std::shared_ptr<std::vector<char>> localBuffer(new std::vector<char>());
         localBuffer->reserve(arg.cbBuf);
 
@@ -408,10 +425,54 @@ public:
         return;
     }
 
-    void GetPrinterW(std::map<std::string, std::string> & _return, const int64_t hPrinter, const int32_t Level, const int32_t cbBuf) {
+    void GetPrinterW(ArgGetPrinterW& _return, const ArgGetPrinterW& arg) {
         printf("GetPrinterW\n");
+        _return.ret = FALSE;
+        _return.lasterror = GetLastError();
+
         if (fpGetPrinterW==NULL) return;
 
+        DWORD localpcbNeeded = 0;
+        std::shared_ptr<std::vector<char>> localBuffer(new std::vector<char>());
+        localBuffer->reserve(arg.cbBuf);
+
+        BOOL ret = fpGetPrinterW((HANDLE)arg.hPrinter,
+                        arg.Level,
+                        (arg.cbBuf>0?reinterpret_cast<LPBYTE>(localBuffer->data()):NULL),
+                        arg.cbBuf,
+                        &localpcbNeeded
+                        );
+
+        _return.pcbNeeded = localpcbNeeded;
+        _return.ret = ret;
+
+        if (ret) {
+            _return.pPrinter = THRIFT_B_TO_STRING((arg.cbBuf>0?reinterpret_cast<LPBYTE>(localBuffer->data()):NULL), arg.cbBuf);
+
+            switch(arg.Level){
+            case 2:
+                {
+                 PPRINTER_INFO_2 info = (PPRINTER_INFO_2) localBuffer->data();
+                _return.int32Args["pServerName"] = RP_GET_OFFSET(info, info->pServerName);
+                _return.int32Args["pPrinterName"] = RP_GET_OFFSET(info, info->pPrinterName);
+                _return.int32Args["pShareName"] = RP_GET_OFFSET(info, info->pShareName);
+                _return.int32Args["pPortName"] = RP_GET_OFFSET(info, info->pPortName);
+                _return.int32Args["pDriverName"] = RP_GET_OFFSET(info, info->pDriverName);
+                _return.int32Args["pComment"] = RP_GET_OFFSET(info, info->pComment);
+                _return.int32Args["pLocation"] = RP_GET_OFFSET(info, info->pLocation);
+                _return.int32Args["pDevMode"] = RP_GET_OFFSET(info, info->pDevMode);
+                _return.int32Args["pSepFile"] = RP_GET_OFFSET(info, info->pSepFile);
+                _return.int32Args["pPrintProcessor"] = RP_GET_OFFSET(info, info->pPrintProcessor);
+                _return.int32Args["pDatatype"] = RP_GET_OFFSET(info, info->pDatatype);
+                _return.int32Args["pParameters"] = RP_GET_OFFSET(info, info->pParameters);
+                break;
+                }
+            default:
+                _return.ret = FALSE;
+            }
+        }
+
+        _return.lasterror = GetLastError();
         return;
     }
 

@@ -9,9 +9,11 @@ int _server_port = 3900;
 
 // We will not hook the following processes forcely.
 char *_with_hook[] = {
-//                    "POS_Main.exe",
-//                    "iexplore.exe",
+                    "POS_Main.exe",
+                    "iexplore.exe",
+#ifdef _DEBUG
                     "notepad.exe",
+#endif
                     NULL
 };
 char *_host_process[] = {
@@ -33,7 +35,7 @@ void print_hex(const char* buffer, size_t len);
 using namespace userdefined;
 
 #define HOOK_ITEM_FUNC(MODULE_NAME, FUNCTION_NAME) {L#MODULE_NAME, #FUNCTION_NAME, (LPVOID)&Detour##FUNCTION_NAME, (LPVOID*)&fp##FUNCTION_NAME}
-#define INT32_TO_INT64(VAL) (((int64_t)VAL)&0x00000000FFFFFFFF)
+#define SAFE_HANDLE(VAL) (sizeof(VAL)==sizeof(int64_t) ? (int64_t)VAL  : ((int64_t)VAL)&0x00000000FFFFFFFF)
 #define THRIFT_A_TO_STRING(VAL) (std::string((LPSTR)(VAL)))                                                                 // string to binary
 #define THRIFT_W_TO_STRING(VAL) (std::string((LPCSTR)(VAL), ((VAL)?wcslen((LPCWSTR)VAL)*sizeof(WCHAR)+sizeof(WCHAR):0)))    // wstring to binary
 #define THRIFT_B_TO_STRING(POI, LEN) (std::string((LPSTR)(POI), (((LPSTR)POI)!=NULL ? LEN : 0)))                            // buffer to binary
@@ -182,7 +184,7 @@ BOOL WINAPI DetourStartPagePrinter(HANDLE hPrinter) {
         return fpStartPagePrinter(hPrinter);
     }
 
-    return _api->StartPagePrinter(INT32_TO_INT64(hPrinter));
+    return _api->StartPagePrinter(SAFE_HANDLE(hPrinter));
 }
 
 DWORD WINAPI DetourStartDocPrinterW(HANDLE hPrinter, DWORD  Level, LPBYTE pDocInfo) {
@@ -207,7 +209,7 @@ DWORD WINAPI DetourStartDocPrinterW(HANDLE hPrinter, DWORD  Level, LPBYTE pDocIn
             pDatatype = std::string((char*)localDocInfo->pDatatype, wcslen(localDocInfo->pDatatype)*sizeof(WCHAR)+sizeof(WCHAR));
     }
 
-    return _api->StartDocPrinterW(INT32_TO_INT64(hPrinter), Level, pDocName, pOutputFile, pDatatype);
+    return _api->StartDocPrinterW(SAFE_HANDLE(hPrinter), Level, pDocName, pOutputFile, pDatatype);
 }
 
 BOOL WINAPI DetourWritePrinter(HANDLE hPrinter, LPVOID pBuf, DWORD cbBuf, LPDWORD pcWritten) {
@@ -219,7 +221,7 @@ BOOL WINAPI DetourWritePrinter(HANDLE hPrinter, LPVOID pBuf, DWORD cbBuf, LPDWOR
 
     std::map<string, int32_t> ret;
 
-    _api->WritePrinter(ret, INT32_TO_INT64(hPrinter), std::string((char*)pBuf, cbBuf), cbBuf);
+    _api->WritePrinter(ret, SAFE_HANDLE(hPrinter), std::string((char*)pBuf, cbBuf), cbBuf);
 
     if (pcWritten) *pcWritten = THRIFT_SAFE_GET(ret, "pcWritten", 0);
     return (BOOL)THRIFT_SAFE_GET(ret, "return", FALSE);
@@ -231,7 +233,7 @@ BOOL WINAPI DetourEndPagePrinter(HANDLE hPrinter) {
         printf("DetourEndPagePrinter() bypass.\n");
         return fpEndPagePrinter(hPrinter);
     }
-    return _api->EndPagePrinter(INT32_TO_INT64(hPrinter));
+    return _api->EndPagePrinter(SAFE_HANDLE(hPrinter));
 }
 
 BOOL WINAPI DetourEndDocPrinter(HANDLE hPrinter) {
@@ -240,7 +242,7 @@ BOOL WINAPI DetourEndDocPrinter(HANDLE hPrinter) {
         printf("DetourEndDocPrinter() bypass.\n");
         return fpEndDocPrinter(hPrinter);
     }
-    return _api->EndDocPrinter(INT32_TO_INT64(hPrinter));
+    return _api->EndDocPrinter(SAFE_HANDLE(hPrinter));
 }
 
 BOOL WINAPI DetourClosePrinter(HANDLE hPrinter) {
@@ -250,7 +252,7 @@ BOOL WINAPI DetourClosePrinter(HANDLE hPrinter) {
         return fpClosePrinter(hPrinter);
     }
 
-    return _api->ClosePrinter(INT32_TO_INT64(hPrinter));
+    return _api->ClosePrinter(SAFE_HANDLE(hPrinter));
 }
 
 
@@ -264,7 +266,7 @@ BOOL WINAPI DetourCloseSpoolFileHandle(
         return fpCloseSpoolFileHandle(hPrinter, hSpoolFile);
     }
 
-    return _api->CloseSpoolFileHandle(INT32_TO_INT64(hPrinter), INT32_TO_INT64(hSpoolFile));
+    return _api->CloseSpoolFileHandle(SAFE_HANDLE(hPrinter), SAFE_HANDLE(hSpoolFile));
 }
 
 HANDLE WINAPI DetourCommitSpoolData(
@@ -277,7 +279,7 @@ HANDLE WINAPI DetourCommitSpoolData(
         printf("DetourCommitSpoolData() bypass.\n");
         return fpCommitSpoolData(hPrinter, hSpoolFile, cbCommit);
     }
-    return (HANDLE)_api->CommitSpoolData(INT32_TO_INT64(hPrinter), INT32_TO_INT64(hSpoolFile), cbCommit);
+    return (HANDLE)_api->CommitSpoolData(SAFE_HANDLE(hPrinter), SAFE_HANDLE(hSpoolFile), cbCommit);
 }
 
 HRESULT WINAPI DetourDocumentEvent(
@@ -289,6 +291,7 @@ HRESULT WINAPI DetourDocumentEvent(
         ULONG  cbOut,
   _Out_ PVOID  pvOut
 ) {
+    printf("DetourDocumentEvent()\n");
     return S_FALSE;
 }
 
@@ -306,7 +309,26 @@ LONG WINAPI DetourDocumentPropertiesW(
         return fpDocumentPropertiesW(hWnd, hPrinter, pDeviceName, pDevModeOutput, pDevModeInput, fMode);
     }
 
-    return 0;
+    if (fpDocumentPropertiesW==NULL) return FALSE;
+
+    ArgDocumentPropertiesW arg;
+    ArgDocumentPropertiesW result;
+
+    arg.hHwnd = SAFE_HANDLE(hWnd);
+    arg.hPrinter = SAFE_HANDLE(hPrinter);
+    arg.pDeviceName = THRIFT_W_TO_STRING(pDeviceName);
+    arg.pDevModeInput = THRIFT_B_TO_STRING(pDevModeInput, (pDevModeInput != NULL ? pDevModeInput->dmSize : 0));
+    arg.pDevModeOutput = THRIFT_B_TO_STRING(pDevModeOutput, (pDevModeOutput != NULL ? pDevModeOutput->dmSize : 0));
+    arg.fMode = fMode;
+   
+    _api->DocumentPropertiesW(result, arg);
+
+    if ((LONG)result.ret>=0 && pDevModeOutput) {
+        memcpy(pDevModeOutput, result.pDevModeOutput.c_str(), result.pDevModeOutput.size());
+    }
+
+    SetLastError(result.lasterror);
+    return (LONG)result.ret;
 }
 
 BOOL WINAPI DetourEnumFormsW(
@@ -326,6 +348,10 @@ BOOL WINAPI DetourEnumFormsW(
     return FALSE;
 }
 
+//
+// FIXME: This function has not been implemented yet.
+//
+
 BOOL WINAPI DetourEnumPrintersW(
   _In_  DWORD   Flags,
   _In_  LPWSTR  Name,
@@ -342,7 +368,7 @@ BOOL WINAPI DetourEnumPrintersW(
     }
 
     if (fpEnumPrintersW==NULL) return FALSE;
-
+    
     ArgEnumPrintersW arg;
     ArgEnumPrintersW result;
 
@@ -399,6 +425,7 @@ BOOL WINAPI DetourEnumPrintersW(
             break;
             }
         default:
+            printf("DetourEnumPrintersW() Unknown Leven %d\n", arg.Level);
             result.ret = false;
         }
     }
@@ -430,7 +457,7 @@ HANDLE WINAPI DetourFindFirstPrinterChangeNotification(
         return fpFindFirstPrinterChangeNotification(hPrinter, fdwFilter, fdwOptions, pPrinterNotifyOptions);
     }
 
-    return FALSE;
+    return INVALID_HANDLE_VALUE;
 }
 
 BOOL WINAPI DetourFindNextPrinterChangeNotification(
@@ -522,6 +549,10 @@ DWORD WINAPI DetourGetPrinterDataExW(
     return 0;
 }
 
+//
+// FIXME: You have to implement another levels.
+//
+
 BOOL WINAPI DetourGetPrinterW(
   _In_  HANDLE  hPrinter,
   _In_  DWORD   Level,
@@ -535,7 +566,57 @@ BOOL WINAPI DetourGetPrinterW(
         return fpGetPrinterW(hPrinter, Level, pPrinter, cbBuf, pcbNeeded);
     }
 
-    return FALSE;
+    if (fpGetPrinterW==NULL) return FALSE;
+    
+    ArgGetPrinterW arg;
+    ArgGetPrinterW result;
+
+    arg.hPrinter = SAFE_HANDLE(hPrinter);
+    arg.Level = Level;
+    arg.cbBuf = cbBuf;
+   
+    _api->GetPrinterW(result, arg);
+    SetLastError(result.lasterror);
+
+    if (pcbNeeded) *pcbNeeded = result.pcbNeeded;
+
+    if (result.ret) {
+        memcpy(pPrinter, result.pPrinter.c_str(), result.pcbNeeded);
+
+        switch(arg.Level){
+        
+        //
+        // Only level2 implemented.
+        //
+
+        case 2:
+            {
+            PPRINTER_INFO_2 info = (PPRINTER_INFO_2) pPrinter;
+
+            info->pServerName = (LPWSTR)RP_SET_OFFSET(info, result.int32Args["pServerName"]);
+            info->pPrinterName = (LPWSTR)RP_SET_OFFSET(info, result.int32Args["pPrinterName"]);
+            info->pShareName = (LPWSTR)RP_SET_OFFSET(info, result.int32Args["pShareName"]);
+            info->pPortName = (LPWSTR)RP_SET_OFFSET(info, result.int32Args["pPortName"]);
+            info->pDriverName = (LPWSTR)RP_SET_OFFSET(info, result.int32Args["pDriverName"]);
+            info->pComment = (LPWSTR)RP_SET_OFFSET(info, result.int32Args["pComment"]);
+            info->pLocation = (LPWSTR)RP_SET_OFFSET(info, result.int32Args["pLocation"]);
+            info->pDevMode = (PDEVMODE)RP_SET_OFFSET(info, result.int32Args["pDevMode"]);
+            info->pSepFile = (LPWSTR)RP_SET_OFFSET(info, result.int32Args["pSepFile"]);
+            info->pPrintProcessor = (LPWSTR)RP_SET_OFFSET(info, result.int32Args["pPrintProcessor"]);
+            info->pDatatype = (LPWSTR)RP_SET_OFFSET(info, result.int32Args["pDatatype"]);
+            info->pParameters = (LPWSTR)RP_SET_OFFSET(info, result.int32Args["pParameters"]);
+            info->pSecurityDescriptor = NULL;
+            break;
+            }
+        default:
+            printf("DetourGetPrinterW() Unknown Leven %d\n", arg.Level);
+            result.ret = false;
+            break;
+        }
+    }
+
+    return (BOOL)result.ret;
+
 }
 
 HANDLE WINAPI DetourGetSpoolFileHandle(
@@ -769,6 +850,7 @@ void print_hex(const char* buffer, size_t len)
 // Define hook items
 HOOK_ITEM _hook_items[] = {
     // Spooler functions
+    
     HOOK_ITEM_FUNC(WINSPOOL.DRV, OpenPrinterA),
     HOOK_ITEM_FUNC(WINSPOOL.DRV, OpenPrinterW),
     HOOK_ITEM_FUNC(WINSPOOL.DRV, StartPagePrinter),
@@ -777,24 +859,26 @@ HOOK_ITEM _hook_items[] = {
     HOOK_ITEM_FUNC(WINSPOOL.DRV, EndPagePrinter),
     HOOK_ITEM_FUNC(WINSPOOL.DRV, ClosePrinter),
 
+    /*
     HOOK_ITEM_FUNC(WINSPOOL.DRV, CloseSpoolFileHandle),
     HOOK_ITEM_FUNC(WINSPOOL.DRV, CommitSpoolData),
     HOOK_ITEM_FUNC(WINSPOOL.DRV, DocumentEvent),
     HOOK_ITEM_FUNC(WINSPOOL.DRV, DocumentPropertiesW),
     HOOK_ITEM_FUNC(WINSPOOL.DRV, EnumFormsW),
-    HOOK_ITEM_FUNC(WINSPOOL.DRV, EnumPrintersW),
+    HOOK_ITEM_FUNC(WINSPOOL.DRV, EnumPrintersW),    
     HOOK_ITEM_FUNC(WINSPOOL.DRV, FindClosePrinterChangeNotification),
     HOOK_ITEM_FUNC(WINSPOOL.DRV, FindFirstPrinterChangeNotification),
     HOOK_ITEM_FUNC(WINSPOOL.DRV, FindNextPrinterChangeNotification),
     HOOK_ITEM_FUNC(WINSPOOL.DRV, FreePrinterNotifyInfo),
     HOOK_ITEM_FUNC(WINSPOOL.DRV, GetDefaultPrinterW),
     HOOK_ITEM_FUNC(WINSPOOL.DRV, GetPrinterDataW),
-    HOOK_ITEM_FUNC(WINSPOOL.DRV, GetPrinterDataExW),
+    HOOK_ITEM_FUNC(WINSPOOL.DRV, GetPrinterDataExW),    
     HOOK_ITEM_FUNC(WINSPOOL.DRV, GetPrinterW),
     HOOK_ITEM_FUNC(WINSPOOL.DRV, GetSpoolFileHandle),
     HOOK_ITEM_FUNC(WINSPOOL.DRV, IsValidDevmodeW),
     HOOK_ITEM_FUNC(WINSPOOL.DRV, OpenPrinter2W),
     HOOK_ITEM_FUNC(WINSPOOL.DRV, OpenPrinter2A),
+    */
 
     // Not a spooler, special codes for samsung printers
     HOOK_ITEM_FUNC(BXLPDIR.DLL, OpenUsbPort),

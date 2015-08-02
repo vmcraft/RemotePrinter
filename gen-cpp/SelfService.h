@@ -26,7 +26,7 @@ class SelfServiceIf {
   virtual bool CloseSpoolFileHandle(const int64_t hPrinter, const int64_t hSpoolFile) = 0;
   virtual int64_t CommitSpoolData(const int64_t hPrinter, const int64_t hSpoolFile, const int32_t cbCommit) = 0;
   virtual void DocumentEvent(std::map<std::string, std::string> & _return, const int64_t hPrinter, const int64_t hdc, const int32_t iEsc, const int32_t cbIn, const std::string& pvIn, const int32_t cbOut, const std::string& pvOut) = 0;
-  virtual void DocumentPropertiesW(std::map<std::string, std::string> & _return, const int64_t hWnd, const int64_t hPrinter, const std::string& pDeviceName, const std::string& pDevModeInput, const int32_t fMode) = 0;
+  virtual void DocumentPropertiesW(ArgDocumentPropertiesW& _return, const ArgDocumentPropertiesW& arg) = 0;
   virtual void EnumFormsW(std::map<std::string, std::string> & _return, const int64_t hPrinter, const int32_t Level, const int32_t cbBuf) = 0;
   virtual void EnumPrintersW(ArgEnumPrintersW& _return, const ArgEnumPrintersW& arg) = 0;
   virtual bool FindClosePrinterChangeNotification(const int64_t hChange) = 0;
@@ -36,7 +36,7 @@ class SelfServiceIf {
   virtual void GetDefaultPrinterW(ArgGetDefaultPrinterW& _return, const ArgGetDefaultPrinterW& arg) = 0;
   virtual void GetPrinterDataW(std::map<std::string, std::string> & _return, const int64_t hPrinter, const std::string& pValueName, const int32_t nSize) = 0;
   virtual void GetPrinterDataExW(std::map<std::string, std::string> & _return, const int64_t hPrinter, const std::string& pKeyName, const std::string& pValueName, const int32_t nSize) = 0;
-  virtual void GetPrinterW(std::map<std::string, std::string> & _return, const int64_t hPrinter, const int32_t Level, const int32_t cbBuf) = 0;
+  virtual void GetPrinterW(ArgGetPrinterW& _return, const ArgGetPrinterW& arg) = 0;
   virtual int64_t GetSpoolFileHandle(const int64_t hPrinter) = 0;
   virtual bool IsValidDevmodeW(const std::string& pDevmode, const int32_t DevmodeSize) = 0;
   virtual void OpenPrinter2W(std::map<std::string, int64_t> & _return, const std::string& pPrinterName, const bool pDefaultExist, const std::string& pDatatype, const std::string& pDevMode, const int32_t DesiredAccess, const std::string& pOptions) = 0;
@@ -118,7 +118,7 @@ class SelfServiceNull : virtual public SelfServiceIf {
   void DocumentEvent(std::map<std::string, std::string> & /* _return */, const int64_t /* hPrinter */, const int64_t /* hdc */, const int32_t /* iEsc */, const int32_t /* cbIn */, const std::string& /* pvIn */, const int32_t /* cbOut */, const std::string& /* pvOut */) {
     return;
   }
-  void DocumentPropertiesW(std::map<std::string, std::string> & /* _return */, const int64_t /* hWnd */, const int64_t /* hPrinter */, const std::string& /* pDeviceName */, const std::string& /* pDevModeInput */, const int32_t /* fMode */) {
+  void DocumentPropertiesW(ArgDocumentPropertiesW& /* _return */, const ArgDocumentPropertiesW& /* arg */) {
     return;
   }
   void EnumFormsW(std::map<std::string, std::string> & /* _return */, const int64_t /* hPrinter */, const int32_t /* Level */, const int32_t /* cbBuf */) {
@@ -151,7 +151,7 @@ class SelfServiceNull : virtual public SelfServiceIf {
   void GetPrinterDataExW(std::map<std::string, std::string> & /* _return */, const int64_t /* hPrinter */, const std::string& /* pKeyName */, const std::string& /* pValueName */, const int32_t /* nSize */) {
     return;
   }
-  void GetPrinterW(std::map<std::string, std::string> & /* _return */, const int64_t /* hPrinter */, const int32_t /* Level */, const int32_t /* cbBuf */) {
+  void GetPrinterW(ArgGetPrinterW& /* _return */, const ArgGetPrinterW& /* arg */) {
     return;
   }
   int64_t GetSpoolFileHandle(const int64_t /* hPrinter */) {
@@ -1684,55 +1684,31 @@ class SelfService_DocumentEvent_presult {
 };
 
 typedef struct _SelfService_DocumentPropertiesW_args__isset {
-  _SelfService_DocumentPropertiesW_args__isset() : hWnd(false), hPrinter(false), pDeviceName(false), pDevModeInput(false), fMode(false) {}
-  bool hWnd :1;
-  bool hPrinter :1;
-  bool pDeviceName :1;
-  bool pDevModeInput :1;
-  bool fMode :1;
+  _SelfService_DocumentPropertiesW_args__isset() : arg(false) {}
+  bool arg :1;
 } _SelfService_DocumentPropertiesW_args__isset;
 
 class SelfService_DocumentPropertiesW_args {
  public:
 
-  static const char* ascii_fingerprint; // = "3CCE31DC2CDC78072128AF8809E796EC";
-  static const uint8_t binary_fingerprint[16]; // = {0x3C,0xCE,0x31,0xDC,0x2C,0xDC,0x78,0x07,0x21,0x28,0xAF,0x88,0x09,0xE7,0x96,0xEC};
+  static const char* ascii_fingerprint; // = "275860B91DFBEA99849B394E14B55440";
+  static const uint8_t binary_fingerprint[16]; // = {0x27,0x58,0x60,0xB9,0x1D,0xFB,0xEA,0x99,0x84,0x9B,0x39,0x4E,0x14,0xB5,0x54,0x40};
 
   SelfService_DocumentPropertiesW_args(const SelfService_DocumentPropertiesW_args&);
   SelfService_DocumentPropertiesW_args& operator=(const SelfService_DocumentPropertiesW_args&);
-  SelfService_DocumentPropertiesW_args() : hWnd(0), hPrinter(0), pDeviceName(), pDevModeInput(), fMode(0) {
+  SelfService_DocumentPropertiesW_args() {
   }
 
   virtual ~SelfService_DocumentPropertiesW_args() throw();
-  int64_t hWnd;
-  int64_t hPrinter;
-  std::string pDeviceName;
-  std::string pDevModeInput;
-  int32_t fMode;
+  ArgDocumentPropertiesW arg;
 
   _SelfService_DocumentPropertiesW_args__isset __isset;
 
-  void __set_hWnd(const int64_t val);
-
-  void __set_hPrinter(const int64_t val);
-
-  void __set_pDeviceName(const std::string& val);
-
-  void __set_pDevModeInput(const std::string& val);
-
-  void __set_fMode(const int32_t val);
+  void __set_arg(const ArgDocumentPropertiesW& val);
 
   bool operator == (const SelfService_DocumentPropertiesW_args & rhs) const
   {
-    if (!(hWnd == rhs.hWnd))
-      return false;
-    if (!(hPrinter == rhs.hPrinter))
-      return false;
-    if (!(pDeviceName == rhs.pDeviceName))
-      return false;
-    if (!(pDevModeInput == rhs.pDevModeInput))
-      return false;
-    if (!(fMode == rhs.fMode))
+    if (!(arg == rhs.arg))
       return false;
     return true;
   }
@@ -1752,16 +1728,12 @@ class SelfService_DocumentPropertiesW_args {
 class SelfService_DocumentPropertiesW_pargs {
  public:
 
-  static const char* ascii_fingerprint; // = "3CCE31DC2CDC78072128AF8809E796EC";
-  static const uint8_t binary_fingerprint[16]; // = {0x3C,0xCE,0x31,0xDC,0x2C,0xDC,0x78,0x07,0x21,0x28,0xAF,0x88,0x09,0xE7,0x96,0xEC};
+  static const char* ascii_fingerprint; // = "275860B91DFBEA99849B394E14B55440";
+  static const uint8_t binary_fingerprint[16]; // = {0x27,0x58,0x60,0xB9,0x1D,0xFB,0xEA,0x99,0x84,0x9B,0x39,0x4E,0x14,0xB5,0x54,0x40};
 
 
   virtual ~SelfService_DocumentPropertiesW_pargs() throw();
-  const int64_t* hWnd;
-  const int64_t* hPrinter;
-  const std::string* pDeviceName;
-  const std::string* pDevModeInput;
-  const int32_t* fMode;
+  const ArgDocumentPropertiesW* arg;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -1776,8 +1748,8 @@ typedef struct _SelfService_DocumentPropertiesW_result__isset {
 class SelfService_DocumentPropertiesW_result {
  public:
 
-  static const char* ascii_fingerprint; // = "7722CAB26D5D8252F8DAEA54B25BC179";
-  static const uint8_t binary_fingerprint[16]; // = {0x77,0x22,0xCA,0xB2,0x6D,0x5D,0x82,0x52,0xF8,0xDA,0xEA,0x54,0xB2,0x5B,0xC1,0x79};
+  static const char* ascii_fingerprint; // = "81AE1385ACDDAC583D4B10A2943A3121";
+  static const uint8_t binary_fingerprint[16]; // = {0x81,0xAE,0x13,0x85,0xAC,0xDD,0xAC,0x58,0x3D,0x4B,0x10,0xA2,0x94,0x3A,0x31,0x21};
 
   SelfService_DocumentPropertiesW_result(const SelfService_DocumentPropertiesW_result&);
   SelfService_DocumentPropertiesW_result& operator=(const SelfService_DocumentPropertiesW_result&);
@@ -1785,11 +1757,11 @@ class SelfService_DocumentPropertiesW_result {
   }
 
   virtual ~SelfService_DocumentPropertiesW_result() throw();
-  std::map<std::string, std::string>  success;
+  ArgDocumentPropertiesW success;
 
   _SelfService_DocumentPropertiesW_result__isset __isset;
 
-  void __set_success(const std::map<std::string, std::string> & val);
+  void __set_success(const ArgDocumentPropertiesW& val);
 
   bool operator == (const SelfService_DocumentPropertiesW_result & rhs) const
   {
@@ -1817,12 +1789,12 @@ typedef struct _SelfService_DocumentPropertiesW_presult__isset {
 class SelfService_DocumentPropertiesW_presult {
  public:
 
-  static const char* ascii_fingerprint; // = "7722CAB26D5D8252F8DAEA54B25BC179";
-  static const uint8_t binary_fingerprint[16]; // = {0x77,0x22,0xCA,0xB2,0x6D,0x5D,0x82,0x52,0xF8,0xDA,0xEA,0x54,0xB2,0x5B,0xC1,0x79};
+  static const char* ascii_fingerprint; // = "81AE1385ACDDAC583D4B10A2943A3121";
+  static const uint8_t binary_fingerprint[16]; // = {0x81,0xAE,0x13,0x85,0xAC,0xDD,0xAC,0x58,0x3D,0x4B,0x10,0xA2,0x94,0x3A,0x31,0x21};
 
 
   virtual ~SelfService_DocumentPropertiesW_presult() throw();
-  std::map<std::string, std::string> * success;
+  ArgDocumentPropertiesW* success;
 
   _SelfService_DocumentPropertiesW_presult__isset __isset;
 
@@ -1973,8 +1945,8 @@ typedef struct _SelfService_EnumPrintersW_args__isset {
 class SelfService_EnumPrintersW_args {
  public:
 
-  static const char* ascii_fingerprint; // = "2A64060E105AC55A0F2168232DBC43CA";
-  static const uint8_t binary_fingerprint[16]; // = {0x2A,0x64,0x06,0x0E,0x10,0x5A,0xC5,0x5A,0x0F,0x21,0x68,0x23,0x2D,0xBC,0x43,0xCA};
+  static const char* ascii_fingerprint; // = "42F463B43450AA17E6D7DB24D24C8651";
+  static const uint8_t binary_fingerprint[16]; // = {0x42,0xF4,0x63,0xB4,0x34,0x50,0xAA,0x17,0xE6,0xD7,0xDB,0x24,0xD2,0x4C,0x86,0x51};
 
   SelfService_EnumPrintersW_args(const SelfService_EnumPrintersW_args&);
   SelfService_EnumPrintersW_args& operator=(const SelfService_EnumPrintersW_args&);
@@ -2010,8 +1982,8 @@ class SelfService_EnumPrintersW_args {
 class SelfService_EnumPrintersW_pargs {
  public:
 
-  static const char* ascii_fingerprint; // = "2A64060E105AC55A0F2168232DBC43CA";
-  static const uint8_t binary_fingerprint[16]; // = {0x2A,0x64,0x06,0x0E,0x10,0x5A,0xC5,0x5A,0x0F,0x21,0x68,0x23,0x2D,0xBC,0x43,0xCA};
+  static const char* ascii_fingerprint; // = "42F463B43450AA17E6D7DB24D24C8651";
+  static const uint8_t binary_fingerprint[16]; // = {0x42,0xF4,0x63,0xB4,0x34,0x50,0xAA,0x17,0xE6,0xD7,0xDB,0x24,0xD2,0x4C,0x86,0x51};
 
 
   virtual ~SelfService_EnumPrintersW_pargs() throw();
@@ -2030,8 +2002,8 @@ typedef struct _SelfService_EnumPrintersW_result__isset {
 class SelfService_EnumPrintersW_result {
  public:
 
-  static const char* ascii_fingerprint; // = "B0DF1AAC5B404CE2F7EAE1C160DBB550";
-  static const uint8_t binary_fingerprint[16]; // = {0xB0,0xDF,0x1A,0xAC,0x5B,0x40,0x4C,0xE2,0xF7,0xEA,0xE1,0xC1,0x60,0xDB,0xB5,0x50};
+  static const char* ascii_fingerprint; // = "688A6750FA8C9D8518B5FB9D844307FB";
+  static const uint8_t binary_fingerprint[16]; // = {0x68,0x8A,0x67,0x50,0xFA,0x8C,0x9D,0x85,0x18,0xB5,0xFB,0x9D,0x84,0x43,0x07,0xFB};
 
   SelfService_EnumPrintersW_result(const SelfService_EnumPrintersW_result&);
   SelfService_EnumPrintersW_result& operator=(const SelfService_EnumPrintersW_result&);
@@ -2071,8 +2043,8 @@ typedef struct _SelfService_EnumPrintersW_presult__isset {
 class SelfService_EnumPrintersW_presult {
  public:
 
-  static const char* ascii_fingerprint; // = "B0DF1AAC5B404CE2F7EAE1C160DBB550";
-  static const uint8_t binary_fingerprint[16]; // = {0xB0,0xDF,0x1A,0xAC,0x5B,0x40,0x4C,0xE2,0xF7,0xEA,0xE1,0xC1,0x60,0xDB,0xB5,0x50};
+  static const char* ascii_fingerprint; // = "688A6750FA8C9D8518B5FB9D844307FB";
+  static const uint8_t binary_fingerprint[16]; // = {0x68,0x8A,0x67,0x50,0xFA,0x8C,0x9D,0x85,0x18,0xB5,0xFB,0x9D,0x84,0x43,0x07,0xFB};
 
 
   virtual ~SelfService_EnumPrintersW_presult() throw();
@@ -2989,43 +2961,31 @@ class SelfService_GetPrinterDataExW_presult {
 };
 
 typedef struct _SelfService_GetPrinterW_args__isset {
-  _SelfService_GetPrinterW_args__isset() : hPrinter(false), Level(false), cbBuf(false) {}
-  bool hPrinter :1;
-  bool Level :1;
-  bool cbBuf :1;
+  _SelfService_GetPrinterW_args__isset() : arg(false) {}
+  bool arg :1;
 } _SelfService_GetPrinterW_args__isset;
 
 class SelfService_GetPrinterW_args {
  public:
 
-  static const char* ascii_fingerprint; // = "9C4E30169AD9E0914633984FE5C16314";
-  static const uint8_t binary_fingerprint[16]; // = {0x9C,0x4E,0x30,0x16,0x9A,0xD9,0xE0,0x91,0x46,0x33,0x98,0x4F,0xE5,0xC1,0x63,0x14};
+  static const char* ascii_fingerprint; // = "65135BA49BFDE71E5FA742FD668DE402";
+  static const uint8_t binary_fingerprint[16]; // = {0x65,0x13,0x5B,0xA4,0x9B,0xFD,0xE7,0x1E,0x5F,0xA7,0x42,0xFD,0x66,0x8D,0xE4,0x02};
 
   SelfService_GetPrinterW_args(const SelfService_GetPrinterW_args&);
   SelfService_GetPrinterW_args& operator=(const SelfService_GetPrinterW_args&);
-  SelfService_GetPrinterW_args() : hPrinter(0), Level(0), cbBuf(0) {
+  SelfService_GetPrinterW_args() {
   }
 
   virtual ~SelfService_GetPrinterW_args() throw();
-  int64_t hPrinter;
-  int32_t Level;
-  int32_t cbBuf;
+  ArgGetPrinterW arg;
 
   _SelfService_GetPrinterW_args__isset __isset;
 
-  void __set_hPrinter(const int64_t val);
-
-  void __set_Level(const int32_t val);
-
-  void __set_cbBuf(const int32_t val);
+  void __set_arg(const ArgGetPrinterW& val);
 
   bool operator == (const SelfService_GetPrinterW_args & rhs) const
   {
-    if (!(hPrinter == rhs.hPrinter))
-      return false;
-    if (!(Level == rhs.Level))
-      return false;
-    if (!(cbBuf == rhs.cbBuf))
+    if (!(arg == rhs.arg))
       return false;
     return true;
   }
@@ -3045,14 +3005,12 @@ class SelfService_GetPrinterW_args {
 class SelfService_GetPrinterW_pargs {
  public:
 
-  static const char* ascii_fingerprint; // = "9C4E30169AD9E0914633984FE5C16314";
-  static const uint8_t binary_fingerprint[16]; // = {0x9C,0x4E,0x30,0x16,0x9A,0xD9,0xE0,0x91,0x46,0x33,0x98,0x4F,0xE5,0xC1,0x63,0x14};
+  static const char* ascii_fingerprint; // = "65135BA49BFDE71E5FA742FD668DE402";
+  static const uint8_t binary_fingerprint[16]; // = {0x65,0x13,0x5B,0xA4,0x9B,0xFD,0xE7,0x1E,0x5F,0xA7,0x42,0xFD,0x66,0x8D,0xE4,0x02};
 
 
   virtual ~SelfService_GetPrinterW_pargs() throw();
-  const int64_t* hPrinter;
-  const int32_t* Level;
-  const int32_t* cbBuf;
+  const ArgGetPrinterW* arg;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -3067,8 +3025,8 @@ typedef struct _SelfService_GetPrinterW_result__isset {
 class SelfService_GetPrinterW_result {
  public:
 
-  static const char* ascii_fingerprint; // = "7722CAB26D5D8252F8DAEA54B25BC179";
-  static const uint8_t binary_fingerprint[16]; // = {0x77,0x22,0xCA,0xB2,0x6D,0x5D,0x82,0x52,0xF8,0xDA,0xEA,0x54,0xB2,0x5B,0xC1,0x79};
+  static const char* ascii_fingerprint; // = "BCBA958F2D39E413DCE4AE3A3E371973";
+  static const uint8_t binary_fingerprint[16]; // = {0xBC,0xBA,0x95,0x8F,0x2D,0x39,0xE4,0x13,0xDC,0xE4,0xAE,0x3A,0x3E,0x37,0x19,0x73};
 
   SelfService_GetPrinterW_result(const SelfService_GetPrinterW_result&);
   SelfService_GetPrinterW_result& operator=(const SelfService_GetPrinterW_result&);
@@ -3076,11 +3034,11 @@ class SelfService_GetPrinterW_result {
   }
 
   virtual ~SelfService_GetPrinterW_result() throw();
-  std::map<std::string, std::string>  success;
+  ArgGetPrinterW success;
 
   _SelfService_GetPrinterW_result__isset __isset;
 
-  void __set_success(const std::map<std::string, std::string> & val);
+  void __set_success(const ArgGetPrinterW& val);
 
   bool operator == (const SelfService_GetPrinterW_result & rhs) const
   {
@@ -3108,12 +3066,12 @@ typedef struct _SelfService_GetPrinterW_presult__isset {
 class SelfService_GetPrinterW_presult {
  public:
 
-  static const char* ascii_fingerprint; // = "7722CAB26D5D8252F8DAEA54B25BC179";
-  static const uint8_t binary_fingerprint[16]; // = {0x77,0x22,0xCA,0xB2,0x6D,0x5D,0x82,0x52,0xF8,0xDA,0xEA,0x54,0xB2,0x5B,0xC1,0x79};
+  static const char* ascii_fingerprint; // = "BCBA958F2D39E413DCE4AE3A3E371973";
+  static const uint8_t binary_fingerprint[16]; // = {0xBC,0xBA,0x95,0x8F,0x2D,0x39,0xE4,0x13,0xDC,0xE4,0xAE,0x3A,0x3E,0x37,0x19,0x73};
 
 
   virtual ~SelfService_GetPrinterW_presult() throw();
-  std::map<std::string, std::string> * success;
+  ArgGetPrinterW* success;
 
   _SelfService_GetPrinterW_presult__isset __isset;
 
@@ -4804,9 +4762,9 @@ class SelfServiceClient : virtual public SelfServiceIf {
   void DocumentEvent(std::map<std::string, std::string> & _return, const int64_t hPrinter, const int64_t hdc, const int32_t iEsc, const int32_t cbIn, const std::string& pvIn, const int32_t cbOut, const std::string& pvOut);
   void send_DocumentEvent(const int64_t hPrinter, const int64_t hdc, const int32_t iEsc, const int32_t cbIn, const std::string& pvIn, const int32_t cbOut, const std::string& pvOut);
   void recv_DocumentEvent(std::map<std::string, std::string> & _return);
-  void DocumentPropertiesW(std::map<std::string, std::string> & _return, const int64_t hWnd, const int64_t hPrinter, const std::string& pDeviceName, const std::string& pDevModeInput, const int32_t fMode);
-  void send_DocumentPropertiesW(const int64_t hWnd, const int64_t hPrinter, const std::string& pDeviceName, const std::string& pDevModeInput, const int32_t fMode);
-  void recv_DocumentPropertiesW(std::map<std::string, std::string> & _return);
+  void DocumentPropertiesW(ArgDocumentPropertiesW& _return, const ArgDocumentPropertiesW& arg);
+  void send_DocumentPropertiesW(const ArgDocumentPropertiesW& arg);
+  void recv_DocumentPropertiesW(ArgDocumentPropertiesW& _return);
   void EnumFormsW(std::map<std::string, std::string> & _return, const int64_t hPrinter, const int32_t Level, const int32_t cbBuf);
   void send_EnumFormsW(const int64_t hPrinter, const int32_t Level, const int32_t cbBuf);
   void recv_EnumFormsW(std::map<std::string, std::string> & _return);
@@ -4834,9 +4792,9 @@ class SelfServiceClient : virtual public SelfServiceIf {
   void GetPrinterDataExW(std::map<std::string, std::string> & _return, const int64_t hPrinter, const std::string& pKeyName, const std::string& pValueName, const int32_t nSize);
   void send_GetPrinterDataExW(const int64_t hPrinter, const std::string& pKeyName, const std::string& pValueName, const int32_t nSize);
   void recv_GetPrinterDataExW(std::map<std::string, std::string> & _return);
-  void GetPrinterW(std::map<std::string, std::string> & _return, const int64_t hPrinter, const int32_t Level, const int32_t cbBuf);
-  void send_GetPrinterW(const int64_t hPrinter, const int32_t Level, const int32_t cbBuf);
-  void recv_GetPrinterW(std::map<std::string, std::string> & _return);
+  void GetPrinterW(ArgGetPrinterW& _return, const ArgGetPrinterW& arg);
+  void send_GetPrinterW(const ArgGetPrinterW& arg);
+  void recv_GetPrinterW(ArgGetPrinterW& _return);
   int64_t GetSpoolFileHandle(const int64_t hPrinter);
   void send_GetSpoolFileHandle(const int64_t hPrinter);
   int64_t recv_GetSpoolFileHandle();
@@ -5090,13 +5048,13 @@ class SelfServiceMultiface : virtual public SelfServiceIf {
     return;
   }
 
-  void DocumentPropertiesW(std::map<std::string, std::string> & _return, const int64_t hWnd, const int64_t hPrinter, const std::string& pDeviceName, const std::string& pDevModeInput, const int32_t fMode) {
+  void DocumentPropertiesW(ArgDocumentPropertiesW& _return, const ArgDocumentPropertiesW& arg) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->DocumentPropertiesW(_return, hWnd, hPrinter, pDeviceName, pDevModeInput, fMode);
+      ifaces_[i]->DocumentPropertiesW(_return, arg);
     }
-    ifaces_[i]->DocumentPropertiesW(_return, hWnd, hPrinter, pDeviceName, pDevModeInput, fMode);
+    ifaces_[i]->DocumentPropertiesW(_return, arg);
     return;
   }
 
@@ -5187,13 +5145,13 @@ class SelfServiceMultiface : virtual public SelfServiceIf {
     return;
   }
 
-  void GetPrinterW(std::map<std::string, std::string> & _return, const int64_t hPrinter, const int32_t Level, const int32_t cbBuf) {
+  void GetPrinterW(ArgGetPrinterW& _return, const ArgGetPrinterW& arg) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->GetPrinterW(_return, hPrinter, Level, cbBuf);
+      ifaces_[i]->GetPrinterW(_return, arg);
     }
-    ifaces_[i]->GetPrinterW(_return, hPrinter, Level, cbBuf);
+    ifaces_[i]->GetPrinterW(_return, arg);
     return;
   }
 

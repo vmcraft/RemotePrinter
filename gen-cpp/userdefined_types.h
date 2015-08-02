@@ -23,6 +23,10 @@ class ArgGetDefaultPrinterW;
 
 class ArgEnumPrintersW;
 
+class ArgDocumentPropertiesW;
+
+class ArgGetPrinterW;
+
 typedef struct _ArgGetDefaultPrinterW__isset {
   _ArgGetDefaultPrinterW__isset() : ret(false), pszBuffer(false), pcchBuffer(false) {}
   bool ret :1;
@@ -94,8 +98,8 @@ typedef struct _ArgEnumPrintersW__isset {
 class ArgEnumPrintersW {
  public:
 
-  static const char* ascii_fingerprint; // = "DE518725CC5D9695526E35BF6A80A175";
-  static const uint8_t binary_fingerprint[16]; // = {0xDE,0x51,0x87,0x25,0xCC,0x5D,0x96,0x95,0x52,0x6E,0x35,0xBF,0x6A,0x80,0xA1,0x75};
+  static const char* ascii_fingerprint; // = "FDA3E4A29FC8F2A906E0E7F414419872";
+  static const uint8_t binary_fingerprint[16]; // = {0xFD,0xA3,0xE4,0xA2,0x9F,0xC8,0xF2,0xA9,0x06,0xE0,0xE7,0xF4,0x14,0x41,0x98,0x72};
 
   ArgEnumPrintersW(const ArgEnumPrintersW&);
   ArgEnumPrintersW& operator=(const ArgEnumPrintersW&);
@@ -168,6 +172,176 @@ class ArgEnumPrintersW {
 };
 
 void swap(ArgEnumPrintersW &a, ArgEnumPrintersW &b);
+
+typedef struct _ArgDocumentPropertiesW__isset {
+  _ArgDocumentPropertiesW__isset() : ret(false), hHwnd(false), hPrinter(false), pDeviceName(false), pDevModeOutput(false), pDevModeInput(false), fMode(false), lasterror(false) {}
+  bool ret :1;
+  bool hHwnd :1;
+  bool hPrinter :1;
+  bool pDeviceName :1;
+  bool pDevModeOutput :1;
+  bool pDevModeInput :1;
+  bool fMode :1;
+  bool lasterror :1;
+} _ArgDocumentPropertiesW__isset;
+
+class ArgDocumentPropertiesW {
+ public:
+
+  static const char* ascii_fingerprint; // = "6873E30F42348638F354653ED57E492E";
+  static const uint8_t binary_fingerprint[16]; // = {0x68,0x73,0xE3,0x0F,0x42,0x34,0x86,0x38,0xF3,0x54,0x65,0x3E,0xD5,0x7E,0x49,0x2E};
+
+  ArgDocumentPropertiesW(const ArgDocumentPropertiesW&);
+  ArgDocumentPropertiesW& operator=(const ArgDocumentPropertiesW&);
+  ArgDocumentPropertiesW() : ret(0), hHwnd(0), hPrinter(0), pDeviceName(), pDevModeOutput(), pDevModeInput(), fMode(0), lasterror(0) {
+  }
+
+  virtual ~ArgDocumentPropertiesW() throw();
+  int32_t ret;
+  int64_t hHwnd;
+  int64_t hPrinter;
+  std::string pDeviceName;
+  std::string pDevModeOutput;
+  std::string pDevModeInput;
+  int32_t fMode;
+  int32_t lasterror;
+
+  _ArgDocumentPropertiesW__isset __isset;
+
+  void __set_ret(const int32_t val);
+
+  void __set_hHwnd(const int64_t val);
+
+  void __set_hPrinter(const int64_t val);
+
+  void __set_pDeviceName(const std::string& val);
+
+  void __set_pDevModeOutput(const std::string& val);
+
+  void __set_pDevModeInput(const std::string& val);
+
+  void __set_fMode(const int32_t val);
+
+  void __set_lasterror(const int32_t val);
+
+  bool operator == (const ArgDocumentPropertiesW & rhs) const
+  {
+    if (!(ret == rhs.ret))
+      return false;
+    if (!(hHwnd == rhs.hHwnd))
+      return false;
+    if (!(hPrinter == rhs.hPrinter))
+      return false;
+    if (!(pDeviceName == rhs.pDeviceName))
+      return false;
+    if (!(pDevModeOutput == rhs.pDevModeOutput))
+      return false;
+    if (!(pDevModeInput == rhs.pDevModeInput))
+      return false;
+    if (!(fMode == rhs.fMode))
+      return false;
+    if (!(lasterror == rhs.lasterror))
+      return false;
+    return true;
+  }
+  bool operator != (const ArgDocumentPropertiesW &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ArgDocumentPropertiesW & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const ArgDocumentPropertiesW& obj);
+};
+
+void swap(ArgDocumentPropertiesW &a, ArgDocumentPropertiesW &b);
+
+typedef struct _ArgGetPrinterW__isset {
+  _ArgGetPrinterW__isset() : ret(false), hPrinter(false), Level(false), pPrinter(false), cbBuf(false), pcbNeeded(false), int32Args(false), lasterror(false) {}
+  bool ret :1;
+  bool hPrinter :1;
+  bool Level :1;
+  bool pPrinter :1;
+  bool cbBuf :1;
+  bool pcbNeeded :1;
+  bool int32Args :1;
+  bool lasterror :1;
+} _ArgGetPrinterW__isset;
+
+class ArgGetPrinterW {
+ public:
+
+  static const char* ascii_fingerprint; // = "887AC5FA8D7F4FC166B66A9233C106E9";
+  static const uint8_t binary_fingerprint[16]; // = {0x88,0x7A,0xC5,0xFA,0x8D,0x7F,0x4F,0xC1,0x66,0xB6,0x6A,0x92,0x33,0xC1,0x06,0xE9};
+
+  ArgGetPrinterW(const ArgGetPrinterW&);
+  ArgGetPrinterW& operator=(const ArgGetPrinterW&);
+  ArgGetPrinterW() : ret(0), hPrinter(0), Level(0), pPrinter(), cbBuf(0), pcbNeeded(0), lasterror(0) {
+  }
+
+  virtual ~ArgGetPrinterW() throw();
+  bool ret;
+  int64_t hPrinter;
+  int32_t Level;
+  std::string pPrinter;
+  int32_t cbBuf;
+  int32_t pcbNeeded;
+  std::map<std::string, int32_t>  int32Args;
+  int32_t lasterror;
+
+  _ArgGetPrinterW__isset __isset;
+
+  void __set_ret(const bool val);
+
+  void __set_hPrinter(const int64_t val);
+
+  void __set_Level(const int32_t val);
+
+  void __set_pPrinter(const std::string& val);
+
+  void __set_cbBuf(const int32_t val);
+
+  void __set_pcbNeeded(const int32_t val);
+
+  void __set_int32Args(const std::map<std::string, int32_t> & val);
+
+  void __set_lasterror(const int32_t val);
+
+  bool operator == (const ArgGetPrinterW & rhs) const
+  {
+    if (!(ret == rhs.ret))
+      return false;
+    if (!(hPrinter == rhs.hPrinter))
+      return false;
+    if (!(Level == rhs.Level))
+      return false;
+    if (!(pPrinter == rhs.pPrinter))
+      return false;
+    if (!(cbBuf == rhs.cbBuf))
+      return false;
+    if (!(pcbNeeded == rhs.pcbNeeded))
+      return false;
+    if (!(int32Args == rhs.int32Args))
+      return false;
+    if (!(lasterror == rhs.lasterror))
+      return false;
+    return true;
+  }
+  bool operator != (const ArgGetPrinterW &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ArgGetPrinterW & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  friend std::ostream& operator<<(std::ostream& out, const ArgGetPrinterW& obj);
+};
+
+void swap(ArgGetPrinterW &a, ArgGetPrinterW &b);
 
 } // namespace
 
