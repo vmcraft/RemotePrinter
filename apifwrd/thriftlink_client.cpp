@@ -40,9 +40,12 @@ void thrift_close() {
 static bool connect_internal() {
     try {
         if (_transport.get()!=NULL) {
-            if (!_transport->isOpen()) {
+            if (!_transport->isOpen() || !_socket->isOpen()) {
                 _transport->open();
             }
+        }
+        else {
+            return false;
         }
     } catch (TTransportException& tx) {
         cout << "ERROR: " << tx.what() << endl;
@@ -53,13 +56,13 @@ static bool connect_internal() {
         return false;
     } 
 
-    return true;
+    return _transport->isOpen();
 }
 
 bool ensure_connection() {
     if (_transport.get() == NULL) return false; 
     try{
-        if (!_transport->isOpen()) {
+        if (!_transport->isOpen() || !_socket->isOpen()) {
             return connect_internal();
         }
     } catch (TException& tx) {
