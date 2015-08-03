@@ -2,7 +2,8 @@
 #include "minhooklink.h"
 #include <iostream> 
 #include <fstream>
-
+#include <codecvt>
+#include <boost/algorithm/string/predicate.hpp>
 
 std::string _server_ip = "127.0.0.1";
 int _server_port = 3900;
@@ -29,8 +30,16 @@ char *_preloaded_dlls[] = {
 
 bool _dont_hook_if_connection_failed = false;
 
+bool isBixolonPrinterByName(const char* printerName);
+bool isBixolonPrinterByHandle(HANDLE hHandle);
+bool addBixolonPrinter(HANDLE hHandle);
+void closeBixolonPrinter(HANDLE hHandle);
+
+
 bool read_from_file(std::string& file_path, std::string& binary_data) ;
 void print_hex(const char* buffer, size_t len);
+wstring s2ws(const std::string& str);
+string ws2s(const std::wstring& wstr);
 
 using namespace userdefined;
 
@@ -103,6 +112,11 @@ BOOL WINAPI DetourOpenPrinterA(LPSTR pPrinterName, LPHANDLE phPrinter, LPPRINTER
         return fpOpenPrinterA(pPrinterName, phPrinter, pDefault);
     }
 
+    if (!isBixolonPrinterByName(pPrinterName)) {
+        printf("DetourOpenPrinterA(%s) bypass. Not a BIXOLON printer\n", pPrinterName);
+        return fpOpenPrinterA(pPrinterName, phPrinter, pDefault);
+    }
+
     std::string printerName(NULL, 0);
     std::map<string, int64_t> ret;
 
@@ -133,6 +147,8 @@ BOOL WINAPI DetourOpenPrinterA(LPSTR pPrinterName, LPHANDLE phPrinter, LPPRINTER
             *phPrinter = (HANDLE)THRIFT_SAFE_GET(ret, "phPrinter", NULL);
             printf("PrinterHandle=%x\n", *phPrinter);
         }
+
+        addBixolonPrinter((HANDLE)THRIFT_SAFE_GET(ret, "phPrinter", NULL));
         return result;
     }
 
@@ -144,6 +160,11 @@ BOOL WINAPI DetourOpenPrinterW(LPWSTR pPrinterName, LPHANDLE phPrinter, LPPRINTE
 
     if (!ensure_connection()) {
         printf("DetourOpenPrinterW() bypass.\n");
+        return fpOpenPrinterW(pPrinterName, phPrinter, pDefault);
+    }
+
+    if (pPrinterName==NULL || !isBixolonPrinterByName(ws2s(std::wstring(pPrinterName)).c_str())) {
+        printf("DetourOpenPrinterW() bypass. Not a BIXOLON printer\n");
         return fpOpenPrinterW(pPrinterName, phPrinter, pDefault);
     }
 
@@ -171,6 +192,7 @@ BOOL WINAPI DetourOpenPrinterW(LPWSTR pPrinterName, LPHANDLE phPrinter, LPPRINTE
             *phPrinter = (HANDLE)THRIFT_SAFE_GET(ret, "phPrinter", NULL);
             printf("PrinterHandle=%x\n", *phPrinter);
         }
+        addBixolonPrinter((HANDLE)THRIFT_SAFE_GET(ret, "phPrinter", NULL));
         return result;
     }
 
@@ -179,7 +201,7 @@ BOOL WINAPI DetourOpenPrinterW(LPWSTR pPrinterName, LPHANDLE phPrinter, LPPRINTE
 
 BOOL WINAPI DetourStartPagePrinter(HANDLE hPrinter) {
     printf("DetourStartPagePrinter()\n");
-    if (!ensure_connection()) {
+    if (!ensure_connection() || !isBixolonPrinterByHandle(hPrinter)) {
         printf("DetourStartPagePrinter() bypass.\n");
         return fpStartPagePrinter(hPrinter);
     }
@@ -189,7 +211,7 @@ BOOL WINAPI DetourStartPagePrinter(HANDLE hPrinter) {
 
 DWORD WINAPI DetourStartDocPrinterW(HANDLE hPrinter, DWORD  Level, LPBYTE pDocInfo) {
     printf("DetourStartDocPrinterW()\n");
-    if (!ensure_connection()) {
+    if (!ensure_connection() || !isBixolonPrinterByHandle(hPrinter)) {
         printf("DetourStartDocPrinterW() bypass.\n");
         return fpStartDocPrinterW(hPrinter, Level, pDocInfo);
     }
@@ -214,7 +236,7 @@ DWORD WINAPI DetourStartDocPrinterW(HANDLE hPrinter, DWORD  Level, LPBYTE pDocIn
 
 BOOL WINAPI DetourWritePrinter(HANDLE hPrinter, LPVOID pBuf, DWORD cbBuf, LPDWORD pcWritten) {
     printf("DetourWritePrinter()\n");
-    if (!ensure_connection()) {
+    if (!ensure_connection() || !isBixolonPrinterByHandle(hPrinter)) {
         printf("DetourWritePrinter() bypass.\n");
         return fpWritePrinter(hPrinter, pBuf, cbBuf, pcWritten);
     }
@@ -229,7 +251,7 @@ BOOL WINAPI DetourWritePrinter(HANDLE hPrinter, LPVOID pBuf, DWORD cbBuf, LPDWOR
 
 BOOL WINAPI DetourEndPagePrinter(HANDLE hPrinter) {
     printf("DetourEndPagePrinter()\n");
-    if (!ensure_connection()) {
+    if (!ensure_connection() || !isBixolonPrinterByHandle(hPrinter)) {
         printf("DetourEndPagePrinter() bypass.\n");
         return fpEndPagePrinter(hPrinter);
     }
@@ -238,7 +260,7 @@ BOOL WINAPI DetourEndPagePrinter(HANDLE hPrinter) {
 
 BOOL WINAPI DetourEndDocPrinter(HANDLE hPrinter) {
     printf("DetourEndDocPrinter()\n");
-    if (!ensure_connection()) {
+    if (!ensure_connection() || !isBixolonPrinterByHandle(hPrinter)) {
         printf("DetourEndDocPrinter() bypass.\n");
         return fpEndDocPrinter(hPrinter);
     }
@@ -247,14 +269,19 @@ BOOL WINAPI DetourEndDocPrinter(HANDLE hPrinter) {
 
 BOOL WINAPI DetourClosePrinter(HANDLE hPrinter) {
     printf("DetourClosePrinter()\n");
-    if (!ensure_connection()) {
+    if (!ensure_connection() || !isBixolonPrinterByHandle(hPrinter)) {
         printf("DetourClosePrinter() bypass.\n");
         return fpClosePrinter(hPrinter);
     }
 
+    closeBixolonPrinter(hPrinter);
     return _api->ClosePrinter(SAFE_HANDLE(hPrinter));
 }
 
+
+//
+// NOT IMPLEMENTED
+//
 
 BOOL WINAPI DetourCloseSpoolFileHandle(
   _In_ HANDLE hPrinter,
@@ -845,6 +872,86 @@ void print_hex(const char* buffer, size_t len)
 }
 
 
+std::shared_ptr<std::list<HANDLE>> _bxprinters;
+
+
+bool initBixolon() {
+    if (_bxprinters.get()==NULL) {
+        _bxprinters = std::shared_ptr<std::list<HANDLE>>(new std::list<HANDLE>());
+    }
+    return true;
+}
+
+bool isBixolonPrinterByName(const char* printerName)
+{
+    if (printerName==NULL) return false;
+
+    HKEY hKey = NULL;
+    std::string subkey;
+    subkey = std::string("SYSTEM\\CurrentControlSet\\Control\\Print\\Printers\\");
+    subkey += printerName;
+
+    LONG result = RegOpenKeyExA(HKEY_LOCAL_MACHINE, subkey.c_str(), 0, KEY_QUERY_VALUE, &hKey);
+    if (result!=ERROR_SUCCESS) return false;
+
+    char buf[MAX_PATH];
+    DWORD buf_size = sizeof(buf);
+    result = RegQueryValueExA(hKey, "Printer Driver", 0, NULL, (LPBYTE)buf, &buf_size);
+    if (result!=ERROR_SUCCESS){
+        RegCloseKey(hKey);
+        return false;
+    }
+
+    std::string lower(buf);
+    std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
+    if (!boost::algorithm::contains(lower, "bixolon")) {
+        RegCloseKey(hKey);
+        return false;
+    }
+
+    RegCloseKey(hKey);
+    return true;
+}
+
+bool isBixolonPrinterByHandle(HANDLE hHandle)
+{
+    std::list<HANDLE>::iterator it;
+    for (it = _bxprinters->begin() ; it != _bxprinters->end() ; ++it) {
+        if (hHandle==*it) return true;
+    }
+    return false;
+}
+
+bool addBixolonPrinter(HANDLE hHandle)
+{
+    if (_bxprinters.get()==NULL) return false;
+    _bxprinters->push_back(hHandle);
+    return true;
+}
+
+void closeBixolonPrinter(HANDLE hHandle)
+{
+    if (isBixolonPrinterByHandle(hHandle)) {
+        _bxprinters->remove(hHandle);
+    }
+}
+
+
+wstring s2ws(const std::string& str)
+{
+    typedef std::codecvt_utf8<wchar_t> convert_typeX;
+    std::wstring_convert<convert_typeX, wchar_t> converterX;
+
+    return converterX.from_bytes(str);
+}
+
+string ws2s(const std::wstring& wstr)
+{
+    typedef std::codecvt_utf8<wchar_t> convert_typeX;
+    std::wstring_convert<convert_typeX, wchar_t> converterX;
+
+    return converterX.to_bytes(wstr);
+}
 
 
 // Define hook items

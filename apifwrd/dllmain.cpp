@@ -7,6 +7,7 @@
 
 bool IsHookProcess(DWORD pid);
 bool IsHostProcess(DWORD pid);
+bool initBixolon();
 extern bool _dont_hook_if_connection_failed;
 extern std::string _server_ip;
 extern int _server_port;
@@ -22,6 +23,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 	{
 	case DLL_PROCESS_ATTACH:
         printf("apifwrd.dll loaded.\n");
+        initBixolon();
 
         if (IsHookProcess(GetCurrentProcessId())) {
 #ifdef _DEBUG
